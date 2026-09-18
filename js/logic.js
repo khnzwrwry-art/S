@@ -72,24 +72,6 @@ function tplMock(kind){
 let progress=(function(){try{return JSON.parse(localStorage.getItem('sg_progress')||'{}');}catch(e){return {};}})();
 function saveProgress(){
  try{localStorage.setItem('sg_progress',JSON.stringify(progress));}catch(e){}
- if(authUser && authDb){
-  authUser.id().then(function(uid){
-   if(!uid) return;
-   authDb.doc('data/users/'+uid+'/progress').set({data:progress,updatedAt:Date.now()}).catch(function(){});
-  }).catch(function(){});
- }
-}
-async function loadRemoteProgress(){
- if(!(authUser && authDb)) return;
- try{
-  var uid=await authUser.id();
-  if(!uid) return;
-  var doc=await authDb.doc('data/users/'+uid+'/progress').get();
-  if(doc && doc.exists){
-   var remote=(doc.data()||{}).data;
-   if(remote && typeof remote==='object'){progress=remote;try{localStorage.setItem('sg_progress',JSON.stringify(progress));}catch(e){}}
-  }
- }catch(e){}
 }
 function doneCount(id){return (progress[id]||[]).length;}
 let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
@@ -98,27 +80,22 @@ const VIEWS=['home','category','content','assistant','templates','editing','glos
 function showView(n){VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});document.getElementById('backBtn').hidden=(n==='home');window.scrollTo(0,0);}
 function go(n){showView(n);if(n==='home')renderHome();}
 
-/* ---------- auth gate ---------- */
-let authUser=null, authDb=null, selectedCountry='';
+/* ---------- auth gate (Firebase Authentication) ---------- */
+let authModule=null, currentUser=null, selectedCountry='';
 
-function localAgreement(){try{return JSON.parse(localStorage.getItem('sg_agreement')||'null');}catch(e){return null;}}
-function saveLocalAgreement(a){try{localStorage.setItem('sg_agreement',JSON.stringify(a));}catch(e){}}
+function agreementKey(uid){return 'sg_agreement_'+uid;}
+function getAgreement(uid){try{return JSON.parse(localStorage.getItem(agreementKey(uid))||'null');}catch(e){return null;}}
+function saveAgreement(uid,rec){try{localStorage.setItem(agreementKey(uid),JSON.stringify(rec));}catch(e){}}
 
-async function checkAuthAndEnter(){
- try{authUser=await claude.use('user');}catch(e){authUser=null;}
- try{authDb=await claude.use('db');}catch(e){authDb=null;}
- if(authUser && authDb){
-  var uid=null; try{uid=await authUser.id();}catch(e){}
-  if(uid){
-   try{
-    var doc=await authDb.doc('data/users/'+uid+'/agreement').get();
-    if(doc && doc.exists){selectedCountry=(doc.data()||{}).country||'';await loadRemoteProgress();enterApp();return;}
-   }catch(e){}
-  }
- }
- var local=localAgreement();
- if(local){selectedCountry=local.country||'';enterApp();return;}
- renderGate();
+async function initAuth(){
+ authModule=await import('./auth.js');
+ authModule.watchAuthState(function(user){
+  currentUser=user;
+  if(!user){renderGate();return;}
+  var rec=getAgreement(user.uid);
+  if(rec){selectedCountry=rec.country||'';enterApp();}
+  else{renderGate();}
+ });
 }
 
 function countryOptions(){
@@ -130,57 +107,47 @@ function countryOptions(){
 
 function renderGate(){
  var g=document.getElementById('gate');
- var realNote = (authUser) ?
-  'You are signing in with your verified Claude account. Google and Apple below are shown as provider options for a real backend — right now your Claude identity is what verifies you and saves your acceptance.' :
-  'This preview cannot reach a login server, so your acceptance is saved on this device only.';
+ var signedInLine = currentUser ?
+  '<p class="hint" style="margin-bottom:14px">Signed in as <b>'+esc(currentUser.displayName||currentUser.email||'your Google account')+'</b> · <span class="link" id="gateSwitch">Not you?</span></p>' : '';
  g.innerHTML=
  '<div class="gate-card">'+
   '<div class="brand-mark" style="margin:0 auto 16px">L</div>'+
   '<h1 style="font-size:24px;text-align:center;margin-bottom:8px">Launchpad</h1>'+
   '<p style="text-align:center;color:var(--text-muted);font-size:14px;margin:0 0 22px">Start a real business, one step at a time.</p>'+
+  signedInLine+
   '<label class="field-label" for="gateCountry">Your country <span style="color:#E0A020">*</span></label>'+
   '<select id="gateCountry">'+countryOptions()+'</select>'+
-  '<label class="field-label">Sign in with</label>'+
-  '<button class="auth-btn" data-p="google"><span class="ai">G</span> Continue with Google</button>'+
-  '<button class="auth-btn" data-p="apple"><span class="ai"></span> Continue with Apple</button>'+
-  '<div class="divider"><span>or</span></div>'+
-  '<label class="field-label" for="gateEmail">Email</label>'+
-  '<input type="text" id="gateEmail" placeholder="you@example.com" autocomplete="email">'+
+  (currentUser ? '' :
+   '<label class="field-label">Sign in with</label>'+
+   '<button class="auth-btn" id="googleBtn"><span class="ai">G</span> Continue with Google</button>'
+  )+
   '<label class="agree"><input type="checkbox" id="agreeBox">'+
    '<span>I have read and accept the <span class="link" id="gateTerms">Terms of Use</span>, including that the guides, templates and content in this app are copyright protected and <b>may not be copied, republished, resold or used to build a competing product</b>.</span></label>'+
-  '<button class="btn-primary" id="gateGo" style="margin-top:14px">Create account and enter</button>'+
+  '<button class="btn-primary" id="gateGo" style="margin-top:14px">'+(currentUser?'Enter Launchpad':'Sign in with Google to continue')+'</button>'+
   '<p class="hint" id="gateHint"></p>'+
-  '<p class="hint" style="margin-top:14px">'+realNote+'</p>'+
  '</div>';
- var pick=null;
- g.querySelectorAll('.auth-btn').forEach(function(b){
-  b.onclick=function(){
-   pick=b.dataset.p;
-   g.querySelectorAll('.auth-btn').forEach(function(x){x.classList.remove('sel');});
-   b.classList.add('sel');
-   document.getElementById('gateHint').textContent='Provider selected. Accept the terms to continue.';
+
+ if(!currentUser){
+  document.getElementById('googleBtn').onclick=async function(){
+   var hint=document.getElementById('gateHint');
+   hint.textContent='Opening Google sign-in...';
+   try{await authModule.signInWithGoogle();}
+   catch(e){hint.textContent='Google sign-in was cancelled or failed. Try again.';}
   };
- });
+ } else {
+  document.getElementById('gateSwitch').onclick=async function(){
+   try{await authModule.logout();}catch(e){}
+  };
+ }
  document.getElementById('gateTerms').onclick=function(){renderTerms();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('terms');};
- document.getElementById('gateGo').onclick=async function(){
+ document.getElementById('gateGo').onclick=function(){
   var hint=document.getElementById('gateHint');
   var country=document.getElementById('gateCountry').value;
-  var email=document.getElementById('gateEmail').value.trim();
+  if(!currentUser){hint.textContent='Sign in with Google first.';return;}
   if(!country){hint.textContent='Please select your country.';return;}
-  if(!pick && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){hint.textContent='Choose Google or Apple, or enter a valid email address.';return;}
   if(!document.getElementById('agreeBox').checked){hint.textContent='You need to accept the Terms of Use to continue.';return;}
-  var btn=document.getElementById('gateGo');btn.disabled=true;hint.textContent='Setting up your account...';
   selectedCountry=country;
-  var record={method:pick||'email',email:email||null,country:country,acceptedAt:Date.now()};
-  var savedRemotely=false;
-  if(authUser && authDb){
-   try{
-    var uid=await authUser.id();
-    if(uid){await authDb.doc('data/users/'+uid+'/agreement').set(record);savedRemotely=true;}
-   }catch(e){}
-  }
-  if(!savedRemotely) saveLocalAgreement(record);
-  if(savedRemotely) await loadRemoteProgress();
+  saveAgreement(currentUser.uid,{country:country,acceptedAt:Date.now(),email:currentUser.email||null});
   enterApp();
  };
 }
@@ -224,8 +191,7 @@ function renderHome(){
  document.getElementById('tLink').onclick=function(){renderTerms();showView('terms');};
  document.getElementById('aLink').onclick=function(){renderAccess();showView('access');};
  document.getElementById('soLink').onclick=async function(){
-  if(authUser && authDb){try{var uid=await authUser.id();if(uid){await authDb.doc('data/users/'+uid+'/agreement').delete();}}catch(e){}}
-  try{localStorage.removeItem('sg_agreement');}catch(e){}
+  if(authModule){try{await authModule.logout();}catch(e){}}
   document.getElementById('app').hidden=true;
   renderGate();
   document.getElementById('gate').hidden=false;
@@ -334,10 +300,13 @@ function renderLegal(){
  panelList(LEGAL)+
  '<button class="btn-ghost full" id="toTerms">Read the Terms of Use</button>';
  document.getElementById('legalCountry').value=selectedCountry;
- document.getElementById('legalCountry').onchange=async function(e){
+ document.getElementById('legalCountry').onchange=function(e){
   selectedCountry=e.target.value||'other';
-  if(authUser && authDb){try{var uid=await authUser.id();if(uid){await authDb.doc('data/users/'+uid+'/agreement').update({country:selectedCountry});}}catch(err){}}
-  else{var l=localAgreement()||{};l.country=selectedCountry;saveLocalAgreement(l);}
+  if(currentUser){
+   var rec=getAgreement(currentUser.uid)||{};
+   rec.country=selectedCountry;
+   saveAgreement(currentUser.uid,rec);
+  }
   renderLegal();
  };
  document.getElementById('toTerms').onclick=function(){renderTerms();showView('terms');};
@@ -591,5 +560,5 @@ function timeAgo(ts){
 /* ---------- init ---------- */
 document.getElementById('backBtn').onclick=function(){go('home');};
 document.getElementById('brandHome').onclick=function(){go('home');};
-checkAuthAndEnter();
+initAuth();
 showView('home');
