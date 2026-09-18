@@ -72,6 +72,8 @@ function tplMock(kind){
 let progress=(function(){try{return JSON.parse(localStorage.getItem('sg_progress')||'{}');}catch(e){return {};}})();
 function saveProgress(){
  try{localStorage.setItem('sg_progress',JSON.stringify(progress));}catch(e){}
+ // TODO (Stage 2): also sync `progress` to Firestore (data/users/{uid}/progress),
+ // keyed by the Firebase Auth uid from auth.js, so it survives across devices.
 }
 function doneCount(id){return (progress[id]||[]).length;}
 let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
@@ -408,12 +410,10 @@ function renderTypeChips(){
 }
 async function generate(biz,task,box,btn){
  box.hidden=false;box.textContent='Writing...';btn.disabled=true;
- try{
-  var sample=await claude.use('sample');
-  if(!sample){box.textContent='The AI tool is not available in this view.';btn.disabled=false;return;}
-  var res=await sample('You write marketing content for teenagers running a small business.\nBusiness: "'+biz+'".\nTask: '+task+'\nWrite in a direct, young tone. No hype, no preamble — go straight to the content.',{onText:function(o){box.textContent=o.text;}});
-  box.textContent=res.text;
- }catch(e){box.textContent='Could not generate right now. Try again in a moment.';}
+ // TODO (Stage 3): replace this stub with a call to a Firebase Cloud Function
+ // that calls the Anthropic API server-side (API key kept as a Firebase secret).
+ // Was: var sample = await claude.use('sample'); (Claude-Artifact-runtime only, not available here)
+ box.textContent='The AI content tool is not available yet in this build.';
  btn.disabled=false;
 }
 
@@ -440,16 +440,10 @@ async function sendChat(){
  if(!text)return;input.value='';
  chatHistory.push({role:'user',content:text});chatHistory.push({role:'assistant',content:'Thinking...'});renderChatLog();
  var btn=document.getElementById('sendBtn');btn.disabled=true;
- try{
-  var sample=await claude.use('sample');
-  if(!sample){chatHistory[chatHistory.length-1].content='The mentor is not available in this view.';renderChatLog();btn.disabled=false;return;}
-  var sys='You are a business mentor for teenagers starting their first business. Answer in English, short and direct, with practical steps they can take today. No get-rich promises. If something requires a parent, a bank account or tax reporting, say so explicitly. If you need more information, ask one focused question.';
-  var turns=[{role:'user',content:sys+'\n\nMy first question: '+chatHistory[0].content}];
-  for(var i=1;i<chatHistory.length-1;i++){if(chatHistory[i].content==='Thinking...')continue;turns.push({role:chatHistory[i].role==='user'?'user':'assistant',content:chatHistory[i].content});}
-  if(turns[turns.length-1].role!=='user')turns.push({role:'user',content:text});
-  var res=await sample(turns,{onText:function(o){chatHistory[chatHistory.length-1].content=o.text;renderChatLog();}});
-  chatHistory[chatHistory.length-1].content=res.text;
- }catch(e){chatHistory[chatHistory.length-1].content='Could not answer right now. Try again in a moment.';}
+ // TODO (Stage 3): replace this stub with a call to a Firebase Cloud Function
+ // that calls the Anthropic API server-side (API key kept as a Firebase secret).
+ // Was: var sample = await claude.use('sample'); (Claude-Artifact-runtime only, not available here)
+ chatHistory[chatHistory.length-1].content='The AI mentor is not available yet in this build.';
  renderChatLog();btn.disabled=false;
 }
 
@@ -457,13 +451,12 @@ async function sendChat(){
 let feedPosts=[],feedFilter='all',feedSearch='',feedSort='new',feedDb=null,feedUser=null,myId=null,nameCache={};
 async function initFeed(){
  if(feedDb!==null)return;
- feedDb=await claude.use('db');feedUser=await claude.use('user');
- if(feedUser){try{myId=await feedUser.id();}catch(e){}}
- if(!feedDb)return;
- try{feedDb.collection('posts').orderBy('createdAt','desc').limit(100).onSnapshot(function(snap){
-  feedPosts=snap.docs.map(function(d){var o=Object.assign({},d.data()||{});o._id=d.id;return o;});
-  resolveNames();renderFeedList();
- },function(){renderFeedList();});}catch(e){}
+ // TODO (Stage 2): replace this stub with Firestore, using the same Firebase
+ // project as auth.js (a "posts" collection) and the current Firebase Auth user
+ // (currentUser from the gate) in place of feedUser.
+ // Was: feedDb = await claude.use('db'); feedUser = await claude.use('user'); (Claude-Artifact-runtime only, not available here)
+ feedDb=false;
+ feedUser=null;
 }
 async function resolveNames(){
  if(!feedUser)return;
