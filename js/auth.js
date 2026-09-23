@@ -57,7 +57,7 @@ export function watchAuthState(callback) {
   return onAuthStateChanged(auth, callback);
 }
 
-export { auth };
+export { app, auth };
 
 /* ---------------- Example wiring into Launchpad's gate screen ----------------
 

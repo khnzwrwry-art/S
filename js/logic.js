@@ -72,30 +72,53 @@ function tplMock(kind){
 let progress=(function(){try{return JSON.parse(localStorage.getItem('sg_progress')||'{}');}catch(e){return {};}})();
 function saveProgress(){
  try{localStorage.setItem('sg_progress',JSON.stringify(progress));}catch(e){}
- // TODO (Stage 2): also sync `progress` to Firestore (data/users/{uid}/progress),
- // keyed by the Firebase Auth uid from auth.js, so it survives across devices.
+ if(firestoreModule){firestoreModule.saveProgress(progress).catch(function(){});}
 }
 function doneCount(id){return (progress[id]||[]).length;}
 let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
 
-const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','legal','terms','access','ages','visual'];
+const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','ages','visual'];
 function showView(n){VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});document.getElementById('backBtn').hidden=(n==='home');window.scrollTo(0,0);}
 function go(n){showView(n);if(n==='home')renderHome();}
 
 /* ---------- auth gate (Firebase Authentication) ---------- */
-let authModule=null, currentUser=null, selectedCountry='';
+let authModule=null, firestoreModule=null, workerModule=null, currentUser=null, selectedCountry='';
 
-function agreementKey(uid){return 'sg_agreement_'+uid;}
-function getAgreement(uid){try{return JSON.parse(localStorage.getItem(agreementKey(uid))||'null');}catch(e){return null;}}
-function saveAgreement(uid,rec){try{localStorage.setItem(agreementKey(uid),JSON.stringify(rec));}catch(e){}}
+async function loadFirestore(){
+ if(!firestoreModule)firestoreModule=await import('./firestore-integration.js');
+ return firestoreModule;
+}
+async function loadWorker(){
+ if(!workerModule)workerModule=await import('./worker-client.js');
+ return workerModule;
+}
+
+async function syncRemoteProgress(){
+ try{
+  var remote=await firestoreModule.loadProgress();
+  if(remote&&typeof remote==='object'&&Object.keys(remote).length){
+   progress=remote;
+   try{localStorage.setItem('sg_progress',JSON.stringify(progress));}catch(e){}
+  }
+ }catch(e){}
+}
 
 async function initAuth(){
- authModule=await import('./auth.js');
- authModule.watchAuthState(function(user){
+ try{
+  authModule=await import('./auth.js');
+ }catch(e){
+  document.getElementById('gate').innerHTML='<div class="gate-card"><p class="hint">Could not load sign-in. Check your connection and reload the page.</p></div>';
+  return;
+ }
+ authModule.watchAuthState(async function(user){
   currentUser=user;
-  if(!user){renderGate();return;}
-  var rec=getAgreement(user.uid);
-  if(rec){selectedCountry=rec.country||'';enterApp();}
+  if(!user){stopFeedWatch();stopLeaderboardWatch();renderGate();return;}
+  var rec=null;
+  try{
+   await loadFirestore();
+   rec=await firestoreModule.loadAgreement();
+  }catch(e){}
+  if(rec){selectedCountry=rec.country||'';await syncRemoteProgress();enterApp();}
   else{renderGate();}
  });
 }
@@ -142,15 +165,23 @@ function renderGate(){
   };
  }
  document.getElementById('gateTerms').onclick=function(){renderTerms();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('terms');};
- document.getElementById('gateGo').onclick=function(){
+ document.getElementById('gateGo').onclick=async function(){
   var hint=document.getElementById('gateHint');
   var country=document.getElementById('gateCountry').value;
   if(!currentUser){hint.textContent='Sign in with Google first.';return;}
   if(!country){hint.textContent='Please select your country.';return;}
   if(!document.getElementById('agreeBox').checked){hint.textContent='You need to accept the Terms of Use to continue.';return;}
+  var btn=document.getElementById('gateGo');btn.disabled=true;hint.textContent='Saving...';
   selectedCountry=country;
-  saveAgreement(currentUser.uid,{country:country,acceptedAt:Date.now(),email:currentUser.email||null});
-  enterApp();
+  try{
+   await loadFirestore();
+   await firestoreModule.saveAgreement({country:country,acceptedAt:Date.now(),email:currentUser.email||null});
+   await syncRemoteProgress();
+   enterApp();
+  }catch(e){
+   hint.textContent='Could not save — check your connection and try again.';
+   btn.disabled=false;
+  }
  };
 }
 function enterApp(){
@@ -171,6 +202,7 @@ function renderHome(){
   {k:'content',c:'#F4B740',i:I.chat,b:'AI content tool',s:'Captions, scripts, hashtags'},
   {k:'editing',c:'#EF6FA0',i:I.scissors,b:'Filming and editing',s:'Tools, rules and illustrated steps'},
   {k:'feed',c:'#4F9DDE',i:I.chat,b:'Community feed',s:'Search and filter by business type'},
+  {k:'leaderboard',c:'#EF6FA0',i:I.mega,b:'Leaderboard',s:'Self-reported sales, ranked'},
   {k:'ages',c:'#A8C94A',i:I.shield,b:'What fits your age',s:'Rules and realistic options by age'},
   {k:'glossary',c:'#9B8AFB',i:I.bookmark,b:'Glossary',s:'Every term explained plainly'}];
  document.getElementById('view-home').innerHTML=
@@ -207,6 +239,7 @@ function renderHome(){
    else if(k==='editing'){renderEditing();showView('editing');}
    else if(k==='glossary'){renderGlossary();showView('glossary');}
    else if(k==='feed'){renderFeed();showView('feed');}
+   else if(k==='leaderboard'){renderLeaderboard();showView('leaderboard');}
    else if(k==='ages'){renderAges();showView('ages');}};
  });
  document.querySelectorAll('.card[data-cat]').forEach(function(el){el.onclick=function(){activeTab='intro';openCategory(el.dataset.cat);};});
@@ -302,12 +335,15 @@ function renderLegal(){
  panelList(LEGAL)+
  '<button class="btn-ghost full" id="toTerms">Read the Terms of Use</button>';
  document.getElementById('legalCountry').value=selectedCountry;
- document.getElementById('legalCountry').onchange=function(e){
+ document.getElementById('legalCountry').onchange=async function(e){
   selectedCountry=e.target.value||'other';
   if(currentUser){
-   var rec=getAgreement(currentUser.uid)||{};
-   rec.country=selectedCountry;
-   saveAgreement(currentUser.uid,rec);
+   try{
+    await loadFirestore();
+    var rec=(await firestoreModule.loadAgreement())||{};
+    rec.country=selectedCountry;
+    await firestoreModule.saveAgreement(rec);
+   }catch(err){}
   }
   renderLegal();
  };
@@ -410,10 +446,11 @@ function renderTypeChips(){
 }
 async function generate(biz,task,box,btn){
  box.hidden=false;box.textContent='Writing...';btn.disabled=true;
- // TODO (Stage 3): replace this stub with a call to a Firebase Cloud Function
- // that calls the Anthropic API server-side (API key kept as a Firebase secret).
- // Was: var sample = await claude.use('sample'); (Claude-Artifact-runtime only, not available here)
- box.textContent='The AI content tool is not available yet in this build.';
+ try{
+  await loadWorker();
+  var text=await workerModule.generateContent(biz,task);
+  box.textContent=text;
+ }catch(e){box.textContent='Could not generate right now. Try again in a moment.';}
  btn.disabled=false;
 }
 
@@ -440,30 +477,29 @@ async function sendChat(){
  if(!text)return;input.value='';
  chatHistory.push({role:'user',content:text});chatHistory.push({role:'assistant',content:'Thinking...'});renderChatLog();
  var btn=document.getElementById('sendBtn');btn.disabled=true;
- // TODO (Stage 3): replace this stub with a call to a Firebase Cloud Function
- // that calls the Anthropic API server-side (API key kept as a Firebase secret).
- // Was: var sample = await claude.use('sample'); (Claude-Artifact-runtime only, not available here)
- chatHistory[chatHistory.length-1].content='The AI mentor is not available yet in this build.';
+ try{
+  await loadWorker();
+  var turns=chatHistory.slice(0,-1).map(function(m){return {role:m.role,content:m.content};});
+  var reply=await workerModule.mentorChat(turns);
+  chatHistory[chatHistory.length-1].content=reply;
+ }catch(e){chatHistory[chatHistory.length-1].content='Could not answer right now. Try again in a moment.';}
  renderChatLog();btn.disabled=false;
 }
 
 /* ---------- feed ---------- */
-let feedPosts=[],feedFilter='all',feedSearch='',feedSort='new',feedDb=null,feedUser=null,myId=null,nameCache={};
-async function initFeed(){
- if(feedDb!==null)return;
- // TODO (Stage 2): replace this stub with Firestore, using the same Firebase
- // project as auth.js (a "posts" collection) and the current Firebase Auth user
- // (currentUser from the gate) in place of feedUser.
- // Was: feedDb = await claude.use('db'); feedUser = await claude.use('user'); (Claude-Artifact-runtime only, not available here)
- feedDb=false;
- feedUser=null;
-}
-async function resolveNames(){
- if(!feedUser)return;
- var ids=feedPosts.map(function(p){return p.authorId;}).filter(function(x){return x&&!(x in nameCache);});
- if(!ids.length)return;
- try{var ps=await feedUser.profiles(Array.from(new Set(ids)));
-  Object.keys(ps||{}).forEach(function(k){nameCache[k]=(ps[k]&&ps[k].name)||'';});renderFeedList();}catch(e){}
+let feedPosts=[],feedFilter='all',feedSearch='',feedSort='new',feedLoaded=false,feedUnsub=null;
+function stopFeedWatch(){if(feedUnsub){try{feedUnsub();}catch(e){}feedUnsub=null;}feedLoaded=false;feedPosts=[];}
+async function startFeedWatch(){
+ if(feedUnsub)return;
+ try{
+  await loadFirestore();
+  feedUnsub=firestoreModule.watchFeed(function(posts){
+   feedPosts=posts;feedLoaded=true;renderFeedList();
+  });
+ }catch(e){
+  var el=document.getElementById('feedList');
+  if(el)el.innerHTML='<p class="hint">The feed is not available right now. Try again later.</p>';
+ }
 }
 function renderFeed(){
  document.getElementById('view-feed').innerHTML=
@@ -479,7 +515,7 @@ function renderFeed(){
  renderComposer();renderFeedChips();renderFeedList();
  document.getElementById('feedSearch').oninput=function(e){feedSearch=e.target.value;renderFeedList();};
  document.querySelectorAll('[data-sort]').forEach(function(c){c.onclick=function(){feedSort=c.dataset.sort;renderFeed();};});
- initFeed().then(renderFeedList);
+ startFeedWatch();
 }
 function renderFeedChips(){
  var el=document.getElementById('feedChips');
@@ -501,20 +537,21 @@ async function submitPost(){
  if(text.length<5){hint.textContent='Write at least a sentence.';return;}
  if(text.length>600){hint.textContent='Keep it under 600 characters.';return;}
  var btn=document.getElementById('postBtn');btn.disabled=true;hint.textContent='Posting...';
- await initFeed();
- if(!feedDb){hint.textContent='The feed is not available in this view.';btn.disabled=false;return;}
  try{
-  await feedDb.collection('posts').add({authorId:myId||'anon',businessId:document.getElementById('postBiz').value,
-   milestone:document.getElementById('postMilestone').value,text:text,cheers:{},createdAt:Date.now()});
+  await loadFirestore();
+  await firestoreModule.postToFeed({
+   businessId:document.getElementById('postBiz').value,
+   milestone:document.getElementById('postMilestone').value,
+   text:text
+  });
   document.getElementById('postText').value='';hint.textContent='Posted.';
- }catch(e){hint.textContent=(e&&e.code==='invalid_argument')?'You do not have permission to post in this view.':'Posting failed, try again.';}
+ }catch(e){hint.textContent='Posting failed, try again.';}
  btn.disabled=false;
 }
 function cheerCount(p){return p.cheers?Object.keys(p.cheers).length:0;}
 function renderFeedList(){
  var el=document.getElementById('feedList');if(!el)return;
- if(feedDb===null){el.innerHTML='<p class="hint">Loading the feed...</p>';return;}
- if(!feedDb){el.innerHTML='<p class="hint">The feed is not available in this view.</p>';return;}
+ if(!feedLoaded){el.innerHTML='<p class="hint">Loading the feed...</p>';return;}
  var q=feedSearch.trim().toLowerCase();
  var list=feedPosts.filter(function(p){
   if(feedFilter!=='all'&&p.businessId!==feedFilter)return false;
@@ -524,8 +561,8 @@ function renderFeedList(){
  if(!list.length){el.innerHTML='<p class="hint">No posts here yet. Be the first.</p>';return;}
  el.innerHTML=list.map(function(p){
   var cat=DATA.find(function(c){return c.id===p.businessId;})||{name:'General',color:'#6C7BD1'};
-  var nm=nameCache[p.authorId]||'Someone in the community';
-  var mine=p.cheers&&myId&&p.cheers[myId];
+  var nm=p.authorName||'Someone in the community';
+  var mine=p.cheers&&currentUser&&p.cheers[currentUser.uid];
   return '<div class="panel"><div class="post-top">'+
   '<span class="post-tag" style="background:'+cat.color+'">'+cat.name+'</span>'+
   '<span class="muted-xs">'+esc(p.milestone||'')+'</span>'+
@@ -537,17 +574,90 @@ function renderFeedList(){
  el.querySelectorAll('[data-cheer]').forEach(function(b){b.onclick=function(){cheer(b.dataset.cheer);};});
 }
 async function cheer(id){
- if(!feedDb||!myId)return;
+ if(!currentUser)return;
  var p=feedPosts.find(function(x){return x._id===id;});if(!p)return;
- var c=Object.assign({},p.cheers||{});
- if(c[myId])delete c[myId];else c[myId]=true;
- try{await feedDb.doc('posts/'+id).update({cheers:c});}catch(e){}
+ try{
+  await loadFirestore();
+  await firestoreModule.toggleCheer(id,p.cheers);
+ }catch(e){}
 }
 function timeAgo(ts){
  if(!ts)return '';var m=Math.floor((Date.now()-ts)/60000);
  if(m<1)return 'just now';if(m<60)return m+'m ago';
  var h=Math.floor(m/60);if(h<24)return h+'h ago';
  return Math.floor(h/24)+'d ago';
+}
+
+/* ---------- leaderboard ---------- */
+let leaderboardModule=null,leaderboardEntries=[],leaderboardLoaded=false,leaderboardUnsub=null;
+async function loadLeaderboard(){
+ if(!leaderboardModule)leaderboardModule=await import('./leaderboard-integration.js');
+ return leaderboardModule;
+}
+function stopLeaderboardWatch(){if(leaderboardUnsub){try{leaderboardUnsub();}catch(e){}leaderboardUnsub=null;}leaderboardLoaded=false;leaderboardEntries=[];}
+function safeUrl(u){
+ try{var p=new URL(u,window.location.href);if(p.protocol==='http:'||p.protocol==='https:')return p.href;}catch(e){}
+ return null;
+}
+async function startLeaderboardWatch(){
+ if(leaderboardUnsub)return;
+ try{
+  await loadLeaderboard();
+  leaderboardUnsub=leaderboardModule.watchLeaderboard(function(entries){
+   leaderboardEntries=entries;leaderboardLoaded=true;renderLeaderboardList();
+  });
+ }catch(e){
+  var el=document.getElementById('lbList');
+  if(el)el.innerHTML='<p class="hint">The leaderboard is not available right now. Try again later.</p>';
+ }
+}
+function renderLeaderboardList(){
+ var el=document.getElementById('lbList');if(!el)return;
+ if(!leaderboardLoaded){el.innerHTML='<p class="hint">Loading...</p>';return;}
+ if(!leaderboardEntries.length){el.innerHTML='<p class="hint">No entries yet. Be the first.</p>';return;}
+ el.innerHTML=leaderboardEntries.map(function(e,i){
+  var proof=safeUrl(e.proofUrl);
+  return '<div class="panel"><div class="post-top">'+
+  '<span class="post-tag" style="background:var(--accent)">#'+(i+1)+'</span>'+
+  '<span class="muted-xs">'+esc(e.businessName||'')+'</span>'+
+  '<span class="muted-xs ml">self-reported</span></div>'+
+  '<p style="font-size:14px;margin:0 0 6px"><b>'+esc(String(e.salesCount))+'</b> sales — '+esc(e.displayName||'Someone in the community')+'</p>'+
+  (proof?'<a class="pill" target="_blank" rel="noopener" href="'+esc(proof)+'">View store</a>':'')+
+  '</div>';
+ }).join('');
+}
+function renderLeaderboard(){
+ document.getElementById('view-leaderboard').innerHTML=
+ '<div class="hero"><h1 class="sm">Leaderboard</h1><p>Active businesses and reported sales. Every number here is <b>self-reported</b> by the person who entered it, not independently verified — treat it as a rough signal, not a certified fact.</p></div>'+
+ '<div class="panel"><h4>Add or update your entry</h4>'+
+  '<label class="field-label" for="lbBiz">Business type</label>'+
+  '<select id="lbBiz">'+DATA.map(function(c){return '<option value="'+c.id+'">'+c.name+'</option>';}).join('')+'</select>'+
+  '<label class="field-label" for="lbSales">Sales so far (self-reported)</label>'+
+  '<input type="number" id="lbSales" placeholder="Sales so far" min="0">'+
+  '<label class="field-label" for="lbProof">Link to your store (optional, adds credibility)</label>'+
+  '<input type="text" id="lbProof" placeholder="https://...">'+
+  '<button class="btn-primary" id="lbSubmit">Update my entry</button>'+
+  '<p class="hint" id="lbHint"></p></div>'+
+ '<div id="lbList"><p class="hint">Loading...</p></div>';
+ document.getElementById('lbSubmit').onclick=async function(){
+  var hint=document.getElementById('lbHint');
+  var sales=parseInt(document.getElementById('lbSales').value,10);
+  if(!Number.isFinite(sales)||sales<0){hint.textContent='Enter a sales count of 0 or more.';return;}
+  var bizId=document.getElementById('lbBiz').value;
+  var biz=DATA.find(function(c){return c.id===bizId;});
+  hint.textContent='Saving...';
+  try{
+   await loadLeaderboard();
+   await leaderboardModule.submitLeaderboardEntry({
+    businessId:bizId,
+    businessName:biz?biz.name:bizId,
+    salesCount:sales,
+    proofUrl:document.getElementById('lbProof').value.trim()
+   });
+   hint.textContent='Updated.';
+  }catch(e){hint.textContent='Could not update — try again.';}
+ };
+ startLeaderboardWatch();
 }
 
 /* ---------- init ---------- */
