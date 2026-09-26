@@ -1,0 +1,14 @@
+{
+  // No wrangler.jsonc previously existed for this Worker — it's been managed
+  // by pasting worker.js directly into the Cloudflare dashboard's "Edit code"
+  // editor. This file is added so the repo documents the Worker's config
+  // (including the "ai" binding below) and is ready for `wrangler deploy` if
+  // you switch to CLI-based deploys later. Adjust `name` / `compatibility_date`
+  // if they don't match what's shown in the Cloudflare dashboard for this Worker.
+  "name": "launchpad-mentor",
+  "main": "worker.js",
+  "compatibility_date": "2024-09-23",
+  "ai": {
+    "binding": "AI"
+  }
+}
