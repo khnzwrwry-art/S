@@ -247,7 +247,8 @@ function renderHome(){
   '<span><h3>'+cat.name+'</h3><p>'+cat.desc+'</p></span>'+
   '<span class="w"><span class="mini-progress"><i style="width:'+p+'%;background:'+cat.color+'"></i></span><span class="mini-label">'+dc+'/'+t+' steps</span></span></button>';
  }).join('')+'</div>'+
- '<p class="hint" style="margin-top:24px;text-align:center"><span class="link" id="tLink">Terms of Use</span> · <span class="link" id="pLink">Privacy Policy</span> · <span class="link" id="cLink">Cookie Policy</span> · <span class="link" id="rLink">Refund Policy</span> · <span class="link" id="aLink">Accessibility statement</span> · <span class="link" id="soLink">Sign out</span></p>';
+ '<p class="hint" style="margin-top:24px;text-align:center"><span class="link" id="tLink">Terms of Use</span> · <span class="link" id="pLink">Privacy Policy</span> · <span class="link" id="cLink">Cookie Policy</span> · <span class="link" id="rLink">Refund Policy</span> · <span class="link" id="aLink">Accessibility statement</span> · <span class="link" id="soLink">Sign out</span></p>'+
+ copyrightNotice();
 
  document.getElementById('legalCard').onclick=function(){renderLegal();showView('legal');};
  document.getElementById('tLink').onclick=function(){renderTerms();showView('terms');};
@@ -425,6 +426,7 @@ function renderAges(){
 
 /* ---------- static views ---------- */
 function panelList(items){return items.map(function(x){return '<div class="panel"><h4>'+x.t+'</h4><p>'+x.d+'</p></div>';}).join('');}
+function copyrightNotice(){return '<p class="hint" style="text-align:center;margin-top:18px">© 2026 Launchpad. All rights reserved.</p>';}
 function renderLegal(){
  if(!selectedCountry) selectedCountry='other';
  var c=COUNTRY_LEGAL[selectedCountry]||COUNTRY_LEGAL.other;
@@ -436,7 +438,8 @@ function renderLegal(){
  c.rules.map(function(r){return '<div class="panel"><h4>'+r[0]+'</h4><p style="font-size:13.7px">'+r[1]+'</p></div>';}).join('')+
  '<h2 class="section-label">General principles — everywhere</h2>'+
  panelList(LEGAL)+
- '<button class="btn-ghost full" id="toTerms">Read the Terms of Use</button>';
+ '<button class="btn-ghost full" id="toTerms">Read the Terms of Use</button>'+
+ copyrightNotice();
  document.getElementById('legalCountry').value=selectedCountry;
  document.getElementById('legalCountry').onchange=async function(e){
   selectedCountry=e.target.value||'other';
@@ -456,7 +459,8 @@ function renderTerms(){
  document.getElementById('view-terms').innerHTML=
  '<div class="hero"><h1 class="sm">Terms of Use</h1><p>Last updated: September 2026</p></div>'+
  '<div class="panel warn"><p class="muted-sm">This is a working draft. Have a lawyer review and adapt it before the app goes live to the public.</p></div>'+
- panelList(TERMS);
+ panelList(TERMS)+
+ copyrightNotice();
 }
 async function renderAccess(){
  document.getElementById('view-access').innerHTML=
@@ -466,10 +470,12 @@ async function renderAccess(){
   await loadLegal();
   document.getElementById('view-access').innerHTML=
   '<div class="hero"><h1 class="sm">Accessibility statement</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
-  panelList(legalModule.ACCESSIBILITY_STATEMENT);
+  panelList(legalModule.ACCESSIBILITY_STATEMENT)+
+  copyrightNotice();
  }catch(e){
   document.getElementById('view-access').innerHTML=
-  '<div class="hero"><h1 class="sm">Accessibility statement</h1></div><p class="hint">Could not load this page. Try again later.</p>';
+  '<div class="hero"><h1 class="sm">Accessibility statement</h1></div><p class="hint">Could not load this page. Try again later.</p>'+
+  copyrightNotice();
  }
 }
 async function renderPrivacy(){
@@ -480,10 +486,12 @@ async function renderPrivacy(){
   document.getElementById('view-privacy').innerHTML=
   '<div class="hero"><h1 class="sm">Privacy Policy</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
   '<div class="panel warn"><p class="muted-sm">This is a well-researched starting draft, not legal advice. Have a lawyer review it before this app is publicly promoted or takes payments.</p></div>'+
-  panelList(legalModule.PRIVACY_POLICY);
+  panelList(legalModule.PRIVACY_POLICY)+
+  copyrightNotice();
  }catch(e){
   document.getElementById('view-privacy').innerHTML=
-  '<div class="hero"><h1 class="sm">Privacy Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>';
+  '<div class="hero"><h1 class="sm">Privacy Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>'+
+  copyrightNotice();
  }
 }
 async function renderCookies(){
@@ -493,10 +501,12 @@ async function renderCookies(){
   await loadLegal();
   document.getElementById('view-cookies').innerHTML=
   '<div class="hero"><h1 class="sm">Cookie Policy</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
-  panelList(legalModule.COOKIE_POLICY);
+  panelList(legalModule.COOKIE_POLICY)+
+  copyrightNotice();
  }catch(e){
   document.getElementById('view-cookies').innerHTML=
-  '<div class="hero"><h1 class="sm">Cookie Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>';
+  '<div class="hero"><h1 class="sm">Cookie Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>'+
+  copyrightNotice();
  }
 }
 async function renderRefunds(){
@@ -506,10 +516,12 @@ async function renderRefunds(){
   await loadLegal();
   document.getElementById('view-refunds').innerHTML=
   '<div class="hero"><h1 class="sm">Refund Policy</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
-  panelList(legalModule.REFUND_POLICY);
+  panelList(legalModule.REFUND_POLICY)+
+  copyrightNotice();
  }catch(e){
   document.getElementById('view-refunds').innerHTML=
-  '<div class="hero"><h1 class="sm">Refund Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>';
+  '<div class="hero"><h1 class="sm">Refund Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>'+
+  copyrightNotice();
  }
 }
 function renderGlossary(){
