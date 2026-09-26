@@ -1,15 +1,6 @@
 // worker.js — Cloudflare Worker backend for Launchpad
-// Replaces Firebase Cloud Functions (which require the paid Blaze plan).
-// Uses Google Gemini's free API tier (no credit card required).
-//
-// SETUP:
-// 1. Get a free Gemini API key: https://aistudio.google.com/apikey
-//    (sign in with the same Google account; the free tier needs no card)
-// 2. In the Cloudflare dashboard for this Worker:
-//    Settings -> Variables and Secrets -> Add -> type: Secret
-//    Name: GEMINI_API_KEY    Value: <paste the key>
-//    NEVER paste the key into this file or into chat.
-// 3. Paste this whole file into the Worker's "Edit code" editor and Deploy.
+// Order: Gemini 3.5 Flash -> Gemini 3.1 Flash-Lite -> Cloudflare Workers AI (Llama 3.3 70B)
+// Requires: secret GEMINI_API_KEY, and a Workers AI binding named "AI".
 
 const ALLOWED_ORIGIN = "https://launchpad-e6280.web.app";
 
@@ -19,6 +10,9 @@ const MENTOR_SYSTEM =
   "No get-rich promises. If something requires a parent, a bank account or tax " +
   "reporting, say so explicitly. If you need more information, ask one focused question.";
 
+const GEMINI_MODELS = ["gemini-3.5-flash", "gemini-3.1-flash-lite"];
+const CF_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
+
 function corsHeaders() {
   return {
     "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
@@ -27,44 +21,83 @@ function corsHeaders() {
   };
 }
 
-async function callGemini(apiKey, systemPrompt, userContent) {
+// messages format: [{ role: 'user' | 'assistant', content: '...' }]
+async function callGeminiModel(model, apiKey, systemPrompt, messages) {
+  const contents = messages.map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content }],
+  }));
   const res = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey,
+    "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + apiKey,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: userContent,
+        contents,
         generationConfig: { maxOutputTokens: 800 },
       }),
     }
   );
   if (!res.ok) {
     const detail = await res.text();
-    throw new Error("Gemini error " + res.status + ": " + detail);
+    throw new Error(model + " error " + res.status + ": " + detail.slice(0, 300));
   }
   const data = await res.json();
   const parts = data?.candidates?.[0]?.content?.parts || [];
-  return parts.map((p) => p.text || "").join("\n").trim();
+  const text = parts.map((p) => p.text || "").join("\n").trim();
+  if (!text) throw new Error(model + " returned empty text");
+  return text;
+}
+
+async function callCloudflareAI(ai, systemPrompt, messages) {
+  const result = await ai.run(CF_MODEL, {
+    messages: [{ role: "system", content: systemPrompt }, ...messages],
+    max_tokens: 800,
+  });
+  const text =
+    (typeof result?.response === "string" && result.response) ||
+    result?.choices?.[0]?.message?.content ||
+    "";
+  if (!text.trim()) throw new Error("Workers AI returned empty text: " + JSON.stringify(result).slice(0, 300));
+  return text.trim();
+}
+
+async function generate(env, systemPrompt, messages) {
+  const errors = [];
+
+  if (env.GEMINI_API_KEY) {
+    for (const model of GEMINI_MODELS) {
+      try {
+        return await callGeminiModel(model, env.GEMINI_API_KEY, systemPrompt, messages);
+      } catch (err) {
+        console.error("GEMINI_FAIL", String(err));
+        errors.push(String(err));
+      }
+    }
+  }
+
+  if (env.AI) {
+    try {
+      return await callCloudflareAI(env.AI, systemPrompt, messages);
+    } catch (err) {
+      console.error("WORKERS_AI_FAIL", String(err));
+      errors.push(String(err));
+    }
+  } else {
+    errors.push("No Workers AI binding named AI");
+  }
+
+  throw new Error(errors.join(" | "));
 }
 
 export default {
   async fetch(request, env) {
-    // Browser preflight check
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders() });
     }
-
     if (request.method !== "POST") {
       return new Response("POST only", { status: 405, headers: corsHeaders() });
-    }
-
-    if (!env.GEMINI_API_KEY) {
-      return Response.json(
-        { error: "Server not configured: missing GEMINI_API_KEY secret." },
-        { status: 500, headers: corsHeaders() }
-      );
     }
 
     let body;
@@ -77,35 +110,32 @@ export default {
     const url = new URL(request.url);
 
     try {
-      // ---- AI mentor chat ----
-      // POST /mentor  { messages: [{role:'user'|'assistant', content:'...'}, ...] }
       if (url.pathname === "/mentor") {
-        const messages = Array.isArray(body.messages) ? body.messages : [];
-        const contents = messages.map((m) => ({
-          role: m.role === "assistant" ? "model" : "user",
-          parts: [{ text: String(m.content || "") }],
+        const raw = Array.isArray(body.messages) ? body.messages : [];
+        const messages = raw.map((m) => ({
+          role: m.role === "assistant" ? "assistant" : "user",
+          content: String(m.content || ""),
         }));
-        const text = await callGemini(env.GEMINI_API_KEY, MENTOR_SYSTEM, contents);
+        const text = await generate(env, MENTOR_SYSTEM, messages);
         return Response.json({ text }, { headers: corsHeaders() });
       }
 
-      // ---- AI content tool ----
-      // POST /content  { biz: '...', task: '...' }
       if (url.pathname === "/content") {
         const prompt =
           `You write marketing content for teenagers running a small business.\n` +
           `Business: "${body.biz || ""}".\nTask: ${body.task || ""}\n` +
           `Write in a direct, young tone. No hype, no preamble — go straight to the content.`;
-        const text = await callGemini(
-          env.GEMINI_API_KEY,
+        const text = await generate(
+          env,
           "You are a concise marketing copywriter for teenage entrepreneurs.",
-          [{ role: "user", parts: [{ text: prompt }] }]
+          [{ role: "user", content: prompt }]
         );
         return Response.json({ text }, { headers: corsHeaders() });
       }
 
       return Response.json({ error: "Unknown path" }, { status: 404, headers: corsHeaders() });
     } catch (err) {
+      console.error("ALL_PROVIDERS_FAILED", String(err));
       return Response.json(
         { error: "Upstream failure", detail: String(err) },
         { status: 502, headers: corsHeaders() }
