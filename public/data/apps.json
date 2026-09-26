@@ -1,0 +1,315 @@
+{
+  "id": "apps",
+  "name": "App & Software Building",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Find a problem worth building for",
+      "goal": "Land on one small, real problem you can describe in one sentence, that you or people around you actually have.",
+      "explanation": [
+        "Start from your own week — a tracker, calculator, or tool that would save you real time or hassle right now. Real personal need beats a guessed market opportunity.",
+        "Talk to 5 people who might share the problem and see if they describe it the same way you do — a problem only you have isn't necessarily a bad idea, but it changes who your first users will be.",
+        "Check if something similar already exists, and if so, why it's not good enough — a missing feature, bad design, or the wrong audience are all valid openings.",
+        "Write a one-sentence scope for version 1: the ONE thing it does, on purpose leaving out every extra feature you're tempted to add.",
+        "Sketch the core screen or flow on paper before writing any code — it's much faster to change your mind on paper."
+      ],
+      "example": "Noa's class kept losing track of who owed money for group orders. She checked existing split-bill apps and found them cluttered with features her class didn't need. Her v1 scope: \"track who owes who in a group, nothing else.\"",
+      "mistakes": [
+        "Starting with \"an app like [huge popular app] but better\" instead of one specific, small problem.",
+        "Skipping the check for existing solutions and rebuilding something that already exists well.",
+        "Writing a feature list of 15 things for version 1 instead of one core thing."
+      ],
+      "template": "Idea worksheet:\nProblem in one sentence: ____\nWho else has this problem (talked to how many?): ____\nExisting alternatives and why they fall short: ____\nVersion 1 scope — the ONE thing it does: \"____\"",
+      "checklist": [
+        "Wrote the problem in one sentence",
+        "Talked to at least 5 people about whether they share the problem",
+        "Checked existing alternatives and why they fall short",
+        "Wrote a one-sentence version 1 scope"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/apps/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know your first users",
+      "goal": "Identify a specific, reachable group of 10-30 people who can actually test version 1.",
+      "explanation": [
+        "Your first users should be people you can actually reach and talk to directly — classmates, a club, a specific online community — not an abstract \"anyone who needs this.\"",
+        "Describe what they're doing right before they'd need your app, and what tool (if any) they currently use instead, even if it's just a messy group chat or spreadsheet.",
+        "Figure out what would make them actually switch from their current workaround — convenience, speed, or something the workaround can't do at all.",
+        "List the platforms/devices they actually use (iPhone? Android? just a browser?) since that affects what you build first.",
+        "Plan how you'll reach these first 10-30 people directly once v1 exists — a specific list of names/groups, not a vague \"post about it somewhere.\""
+      ],
+      "example": "Noa's first users were her own class of 28 students, already reachable through an existing group chat, all on a mix of iPhone and Android — which pushed her toward a simple web app instead of building two separate native apps.",
+      "mistakes": [
+        "Designing for a broad, abstract audience instead of a specific reachable group.",
+        "Not checking what devices/platforms your real first users are actually on before choosing what to build.",
+        "Having no concrete plan for how the first 10-30 people will actually hear about and try it."
+      ],
+      "template": "First-users plan:\nWho (specific, reachable group): ____\nCurrent workaround they use instead: ____\nWhat would make them switch: \"____\"\nDevices/platforms they use: ____\nHow I'll reach them directly: ____",
+      "checklist": [
+        "Identified a specific, reachable group of first users",
+        "Found out what workaround they currently use",
+        "Checked what devices/platforms they're actually on",
+        "Wrote a concrete plan to reach them once v1 exists"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/apps/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Decide how it will eventually make money",
+      "goal": "Pick one realistic monetization model for later, without letting it slow down building v1.",
+      "explanation": [
+        "Common models: subscription (recurring, usually the strongest long-term), one-time purchase, in-app purchases, ads, or building it for a client at a fixed price.",
+        "For a personal tool solving a real problem, subscription pricing tends to work best once there's a proven user base — but v1 should usually be free while you're learning if people actually want it.",
+        "If considering ads, know that meaningful ad revenue needs real scale — it's rarely the right model for an early, small-audience app.",
+        "If building for a client instead of your own product, agree a fixed price and scope in writing before starting — the equipment/costs chapter covers doing this safely.",
+        "Whatever model you pick, don't build payment/monetization infrastructure until you have real users who've said they'd pay — it's wasted effort otherwise."
+      ],
+      "example": "Noa kept her split-bill app free for the whole first semester while it was just her class using it. Once three other classes asked to use it too, she planned a simple \"free for groups under 10, small monthly fee above that\" model — but only built the payment piece once that demand was real.",
+      "mistakes": [
+        "Building complex payment/subscription infrastructure before having any real, paying-interested users.",
+        "Picking ads as a monetization model for a small, early-stage app where it won't generate meaningful revenue.",
+        "Doing client work without a fixed price and written scope agreed first."
+      ],
+      "template": "Monetization plan:\nModel I'm aiming for eventually: ____\nWhy this fits my app/audience: \"____\"\nSignal I'm watching for before building payment infrastructure: ____",
+      "checklist": [
+        "Picked one realistic long-term monetization model",
+        "Decided to keep v1 free (or scope-limited) while validating demand",
+        "If doing client work, agreed a fixed price and scope in writing first",
+        "Identified the signal that would tell me it's time to build payments"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/apps/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Tools and startup costs",
+      "goal": "Know the real costs of building and shipping, and start with the free tiers.",
+      "explanation": [
+        "Most build tools (AI coding assistants, no-code app builders, databases like Firebase/Supabase) have usable free tiers — start there, and only upgrade once a real, active user base needs it.",
+        "The two costs you can't avoid if you want to publish to app stores are the Apple Developer Program (about $99/year, requires a Mac to build for iOS) and Google Play Console (a one-time roughly $25 fee, no Mac needed) — Google Play is usually the cheaper, more accessible first step.",
+        "A web app (built and used entirely in a browser) avoids both store fees and store review entirely, and is often the fastest way to get real users testing v1.",
+        "Track any recurring costs (database usage, hosting) as your user count grows — free tiers have real limits, and it's worth knowing where yours is before you hit it.",
+        "If a parent's card is used for any store fee or paid tool, agree the amount together first."
+      ],
+      "example": "Noa built her v1 as a simple web app using free tiers of a database and hosting service — zero cost, no store review, and her classmates could use it from a link in seconds.",
+      "mistakes": [
+        "Paying for the Apple Developer Program before validating the app with a web version or free-tier testing first.",
+        "Not tracking free-tier usage limits and getting an unexpected bill once real users show up.",
+        "Choosing native app development when a web app would reach the same first users faster and for free."
+      ],
+      "template": "Tooling and cost sheet:\nBuild tool(s), free tier limits: ____\nHosting/database, free tier limits: ____\nStore fees needed (if publishing to stores): $____\nTotal spent so far: $____",
+      "checklist": [
+        "Started with free tiers of build/hosting tools",
+        "Considered a web app to avoid store fees for v1",
+        "Checked free-tier usage limits before they became a surprise",
+        "Agreed any spending with a parent if their card is used"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Only needed if/when publishing to app stores: the Apple Developer Program and Google Play Console both require a payment method, and account holders are generally expected to be 18+ — a parent's account and card are the standard route under that age. Not needed for a free-tier web app.",
+      "imagePath": "images/apps/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Name it and make it feel real",
+      "goal": "Give the app a name, icon and simple visual identity that makes it feel trustworthy and finished, not a rough prototype.",
+      "explanation": [
+        "Pick a short, easy-to-say name, and quickly check it's not already a well-known app or an obvious trademark conflict in your category.",
+        "Design one simple app icon and a consistent color scheme — free design tools make this a same-day task, and consistency matters more than complexity.",
+        "Write one clear sentence describing what the app does, used consistently everywhere (app store listing, homepage, README) — if you can't describe it in one sentence, the scope may still be too broad.",
+        "Add basic polish that builds trust even in an early version: a real (even simple) app icon instead of a default placeholder, and consistent button/text styling.",
+        "If you plan to publish publicly later, a simple privacy policy page is expected even for a small app that collects any user data at all."
+      ],
+      "example": "Noa named her app \"SplitIt\", made a simple two-color icon in an afternoon, and wrote one sentence for the top of the page: \"Track who owes who in your group — no sign-up drama.\"",
+      "mistakes": [
+        "Shipping with a default/placeholder icon and no consistent visual style, which reads as unfinished even if the functionality is solid.",
+        "Picking a name without checking for an existing app or obvious trademark conflict.",
+        "Skipping a privacy notice entirely once the app collects any real user data."
+      ],
+      "template": "Brand basics:\nApp name (checked for conflicts): ____\nOne-sentence description: \"____\"\nIcon/color scheme: ____\nPrivacy notice needed? Yes/No — done? ____",
+      "checklist": [
+        "Picked a name and checked for obvious conflicts",
+        "Made a simple, consistent icon and color scheme",
+        "Wrote a clear one-sentence description",
+        "Added a basic privacy notice if collecting user data"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/apps/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Build a rough version fast",
+      "goal": "Get a working, usable version 1 built in about a week — rough is fine, working is what matters.",
+      "explanation": [
+        "Build only the one core feature from your version 1 scope — resist adding \"just one more thing\" before anyone has used it.",
+        "Use AI coding tools or no-code builders to move fast on the parts that aren't your core value — authentication, basic layout — and spend your own effort on the part that actually solves the problem.",
+        "Test it yourself, end to end, as if you were a brand-new user with no context, before showing anyone else.",
+        "Fix anything that outright breaks, but don't polish visuals extensively yet — that effort is better spent after you know people actually want to use it.",
+        "Set a real deadline (one week is a reasonable target for a truly minimal version) and treat \"working\" as done, not \"perfect.\""
+      ],
+      "example": "Noa built SplitIt's core \"add an expense, see who owes what\" flow in four days using an AI coding assistant, deliberately skipping login (just a shareable group link) to keep v1 as simple as possible.",
+      "mistakes": [
+        "Adding features beyond the core scope before anyone has tried the app at all.",
+        "Spending the first week on visual polish instead of the core functionality.",
+        "Never actually testing it yourself as a fresh user before showing others."
+      ],
+      "template": "Build sprint plan:\nCore feature only, no extras: ____\nDeadline: ____ (aim for about a week)\nSelf-test as a new user — issues found: ____",
+      "checklist": [
+        "Built only the core feature from the v1 scope",
+        "Set and hit a real one-week-ish deadline",
+        "Tested it myself end to end as a brand-new user",
+        "Fixed anything that outright breaks, without over-polishing yet"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/apps/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Get 10 real users testing it",
+      "goal": "Put the rough version in front of 10 real people who actually have the problem, and watch them use it without helping.",
+      "explanation": [
+        "Give it directly to the specific group identified in the audience chapter — don't wait for a bigger, more polished version.",
+        "Watch people use it without jumping in to explain — everything that confuses them without your help is something that needs fixing in the app itself, not in a verbal explanation.",
+        "Ask what they were trying to do at the moment they got stuck, not just \"what did you think\" afterward — in-the-moment friction is the most useful signal.",
+        "Use a simple feedback form (a free form tool) so people can report issues after the session too, not just during it.",
+        "Expect real bugs and confusing moments — this is exactly what this step is for, not a sign the app is bad."
+      ],
+      "example": "Noa sat with three classmates individually while they tried SplitIt for the first time, saying nothing unless they were completely stuck. Two of the three got confused at the exact same step, which told her precisely what to fix first.",
+      "mistakes": [
+        "Explaining how to use the app while watching, instead of letting real confusion show itself.",
+        "Only asking for feedback after the session instead of noticing where people actually got stuck.",
+        "Treating found bugs as a reason to be discouraged instead of exactly the useful information this step exists to produce."
+      ],
+      "template": "User testing log (one row per tester):\nWho | What they got stuck on | What they said afterward\nTop 3 fixes needed based on this round: ____",
+      "checklist": [
+        "Put the app in front of at least 10 real people from the target audience",
+        "Watched without explaining, noting where people got stuck",
+        "Collected feedback with a simple form for after the session too",
+        "Wrote down the top fixes needed from this round"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/apps/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Fix issues and keep users",
+      "goal": "Turn early testers into people who keep using the app, by fixing what actually blocks them.",
+      "explanation": [
+        "Prioritize fixes by how many people hit the same issue, not by which fix is most interesting to you as a builder.",
+        "Reply to bug reports and feedback fast, even just to say \"seen it, working on it\" — silence makes early users assume the project is abandoned.",
+        "Ship small fixes frequently rather than saving everything for one big update — users notice active improvement.",
+        "Ask your most engaged early users directly what would make them use it even more, and take that seriously over your own assumptions.",
+        "Keep a simple public or semi-public list of known issues/planned fixes so users feel heard even before something is actually fixed."
+      ],
+      "example": "Noa fixed the exact confusing step two of her three testers hit within a day, told them directly it was fixed, and asked if they'd try again — both did, and both kept using it afterward.",
+      "mistakes": [
+        "Letting bug reports go unanswered for weeks, which reads as an abandoned project.",
+        "Fixing the issue you find most interesting instead of the one blocking the most users.",
+        "Never asking engaged users directly what would make the app better for them."
+      ],
+      "template": "Fix-and-retain log:\nIssue reported | How many hit it | Fixed by (date) | Reporter re-engaged? Y/N",
+      "checklist": [
+        "Prioritized fixes by how many users were affected",
+        "Replied to every bug report within a reasonable time",
+        "Shipped fixes in small, frequent updates",
+        "Asked engaged users directly what would improve their experience"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/apps/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Launching and charging money",
+      "goal": "Add a price or subscription only once there's real demand, and set it up legally.",
+      "explanation": [
+        "In-app payment/subscription providers (App Store, Google Play billing, or a web payment processor like Stripe) generally require an 18+ account holder — under that age a parent holds the account.",
+        "Only add payment once users have told you, directly or through their behavior, that they'd pay — building billing infrastructure before that is wasted effort.",
+        "If publishing to app stores, budget for their review process (which can take days and sometimes requires changes) before a public launch date.",
+        "Keep pricing simple at first — one clear price or tier is easier to explain and convert than a complicated pricing table nobody reads.",
+        "Agree the payout arrangement with the account-holding parent before real payments start."
+      ],
+      "example": "Once two other classes asked to use SplitIt and were willing to pay a small monthly fee for groups over 10 people, Noa's father set up the Stripe account, and they agreed payouts would transfer to Noa's account monthly.",
+      "mistakes": [
+        "Building complex payment infrastructure before any real user has indicated they'd pay.",
+        "Launching to app stores without budgeting time for the review process.",
+        "Setting up a payment account without the required 18+ holder, risking the account being frozen."
+      ],
+      "template": "Launch payment plan:\nPayment provider: ____ — account holder (18+): ____\nPrice/tier (kept simple): $____\nStore review time budgeted (if applicable): ____ days\nAgreed transfer arrangement: ____",
+      "checklist": [
+        "Confirmed real user demand before building payment infrastructure",
+        "Set up the payment account with an 18+ holder",
+        "Kept pricing simple — one clear price or tier",
+        "Budgeted for app store review time if publishing there"
+      ],
+      "parentNeeded": true,
+      "parentNote": "In-app payments and app store developer accounts require an 18+ account holder. A parent needs to hold this account and agree the payout arrangement before charging money.",
+      "imagePath": "images/apps/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track subscription/purchase income and understand what's owed as it becomes real.",
+      "explanation": [
+        "App income (subscriptions, purchases, or client payments) is taxable business income in almost every country, including for minors, with rules that vary by country.",
+        "Keep a simple log: date, amount, source (subscription / one-time purchase / client payment), and any platform fee taken (app stores typically take a percentage cut).",
+        "Remember that store platform fees (often 15-30%) reduce what actually reaches you — track net income, not just gross revenue shown in a dashboard.",
+        "Set aside a portion of net income (a rough 20-25% placeholder is common) until the real applicable rate for your situation is known.",
+        "Have one real conversation with a parent, and once income is more than occasional, check your country's actual rules for minors' business/app income."
+      ],
+      "example": "Noa's spreadsheet tracked gross revenue, the store's cut, and net income separately each month, so tax time reflected what she actually received, not the inflated gross number shown in the dashboard.",
+      "mistakes": [
+        "Tracking gross revenue and forgetting that store platform fees significantly reduce actual income.",
+        "Not tracking client payments (if building apps for others) the same carefully way as subscription income.",
+        "Spending all net income immediately with nothing set aside."
+      ],
+      "template": "Income log (one row per period):\nDate | Gross revenue | Platform fee | Net income | Running total\nSet-aside plan: ____% saved so far: $____",
+      "checklist": [
+        "Started a running income log tracking net (not just gross) income",
+        "Accounted for platform/store fees in the tracking",
+        "Set aside a percentage of net income",
+        "Had one conversation with a parent about this income"
+      ],
+      "parentNeeded": true,
+      "parentNote": "App/software income is taxable in most places, including for minors, and store platform fees complicate the real net number. This needs a parent involved and, once meaningful, a real check with local tax rules.",
+      "imagePath": "images/apps/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing beyond the first users",
+      "goal": "Turn a working v1 with real early users into a slowly-growing, more reliable product.",
+      "explanation": [
+        "Look at usage data (which features get used, where people drop off) to decide what to build next, rather than guessing or building whatever feels exciting.",
+        "Fix reliability and performance issues before adding flashy new features — a stable app people trust beats a feature-rich one that breaks.",
+        "Expand deliberately to a second audience segment or platform only once the first is stable and genuinely happy, not before.",
+        "Keep a public or semi-public changelog so returning users see visible, ongoing improvement.",
+        "Review monthly: active users, retention (do people come back?), and income — not daily download counts, which swing too much to mean much alone."
+      ],
+      "example": "After SplitIt was stable and loved by four classes, Noa looked at usage data and saw people wanted recurring (not just one-time) expense tracking. That became the next feature, built only after the core was solid.",
+      "mistakes": [
+        "Adding new features before the core experience is stable and reliable.",
+        "Expanding to a whole new audience or platform before the first one is genuinely happy.",
+        "Reviewing daily download numbers instead of monthly retention and usage trends."
+      ],
+      "template": "Monthly growth review:\nActive users: ____  Retention (returning users): ____%  Net income: $____\nWhat usage data suggests building next: ____\nOne stability/performance fix prioritized this month: ____",
+      "checklist": [
+        "Used real usage data to decide what to build next",
+        "Prioritized stability/performance over new features when needed",
+        "Only expanded to a new audience/platform once the first was stable",
+        "Set up a monthly review of active users, retention and income"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/apps/growth.jpg"
+    }
+  ]
+}

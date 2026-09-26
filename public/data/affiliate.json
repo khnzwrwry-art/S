@@ -1,0 +1,315 @@
+{
+  "id": "affiliate",
+  "name": "Affiliate Marketing",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Pick a niche and programs to promote",
+      "goal": "Land on one topic you genuinely know, and 2-3 affiliate programs in it you'd recommend even without being paid.",
+      "explanation": [
+        "Start from what you already know or consume a lot — gaming gear, skincare, study tools, sneakers. Real knowledge makes your content believable; faking expertise doesn't.",
+        "Search \"[topic] affiliate program\" and check the big networks (Amazon Associates, Impact, ShareASale, Awin) for programs in that niche — compare commission rate and cookie duration (how long after a click you still get credit).",
+        "Narrow to one niche specific enough that you can become the go-to voice in it, not \"tech\" but \"budget mechanical keyboards for students.\"",
+        "Shortlist 2-3 products/programs you'd genuinely use or already do — never promote something you wouldn't personally recommend to a friend.",
+        "Write your one-sentence angle: \"I help [who] choose [what] without [common frustration].\""
+      ],
+      "example": "Omer was already deep into budget keyboard builds for his own desk. He joined two keyboard-parts affiliate programs with decent commissions and cookie durations, and his angle became: \"I help students build a great keyboard for under $60 without getting scammed by fake reviews.\"",
+      "mistakes": [
+        "Picking the highest-commission program in a topic you don't actually care about — the content shows it, and so does the audience.",
+        "Spreading across ten unrelated niches instead of owning one.",
+        "Signing up for a program without reading its terms on prohibited promotion methods (e.g. no fake reviews, no misleading claims)."
+      ],
+      "template": "Niche worksheet:\nTopic I actually know: ____\nPrograms found (name / commission % / cookie length): ____\nWhy I'd recommend these even unpaid: \"____\"\nOne-sentence angle: \"I help [who] [do what] without [frustration].\"",
+      "checklist": [
+        "Wrote down 3 topics I genuinely know well",
+        "Found and compared at least 2 affiliate programs in that niche",
+        "Read each program's terms for prohibited promotion methods",
+        "Wrote my one-sentence angle"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know who's actually reading or watching you",
+      "goal": "Describe the exact person who'd trust your recommendation enough to click through and buy.",
+      "explanation": [
+        "Your audience isn't \"everyone interested in X\" — it's a specific person at a specific decision point (about to buy their first keyboard, stuck choosing between two brands).",
+        "Read comments and questions on existing content in your niche — what do people keep asking that isn't clearly answered anywhere?",
+        "Notice what convinces YOU to trust a recommendation online (a real demo, an honest downside, a specific number) and build that into your content style.",
+        "Write a short buyer profile: who they are, what they're about to decide, and what would make them trust a stranger's link.",
+        "Test it — show a draft post/video to 2-3 people matching the profile and ask what would stop them from clicking."
+      ],
+      "example": "Omer's profile: \"A student who's outgrown their laptop keyboard, has a $50-70 budget, and is overwhelmed by conflicting YouTube reviews.\" His content leaned hard into honest trade-offs at that exact price point instead of hyping the most expensive option.",
+      "mistakes": [
+        "Writing generic \"top 10\" content that could apply to anyone, convincing no one.",
+        "Ignoring the comments section, which is free research on exactly what your audience doesn't understand yet.",
+        "Never testing content on a real person before publishing."
+      ],
+      "template": "Audience one-pager:\nWho: ____\nWhat they're deciding right now: ____\nWhat makes them trust a recommendation: \"____\"\nWhere they already hang out online: ____",
+      "checklist": [
+        "Read comments/questions on 5+ pieces of existing content in my niche",
+        "Wrote the buyer profile",
+        "Identified what specifically builds trust for this audience",
+        "Tested a draft on someone matching the profile"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Understand the commission structure",
+      "goal": "Know exactly how and how much you get paid per action, so you can judge which programs are actually worth your time.",
+      "explanation": [
+        "You don't set a price — the merchant does. What matters to you is the commission rate (often 3-10% on physical goods, 20-50%+ on digital products/courses) and the payout trigger (per sale, per sign-up, per free trial).",
+        "Check the cookie duration — how many days after someone clicks your link they can still buy and you get credit. Longer is better; 24 hours is weak, 30+ days is strong.",
+        "Calculate realistic numbers: if 100 people click and 2% buy a $40 item at 8% commission, that's roughly $6.40 per 100 clicks — useful for judging how much traffic you'd actually need.",
+        "Watch for a minimum payout threshold (some programs won't pay you until you've earned $50-100) and how often payouts happen.",
+        "Compare 2-3 programs on this same math before committing your content time to one."
+      ],
+      "example": "Omer compared two keyboard-parts programs: one paid 5% with a 7-day cookie, the other 8% with a 30-day cookie. The second was clearly better even though the per-click math looked similar, because a keyboard purchase decision often takes people weeks.",
+      "mistakes": [
+        "Chasing the highest advertised commission % without checking cookie duration or payout threshold.",
+        "Not calculating realistic expected earnings before investing weeks of content into one program.",
+        "Missing a program's minimum payout threshold and being surprised it never pays out at low volume."
+      ],
+      "template": "Commission comparison:\nProgram A: ____% commission, ____ day cookie, $____ minimum payout\nProgram B: ____% commission, ____ day cookie, $____ minimum payout\nEstimated earnings per 100 clicks (using a 2% realistic conversion guess): $____",
+      "checklist": [
+        "Found the commission rate for each shortlisted program",
+        "Found the cookie duration for each",
+        "Found the minimum payout threshold and frequency",
+        "Did the rough per-100-clicks math for comparison"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Equipment and startup costs",
+      "goal": "Know that this can start at $0, and know exactly what (if anything) is worth spending on early.",
+      "explanation": [
+        "Affiliate marketing is one of the lowest-cost paths here — a phone and free editing apps are enough to start; the real investment is time.",
+        "The only common paid step is applying to a network that requires an existing website/following — if you're rejected for having no audience yet, build content first and reapply later rather than paying for shortcuts.",
+        "If you eventually want a simple link-in-bio page or a basic website, free tiers exist (Linktree free, a free blog platform) — don't pay for this before you have any traffic.",
+        "Avoid any paid \"affiliate marketing course\" promising guaranteed income — the free official documentation of each network covers everything you need to start.",
+        "If you do spend anything (a domain name, a paid tool), set a small hard cap and track it."
+      ],
+      "example": "Omer spent $0 for his first three months — free editing app, free blog platform for his \"best budget keyboards\" list, and existing social accounts. He only bought a $12/year domain once he had steady traffic.",
+      "mistakes": [
+        "Paying for a \"guaranteed income\" affiliate course instead of using free program documentation.",
+        "Buying tools or a custom website before having any content or traffic to justify it.",
+        "Applying to a big network before having any content, then getting discouraged by rejection instead of building first."
+      ],
+      "template": "Startup cost sheet:\nTotal spent so far: $____\nAnything I'm considering buying: ____ — do I have traffic that justifies it yet? Yes/No",
+      "checklist": [
+        "Confirmed I can start with $0 in tools",
+        "Avoided any paid \"guaranteed income\" course or program",
+        "If considering a paid tool, checked whether current traffic justifies it",
+        "Set a hard cap for any spending"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Build a trustworthy voice",
+      "goal": "Make your recommendations feel like they come from a real, honest person — not an ad.",
+      "explanation": [
+        "Pick a consistent name/handle across the platform(s) you'll use, and a simple visual style (thumbnail style, intro line) that makes your content recognizable.",
+        "Always disclose that a link is an affiliate link, clearly and early — not buried in fine print. It's legally required in most places and it actually builds trust rather than losing it.",
+        "Include at least one honest downside in every recommendation — \"this is great, but the app is clunky\" — one-sided hype content converts worse and gets less trust over time.",
+        "Write a short \"why trust me\" note for your bio/about section: your actual experience with the niche, in one or two sentences.",
+        "Keep your tone the same whether or not a link is attached — audiences notice when enthusiasm only appears for paid links."
+      ],
+      "example": "Omer's videos always opened with \"budget keyboard breakdown, this link is an affiliate link, I get a small cut if you buy\" — said naturally in the first few seconds, not hidden. Comments regularly thanked him for the honesty.",
+      "mistakes": [
+        "Hiding or burying affiliate disclosure — it's both a trust-killer and, in most places, against advertising law.",
+        "Only ever posting glowing reviews with zero downsides.",
+        "Changing tone/enthusiasm noticeably only for sponsored or affiliate content."
+      ],
+      "template": "Brand basics:\nConsistent name/handle: ____\nDisclosure line I'll say/write every time: \"____\"\n\"Why trust me\" bio line: \"____\"",
+      "checklist": [
+        "Picked a consistent name/handle",
+        "Wrote a clear, early disclosure line and use it every time",
+        "Included a genuine downside in my last piece of content",
+        "Wrote a short \"why trust me\" bio line"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Choose your content channel",
+      "goal": "Pick one platform format to publish consistently on, matched to where your audience already is.",
+      "explanation": [
+        "Match format to niche: visual/physical products often work well as short-form video; software/apps often work well as a blog post or comparison article; either can work — check where similar creators in your niche actually get engagement.",
+        "Commit to a specific, sustainable posting rhythm (e.g. 2 pieces of content a week) rather than a burst followed by silence.",
+        "Link placement matters: put your affiliate link somewhere easy to find (bio link, pinned comment, description) and mention where it is in the content itself.",
+        "Use whatever basic click tracking the program or a free link shortener gives you, so you can see which content actually drives clicks.",
+        "Repurpose one piece of content across 2 formats (a video's script becomes a blog post) instead of creating everything from scratch every time."
+      ],
+      "example": "Omer picked YouTube Shorts as his primary format since keyboard builds are visual, cross-posted the same clips to TikTok and Instagram Reels, and kept his affiliate links pinned in every video's description and top comment.",
+      "mistakes": [
+        "Posting on 4 platforms at once with no consistent rhythm on any of them.",
+        "Making it hard to find the link — buried in a bio with no mention of where it is.",
+        "Never checking which specific piece of content actually drove clicks."
+      ],
+      "template": "Channel plan:\nPrimary platform: ____\nPosting rhythm: ____ pieces per week\nWhere the link lives: ____\nHow I'll check which content drives clicks: ____",
+      "checklist": [
+        "Picked one primary content format/platform",
+        "Set a realistic, sustainable posting rhythm",
+        "Made the affiliate link easy to find and mentioned where it is",
+        "Set up basic click tracking"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Land your first commission",
+      "goal": "Get one real click-through purchase — proof the whole loop actually works.",
+      "explanation": [
+        "Your first commission usually comes from your most specific, most helpful piece of content — not your most polished one. Answer one real question completely.",
+        "Make the recommendation feel earned: show the product in real use, not just a link dump.",
+        "Reply to every comment asking a follow-up question about the product — those replies often convert better than the original post.",
+        "Check your affiliate dashboard regularly in the first weeks so you learn which specific content and audience segment actually converts.",
+        "Don't panic if the first few weeks show clicks but no sales — for higher-cookie-duration programs, a sale can land days or weeks after the click."
+      ],
+      "example": "Omer's first commission came from a comment reply — someone asked \"does this switch feel mushy?\", he gave a specific, honest answer with the link, and they bought two days later through the 30-day cookie window.",
+      "mistakes": [
+        "Giving up after one week of clicks-but-no-sales without checking the cookie window.",
+        "Never replying to follow-up questions, which are often the actual moment of decision.",
+        "Judging success only by the most polished content instead of the most specifically helpful one."
+      ],
+      "template": "First-commission log:\nContent that got the click: ____\nQuestion or comment that led to it (if any): \"____\"\nDays between click and sale: ____",
+      "checklist": [
+        "Published at least one specific, genuinely helpful piece of content",
+        "Replied to every follow-up question",
+        "Checked the affiliate dashboard weekly",
+        "Logged the details once the first commission landed"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Keep the audience's trust",
+      "goal": "Make sure people keep clicking your links in the future because your past recommendations were honest and useful.",
+      "explanation": [
+        "If a product you recommended turns out disappointing after more use, say so publicly — a follow-up correction builds more long-term trust than staying silent.",
+        "Keep disclosure consistent on every piece of content, not just the first few — audiences notice if it quietly disappears.",
+        "Don't accept every affiliate offer that comes your way — turning down a bad-fit, high-commission product protects the trust that makes the good ones convert.",
+        "Answer audience questions honestly even when the honest answer is \"don't buy this, get the other one instead\" — it's the single biggest trust builder in this business model.",
+        "Keep a simple list of what you've recommended so you can follow up or correct yourself later without having to remember everything."
+      ],
+      "example": "When a keyboard Omer recommended developed a common defect after a few months, he posted a follow-up video about it and updated the article. Subscribers specifically mentioned that follow-up as why they kept trusting his future recommendations.",
+      "mistakes": [
+        "Staying silent when a past recommendation turns out to be wrong.",
+        "Accepting every affiliate offer regardless of fit, diluting trust in all of them.",
+        "Letting disclosure quietly slip once an audience is established."
+      ],
+      "template": "Trust log:\nProducts recommended (running list): ____\nAny follow-up corrections needed: ____\nOffers turned down and why: ____",
+      "checklist": [
+        "Started a running list of what I've recommended",
+        "Posted a follow-up/correction where one was needed",
+        "Kept disclosure consistent on every piece of content",
+        "Turned down at least one bad-fit offer on purpose"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Getting paid",
+      "goal": "Understand how and when commission money actually reaches you, and set it up legally.",
+      "explanation": [
+        "Most affiliate networks require the account holder to be 18+ — under that age, a parent applies and holds the account, with you tracking your own content and results.",
+        "Understand the payout method (bank transfer, PayPal, check) and minimum threshold before you rely on any specific number arriving.",
+        "Payouts are often monthly and often delayed by a \"clearance period\" (in case of returns) — don't expect same-day money after a sale.",
+        "Keep the login and payout details agreed upon and secure between you and the account-holding parent — never shared with anyone outside that.",
+        "Watch for scam \"affiliate programs\" that ask YOU to pay an upfront fee to join — legitimate programs never charge you to become an affiliate."
+      ],
+      "example": "Omer's father held the Amazon Associates and keyboard-parts affiliate accounts, and they agreed payouts would transfer to Omer's own savings account monthly after clearing, with Omer tracking every commission in a shared spreadsheet.",
+      "mistakes": [
+        "Paying an upfront \"joining fee\" for an affiliate program — a clear scam signal.",
+        "Expecting instant payout without accounting for clearance periods and minimum thresholds.",
+        "Not agreeing on the payout arrangement with the account-holding parent in advance."
+      ],
+      "template": "Payment setup record:\nAccount holder (must be 18+ for most networks): ____\nPayout method and minimum threshold: ____\nClearance/delay period: ____\nAgreed transfer arrangement to me: ____",
+      "checklist": [
+        "Confirmed the account holder meets each program's age requirement",
+        "Understood the payout method, threshold and clearance period",
+        "Agreed the transfer arrangement with the account-holding parent",
+        "Never paid any upfront fee to join a program"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Most affiliate networks require an 18+ account holder. A parent applying and holding the account is the standard route under that age.",
+      "imagePath": "images/affiliate/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track every commission earned and understand what's owed, without waiting until it's confusing.",
+      "explanation": [
+        "Affiliate commissions are taxable income in almost every country, same as any other business income, including for minors — the specific rules vary by country and need a real check for where you live.",
+        "Keep a simple log: date, program, amount, and payout date for every commission — most networks give you a dashboard export, use it.",
+        "Set aside a portion of every payout (a rough 20-25% placeholder is common) rather than spending all of it, until you know the real number that applies to you.",
+        "Some programs issue tax forms (in the US, a 1099 above a threshold) — know whether yours does and keep records either way.",
+        "Have one real conversation with a parent, and once income is more than pocket change, check your country's actual rules for minors' business income."
+      ],
+      "example": "Omer exported his commission history monthly from each program's dashboard into one spreadsheet, and set aside a quarter of each payout into a separate account so nothing was a surprise later.",
+      "mistakes": [
+        "Assuming small affiliate commissions aren't taxable — in most places they are, regardless of amount.",
+        "Not keeping records because the network \"already tracks it\" — dashboards can be hard to access after account changes or don't cover everything.",
+        "Spending 100% of payouts with nothing set aside."
+      ],
+      "template": "Commission log (one row per payout):\nDate | Program | Amount | Payout date | Running total\nSet-aside plan: ____% of each payout → $____ saved so far",
+      "checklist": [
+        "Started a running commission log",
+        "Set aside a percentage of each payout",
+        "Checked whether any program issues a tax form",
+        "Had one conversation with a parent about how this income is handled"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Affiliate income is taxable in most places, including for minors, and the exact filing rules depend on your country. This needs a parent involved, and a real check with a tax authority once income is meaningful — see the Legal section in this app for country-specific starting notes.",
+      "imagePath": "images/affiliate/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing your affiliate income",
+      "goal": "Turn one working niche and channel into a steadier, slowly-diversifying source of commission income.",
+      "explanation": [
+        "Once you have consistent traffic, look at which specific content and which specific product recommendations actually convert, and make more of that pattern.",
+        "Diversify across 2-4 programs in your niche rather than depending entirely on one company's commission rates or program terms, which can change.",
+        "Consider negotiating a higher commission rate once you have proven, consistent traffic — many programs will do this for reliable affiliates, but only if you ask.",
+        "Build an owned asset over time (an email list, a resource page) that doesn't depend entirely on any one platform's algorithm.",
+        "Review monthly, not daily — total clicks, conversion rate, and earnings per 100 clicks tell you more over a month than any single viral post."
+      ],
+      "example": "After six months, Omer noticed his comparison-style posts converted 3x better than his \"unboxing\" content. He shifted most of his effort there, added a second complementary affiliate program, and started a short email list of people wanting build guides.",
+      "mistakes": [
+        "Depending on a single program that could change its terms or shut down without warning.",
+        "Never asking for a better commission rate despite having proven, consistent traffic.",
+        "Reviewing performance obsessively day to day instead of looking at real monthly trends."
+      ],
+      "template": "Monthly growth review:\nTotal clicks: ____  Conversions: ____  Earnings per 100 clicks: $____\nBest-converting content type: ____\nOne thing I'm doing more of next month: ____",
+      "checklist": [
+        "Identified my best-converting content pattern",
+        "Diversified into at least a second program in my niche",
+        "Considered or asked about a better commission rate",
+        "Set up a simple monthly (not daily) performance review"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/affiliate/growth.jpg"
+    }
+  ]
+}

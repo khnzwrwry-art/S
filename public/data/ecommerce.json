@@ -1,0 +1,315 @@
+{
+  "id": "ecommerce",
+  "name": "Your Own Product",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Design a product worth making",
+      "goal": "Land on one original product you can describe clearly, that solves a real want or need better than what already exists.",
+      "explanation": [
+        "Start from something you'd genuinely want to own yourself — a specific design, a better version of something ordinary, a product for a hobby you're part of.",
+        "Research 5-10 similar products already for sale — note their price, quality complaints in reviews, and what a better version would actually change.",
+        "Sketch or prototype the simplest possible first version — resist designing 10 variants before you've made and held even one.",
+        "Order or make a single sample before committing to anything else — most real problems (fit, material feel, function) only show up once it's physical.",
+        "Write your one-sentence pitch: \"Unlike [existing option], mine [specific difference] because [reason].\""
+      ],
+      "example": "Yael was frustrated that reusable water bottles with fun designs always cracked at the lid. She researched competitors' 1-star reviews (lid cracking was the #1 complaint), designed a reinforced lid, and ordered one sample before deciding on colors or branding.",
+      "mistakes": [
+        "Designing multiple product variants before making and testing even one sample.",
+        "Skipping competitor research and missing an easy, specific differentiator hiding in their bad reviews.",
+        "Falling in love with a design before checking if it's actually better than what already exists, not just different."
+      ],
+      "template": "Product worksheet:\nProduct idea: ____\nCompetitor research — common complaint in reviews: \"____\"\nMy specific improvement: \"____\"\nOne-sentence pitch: \"Unlike [X], mine [Y] because [Z].\"",
+      "checklist": [
+        "Researched 5-10 similar existing products and their reviews",
+        "Identified a specific, real improvement over existing options",
+        "Made or ordered one physical sample before deciding anything else",
+        "Wrote the one-sentence pitch"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/ecommerce/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know exactly who buys this",
+      "goal": "Describe the specific person who'd choose your product over a cheaper or more established alternative.",
+      "explanation": [
+        "Your buyer isn't \"anyone who needs [category]\" — it's someone with a specific reason to prefer YOUR version, often tied directly to the improvement you identified.",
+        "Read reviews (positive and negative) of competitor products to understand exactly what this buyer already cares about and complains about.",
+        "Find where this buyer already spends time (a hobby community, a specific social platform, a local group) rather than guessing.",
+        "Write a short profile: who they are, what they currently use instead, and the one sentence that would make them switch.",
+        "Show your sample/prototype to 3-5 real people matching this profile and note their actual reaction, not just polite feedback."
+      ],
+      "example": "Yael's buyer profile: \"People who've already owned a cheap reusable bottle that cracked, who care about durability more than trend, and hang out in zero-waste/sustainability communities online.\" Her messaging led with durability, not aesthetics.",
+      "mistakes": [
+        "Targeting \"everyone who drinks water\" instead of the specific person with a reason to prefer this version.",
+        "Guessing what the audience cares about instead of reading their real reviews of similar products.",
+        "Only asking friends for feedback instead of people who actually match the target buyer profile."
+      ],
+      "template": "Audience one-pager:\nWho: ____\nWhat they currently use instead: ____\nWhat makes them switch: \"____\"\nWhere they hang out: ____",
+      "checklist": [
+        "Read reviews of competitor products for real audience pain points",
+        "Wrote the specific buyer profile",
+        "Found where this buyer already spends time online",
+        "Showed the sample to 3-5 people matching the profile"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/ecommerce/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Price for real margin",
+      "goal": "Set a price that covers your true per-unit cost with enough margin to survive returns, fees and slow periods.",
+      "explanation": [
+        "Calculate the true per-unit cost: manufacturing/materials, packaging, and shipping to you — not just the raw material price.",
+        "A common approach for an original product is pricing at 2.5-4× true cost, since you're carrying more risk (unsold inventory) than a dropshipper.",
+        "Compare to 3-5 competitor prices and place yourself within a sensible range — a much lower price on an \"improved\" product looks suspicious rather than like a deal.",
+        "Account for payment processor fees (roughly 3%) and expected return/defect rate when calculating real margin, not just the sale price minus cost.",
+        "Decide your break-even unit count — how many units you need to sell to recover your batch cost — before ordering stock."
+      ],
+      "example": "Yael's bottle cost $6.50 landed per unit for a 50-unit batch. At 3.5× that's about $22.75; she priced at $24, checked against $18-32 competitor range, and calculated she needed to sell 14 units just to recover the batch cost.",
+      "mistakes": [
+        "Pricing based on what feels fair rather than the real cost-plus-margin math.",
+        "Forgetting to account for returns/defects when calculating real margin.",
+        "Not knowing the break-even unit count before ordering a batch."
+      ],
+      "template": "Pricing calculator:\nTrue landed cost per unit: $____\nCost × 3 = suggested price: $____\nCompetitor range: $____ – $____\nMy price: $____\nBreak-even units needed to recover batch cost: ____",
+      "checklist": [
+        "Calculated true landed cost per unit",
+        "Applied the multiplier and compared to competitors",
+        "Accounted for processor fees and expected returns",
+        "Calculated break-even unit count before ordering"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/ecommerce/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Batch size and startup costs",
+      "goal": "Order the smallest batch that lets you actually sell and learn, without risking money you can't afford to lose.",
+      "explanation": [
+        "Unlike dropshipping, you pay for stock upfront — this is real money at risk before any sale happens, so budget and batch size decisions matter more here than almost anywhere else in this app.",
+        "Always order the smallest batch a supplier allows for your first run, even if the per-unit price is worse — proving demand matters more than maximizing margin on an unproven product.",
+        "Budget for the full real cost: manufacturing, shipping to you, packaging, and a small buffer for defects — not just the quoted unit price.",
+        "Set a hard total spending cap you (and a parent, if their money/card is involved) are fully prepared to lose if the product doesn't sell.",
+        "Get a second sample from your chosen manufacturer before the full batch ships, to catch quality issues before they're baked into 50+ units."
+      ],
+      "example": "Yael's supplier's minimum batch was 50 units at $6.50 landed each — $325 total. Her parents agreed to a $400 hard cap (batch plus a small buffer), fully understanding it could all be lost if the bottles didn't sell.",
+      "mistakes": [
+        "Ordering a large batch for a better per-unit price before any real demand is proven.",
+        "Forgetting to budget for packaging and shipping-to-you costs on top of the manufacturing price.",
+        "Skipping a pre-batch quality-check sample and discovering a defect only after 50+ units arrive."
+      ],
+      "template": "Startup budget sheet:\nSmallest batch size supplier allows: ____ units\nTotal batch cost (incl. shipping/packaging): $____\nHard cap I'm prepared to lose entirely: $____\nPre-batch quality sample ordered? Yes/No",
+      "checklist": [
+        "Ordered the smallest batch size the supplier allows",
+        "Budgeted the full real cost, not just quoted unit price",
+        "Set a hard spending cap agreed with a parent if their money is involved",
+        "Got a quality-check sample before the full batch"
+      ],
+      "parentNeeded": true,
+      "parentNote": "A physical product batch is real upfront money at risk, and most suppliers/payment methods for bulk ordering need an adult. A parent should agree the spending cap in writing before any batch is ordered.",
+      "imagePath": "images/ecommerce/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Build a brand around the product",
+      "goal": "Give the product a name, story and look that make it feel like a real, considered brand, not a random item.",
+      "explanation": [
+        "Pick a name that's easy to say and remember, and check it's not already a registered trademark or an existing well-known brand in your category.",
+        "Design consistent packaging or presentation — even a simple branded sticker or card insert makes a product feel intentional rather than generic.",
+        "Write the story behind why you made this — the real problem that led to it (from chapter 1) — since a genuine story differentiates far more than generic marketing copy.",
+        "Take real, honest product photos showing actual use, not just studio shots — for a physical product, buyers want to see it in the real world.",
+        "Decide your return/quality policy up front and state it clearly — it's one of the biggest trust signals for a small, unknown brand."
+      ],
+      "example": "Yael named her bottles \"Holdfast\", included a small card in every package explaining the lid-cracking problem she set out to fix, and photographed real people using the bottles at school and the gym instead of only studio shots.",
+      "mistakes": [
+        "Generic, unbranded packaging that makes the product feel like an unbranded dropship item.",
+        "Skipping the real story behind the product in favor of generic marketing language.",
+        "No clear return/quality policy stated anywhere, which reads as untrustworthy for a new brand."
+      ],
+      "template": "Brand one-pager:\nName (checked for conflicts): ____\nPackaging/presentation: ____\nOne-paragraph real story: \"____\"\nReturn/quality policy in one sentence: \"____\"",
+      "checklist": [
+        "Picked a name and checked for conflicts",
+        "Designed simple, consistent packaging or presentation",
+        "Wrote the real story behind the product",
+        "Stated a clear return/quality policy"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/ecommerce/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Choose where to sell",
+      "goal": "Pick the right mix of storefront and marketing channel for a physical, original product.",
+      "explanation": [
+        "A marketplace with built-in buyers (like Etsy for handmade/design goods) can get you sales faster than a standalone store with zero traffic — consider starting there, or alongside your own store.",
+        "Match your marketing channel to your audience profile — visual/lifestyle products usually do well with real-use photo and video content on social platforms.",
+        "Whichever primary channel you pick, install analytics/tracking before spending any money on ads, so you can see what's actually working.",
+        "Consider selling a small amount locally first (friends, school, a local market/fair) — it's a fast, low-risk way to get real feedback and your first reviews.",
+        "Don't spread your limited first batch across too many channels at once — concentrate early sales and reviews in one or two places."
+      ],
+      "example": "Yael listed on Etsy (built-in buyers already searching for sustainable products) and posted real-use content on Instagram, driving traffic to the same Etsy listing rather than splitting effort across a separate store too.",
+      "mistakes": [
+        "Building a standalone store with no existing traffic instead of considering a marketplace with built-in buyers first.",
+        "Spreading a small first batch across too many channels, diluting reviews and momentum everywhere.",
+        "Spending on ads before installing basic tracking to see what's working."
+      ],
+      "template": "Channel plan:\nPrimary channel: ____ (marketplace / own store / local)\nSecondary marketing channel: ____\nTracking installed before spending? Yes/No",
+      "checklist": [
+        "Picked a primary sales channel matching the audience",
+        "Considered a marketplace with built-in buyers for the first batch",
+        "Installed tracking before any ad spend",
+        "Concentrated the first batch's sales in one or two channels, not many"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/ecommerce/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Sell your first units",
+      "goal": "Get real strangers to buy, and collect the reviews and feedback that make the next sale easier.",
+      "explanation": [
+        "Make sure checkout and shipping logistics actually work by placing a test order yourself, or having a friend do so, before driving real traffic.",
+        "For a new, unproven brand, consider a small honest launch incentive (a modest discount for early reviewers) to get your first real reviews faster.",
+        "Ship carefully and promptly — for a physical product, the unboxing experience itself is part of what gets shared and reviewed.",
+        "Follow up directly with early buyers to ask for a review once they've had time to actually use the product, not immediately after shipping.",
+        "Log everything about each early sale: what channel it came from, what almost stopped them (if they mention it), and what they said afterward."
+      ],
+      "example": "Yael's first five sales came through a launch discount shared with a sustainability Instagram community she'd been genuinely part of for months — not strangers, but people who already trusted her presence there.",
+      "mistakes": [
+        "Driving traffic to checkout before testing that the actual purchase and shipping flow works end to end.",
+        "Asking for a review immediately at shipping instead of after the buyer has actually used the product.",
+        "Not tracking where early sales actually came from, losing the ability to double down on what worked."
+      ],
+      "template": "First-sales log:\nTest order placed myself? Yes/No\nSale source | What almost stopped them | Review received?",
+      "checklist": [
+        "Tested checkout and shipping myself before launch",
+        "Considered a launch incentive for early reviewers",
+        "Shipped carefully and promptly with attention to unboxing",
+        "Logged the source and outcome of each early sale"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/ecommerce/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Handle stock, shipping and issues",
+      "goal": "Manage inventory and problems responsibly so a growing brand doesn't outrun its own reliability.",
+      "explanation": [
+        "Track exact stock levels and never sell what you don't have — an oversold, backordered item creates a review that stays forever.",
+        "Set honest shipping-time expectations on the listing and stick to them — a delay you warned about is fine; a silent one isn't.",
+        "Have a clear, pre-decided process for damaged/wrong items — replace or refund quickly rather than making a customer argue their case.",
+        "Watch remaining stock against your reorder lead time — running out completely while waiting weeks for a restock loses momentum and sales.",
+        "Keep a simple spreadsheet of stock in, stock sold, and stock remaining, updated after every sale."
+      ],
+      "example": "When Yael's stock dropped to 10 units, she ordered a restock immediately rather than waiting until zero, since her supplier's lead time was three weeks — she never had to pause sales.",
+      "mistakes": [
+        "Selling units you don't actually have in stock, creating backorder frustration.",
+        "Waiting until stock hits zero to reorder, causing an avoidable sales gap.",
+        "Making a customer prove fault before resolving a damaged or wrong item."
+      ],
+      "template": "Stock and service playbook:\nCurrent stock: ____  Reorder lead time: ____ weeks  Reorder trigger point: ____ units\nDamaged/wrong item policy: \"____\"",
+      "checklist": [
+        "Set up a simple stock tracking sheet",
+        "Set an honest shipping-time expectation on the listing",
+        "Wrote a clear damaged/wrong item policy",
+        "Set a reorder trigger point based on lead time"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/ecommerce/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Payments and checkout",
+      "goal": "Accept payment safely and legally for a physical product business.",
+      "explanation": [
+        "Payment processors and most marketplaces require an 18+ account holder — under that age, a parent opens and holds the account, with you running the store day to day.",
+        "Agree the payout schedule and destination account with the account-holding parent before sales start.",
+        "Keep basic fraud protection (address verification, card verification) turned on — it's usually on by default.",
+        "Keep a simple record of every sale, refund and fee, which you'll need for the accounting chapter.",
+        "Never share payment account details or one-time codes with anyone claiming to be a supplier or platform \"support\" over chat."
+      ],
+      "example": "Yael's Etsy shop and Stripe account for her own site were both opened under her mother's name, with a written agreement that profit transferred to Yael's account monthly after costs.",
+      "mistakes": [
+        "Trying to work around the 18+ requirement, which risks funds being frozen for a terms-of-service breach.",
+        "Not agreeing on the payout schedule before sales start.",
+        "Sharing account details or codes with anyone in a message claiming to need them for \"verification.\""
+      ],
+      "template": "Payment setup record:\nProcessor/marketplace account holder (18+): ____\nAgreed payout schedule: ____\nWhere I log every sale/refund/fee: ____",
+      "checklist": [
+        "Payment/marketplace account opened by an adult 18+",
+        "Agreed payout schedule in writing with that adult",
+        "Confirmed basic fraud protection is on",
+        "Set up a simple sales/refund/fee log"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Payment processors and most marketplaces require an 18+ account holder almost everywhere. This chapter needs a parent to open and hold that account.",
+      "imagePath": "images/ecommerce/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track real profit (not just revenue) and know what's owed, including inventory costs.",
+      "explanation": [
+        "Business income is taxable in almost every country, including for minors, and physical-product businesses also need to track inventory cost, not just sales — rules vary by country.",
+        "Keep a running log: date, sale amount, unit cost, shipping cost, processor fee, and any refunds — profit is revenue minus ALL of these, not just revenue minus unit cost.",
+        "Remember unsold inventory sitting in a box is money already spent, not profit — don't count it as available cash until it's actually sold.",
+        "Set aside a percentage of real profit (a rough 25-30% placeholder is common) rather than spending all sales revenue as it comes in.",
+        "Have one real conversation with a parent, and once income is more than pocket change, check your country's actual rules for minors' business income, plus whether product safety/labelling rules apply to your specific product category."
+      ],
+      "example": "Yael's spreadsheet tracked revenue, unit cost, shipping, and fees separately every month, and she set aside 30% of real profit — while remembering the 15 unsold bottles still in her closet weren't cash yet.",
+      "mistakes": [
+        "Counting unsold inventory as available profit instead of money already spent.",
+        "Tracking only revenue, not true profit after all real costs.",
+        "Not checking whether product safety or labelling rules apply to the specific product category."
+      ],
+      "template": "Bookkeeping log (one row per sale):\nDate | Sale amount | Unit cost | Shipping | Processor fee | Refund | Net\nMonthly: revenue $____ − costs $____ = profit $____ → set aside ____% = $____",
+      "checklist": [
+        "Started a running sales/cost log including inventory cost",
+        "Distinguished true profit from revenue and unsold stock",
+        "Set aside a percentage of real profit",
+        "Checked whether product safety/labelling rules apply to my product"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Physical-product business income and inventory tracking involve real legal and tax questions that depend on your country and product category. This needs a parent involved and, once income is real, a proper check with a tax authority or accountant.",
+      "imagePath": "images/ecommerce/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing the brand",
+      "goal": "Turn one proven product into a small, repeatable, slowly-scaling brand.",
+      "explanation": [
+        "Once you've sold through a first batch, look at real patterns: which channel, which content, which specific claim (durability, design, story) actually drove sales.",
+        "Reinvest a planned portion of profit into a slightly larger next batch of the proven product before adding new products — prove repeatability first.",
+        "Once you have real reviews and social proof, you can often raise price slightly without losing conversion — reviews do real selling work.",
+        "Consider a second product only once the first is a genuinely reliable, repeatable seller, not because you're bored of the first one.",
+        "Review weekly: sell-through rate, return rate, and real profit per batch — not just total revenue, which can hide a shrinking margin."
+      ],
+      "example": "After selling through her first 50 units in six weeks with a 4% return rate, Yael ordered a 150-unit second batch of the same bottle — proven repeatable — before even sketching a second product.",
+      "mistakes": [
+        "Launching a second product before the first is a proven, repeatable seller.",
+        "Reinvesting profit without a plan, instead of pointing it at what's already proven to work.",
+        "Watching only total revenue and missing a shrinking real margin underneath it."
+      ],
+      "template": "Weekly growth review:\nSell-through rate: ____%  Return rate: ____%  Real profit per batch: $____\nBest-performing channel/claim: ____\nThis week's one decision: reorder / new product / hold steady",
+      "checklist": [
+        "Identified the real pattern behind what's driving sales",
+        "Reinvested profit into a proven repeat batch before a new product",
+        "Considered a modest price increase once real reviews existed",
+        "Set up a weekly review of sell-through, returns and real profit"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/ecommerce/growth.jpg"
+    }
+  ]
+}

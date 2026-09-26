@@ -1,0 +1,315 @@
+{
+  "id": "content",
+  "name": "Content Creation",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Choose a platform and a niche",
+      "goal": "Pick one platform and one specific topic angle you can keep making content about for months without running out of ideas.",
+      "explanation": [
+        "Pick the platform that matches the content format you actually enjoy making — short video (TikTok/Reels), long video (YouTube), or writing/photos (a blog, Instagram) — enjoying the process is what makes consistency possible.",
+        "Narrow your topic until it's specific: not \"gaming\" but \"budget PC building for first-time builders.\" A narrow niche is easier to stand out in and easier to keep making content about.",
+        "Look at 5-10 creators already in your niche — note what they cover well and what questions or angles they leave out. That gap is your opening.",
+        "Write down 20 video/post ideas before you publish anything — if you can't get past 10, the niche might be too narrow; if ideas are all vague, it might be too broad.",
+        "Decide your posting format and rough length up front (60-90 second videos, or 5-minute videos, or weekly posts) so every idea fits a template you can execute fast."
+      ],
+      "example": "Maya loved editing and had strong opinions about phone photography. Instead of \"photography tips\" (huge, crowded), she picked \"phone photography for people who just got a new phone\" — specific enough to have a clear audience and easy to keep generating ideas for.",
+      "mistakes": [
+        "Picking a platform because it's trendy rather than because the format suits how you actually like to create.",
+        "Staying so broad (\"lifestyle\", \"comedy\") that there's no specific reason for anyone to follow you over anyone else.",
+        "Publishing before testing whether you can actually generate 20 ideas in the niche."
+      ],
+      "template": "Niche worksheet:\nPlatform: ____  Format: ____ (length/style)\nNiche (specific, not broad): ____\n5 creators I'm watching and what they're missing: ____\n20 idea list: 1. ____ 2. ____ ... (aim for 20)",
+      "checklist": [
+        "Picked one primary platform matching my preferred format",
+        "Narrowed to a specific niche, not a broad category",
+        "Studied 5+ existing creators in the niche",
+        "Brainstormed 20 content ideas before publishing"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know who you're making this for",
+      "goal": "Be able to picture one specific viewer and make every piece of content for them.",
+      "explanation": [
+        "Describe your ideal viewer: their situation, what they're scrolling to escape or learn, and what would make them stop on your content specifically.",
+        "Read comments on similar creators' content — what do people keep asking, disagreeing with, or wishing existed?",
+        "Notice which of your own early posts (if you have any) got real engagement versus silence, and look for a pattern in who engaged.",
+        "Write your \"for someone who...\" sentence: \"This is for someone who [situation] and wants [outcome].\"",
+        "Revisit this profile every month or two — your real audience often turns out slightly different from your first guess, and that's useful information, not a failure."
+      ],
+      "example": "Maya's profile: \"Someone who just got a new phone, feels like their photos look flat compared to what they see online, and doesn't want to buy extra gear.\" Every video answered a version of that exact frustration.",
+      "mistakes": [
+        "Making content for \"everyone\" instead of one specific viewer.",
+        "Ignoring comments as free research on what your actual audience wants.",
+        "Never revisiting the audience profile as real data comes in."
+      ],
+      "template": "Audience one-pager:\nWho: ____\nWhat they're scrolling to find/escape: ____\nWhat stops them on content like mine: \"____\"\n\"This is for someone who ____ and wants ____.\"",
+      "checklist": [
+        "Wrote the specific viewer profile",
+        "Read comments on 5+ pieces of similar content",
+        "Wrote the \"for someone who...\" sentence",
+        "Set a reminder to revisit this after a month of posting"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Understand how content actually earns money",
+      "goal": "Know the real income sources for a creator, and which ones are realistic to aim for at each stage.",
+      "explanation": [
+        "The main income sources are: platform ad-revenue programs (need a follower/view threshold and, on most platforms, an 18+ payout account), sponsorships (brands pay for a post), your own product, and affiliate links.",
+        "Ad-revenue programs pay relatively little per view — this is usually the slowest, least reliable income source until an audience is large.",
+        "Sponsorships and affiliate links can start earning with a much smaller, engaged audience than ad-revenue thresholds require, and are often the realistic first income source.",
+        "A rough, honest benchmark: a first sponsorship might realistically happen with a few thousand real, engaged followers in a focused niche — not millions.",
+        "Decide which income source you're actually aiming for first, since it changes what \"good numbers\" even means for you right now (views vs. engagement rate vs. click-throughs)."
+      ],
+      "example": "Maya didn't wait for YouTube's ad-revenue threshold. At around 4,000 engaged followers, she pitched a small phone-accessory brand for a sponsored post, using her engagement rate (not follower count) as the pitch.",
+      "mistakes": [
+        "Waiting passively for a platform's ad-revenue threshold instead of pursuing sponsorships or affiliate links earlier.",
+        "Chasing follower count instead of engagement rate, which is what most sponsors actually care about.",
+        "Not knowing which income source you're aiming for, so you can't tell if your numbers are actually good."
+      ],
+      "template": "Income source plan:\nMain target income source right now: ____ (ad revenue / sponsorship / affiliate / own product)\nWhat \"good numbers\" means for that source: ____\nCurrent numbers: ____",
+      "checklist": [
+        "Learned the follower/view thresholds for platform ad-revenue programs",
+        "Identified engagement rate as a pitch-worthy metric even at a small following",
+        "Picked one primary income source to aim for first",
+        "Wrote down what \"good numbers\" means for that specific source"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Equipment and costs",
+      "goal": "Start with what you already have, and know exactly what upgrade (if any) is actually worth the money.",
+      "explanation": [
+        "A phone, natural light, and a free editing app cover almost everything needed to start — resist the urge to buy gear before you have content proving you'll stick with this.",
+        "If you do upgrade, prioritize in this order: audio (a cheap clip-on mic beats any camera upgrade for retention), then lighting, then camera — most viewers forgive average video but not bad audio.",
+        "Set a small monthly budget cap if you use any paid editing tools or stock assets, and cancel unused subscriptions after free trials.",
+        "Before buying anything over $20-30, post 10-15 pieces of content with what you already have — this tells you whether the upgrade is actually the bottleneck.",
+        "If a parent's card is involved for any purchase or subscription, agree the amount together first."
+      ],
+      "example": "Maya filmed her first 20 videos entirely on her existing phone with a free editing app. The only purchase after that was a $15 clip-on microphone — everything else stayed free.",
+      "mistakes": [
+        "Buying an expensive camera before proving you'll post consistently with what you already have.",
+        "Upgrading video quality while audio stays bad — viewers notice bad audio far more.",
+        "Letting a free trial silently convert to a paid subscription."
+      ],
+      "template": "Equipment plan:\nWhat I'm starting with (already owned): ____\nPosts made before any purchase: ____ (aim for 10-15)\nNext upgrade, in priority order (audio > lighting > camera): ____ — cost $____",
+      "checklist": [
+        "Started with existing equipment, no purchases",
+        "Posted at least 10 pieces of content before buying anything",
+        "If upgrading, prioritized audio first",
+        "Set a spending cap and checked in with a parent if their card is used"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Build a recognizable identity",
+      "goal": "Make it obvious within 2 seconds whose content someone is watching.",
+      "explanation": [
+        "Pick a consistent handle across platforms, and one or two visual signatures (a recurring intro line, consistent caption style, consistent color grading) that make your content instantly recognizable.",
+        "Write a short bio that states exactly what you post about and for whom, not a vague personal description.",
+        "Develop a consistent \"voice\" — the way you talk to camera or write captions — rather than sounding different in every piece of content.",
+        "Design a simple, repeatable thumbnail or opening-frame style if your platform uses thumbnails, since that's often the actual deciding factor for a click.",
+        "Revisit your branding every few months, not every few days — constant rebranding confuses an audience that's just starting to recognize you."
+      ],
+      "example": "Maya's videos always opened with the exact same three words spoken over a matching visual, and her captions used one recurring font/color combo. Regular viewers said they recognized her content before the profile picture even loaded.",
+      "mistakes": [
+        "Changing visual style or voice every few posts, preventing any recognizable identity from forming.",
+        "A bio that says something vague like \"just living my life\" instead of what you actually post about.",
+        "Copying another creator's exact style instead of developing a distinct one."
+      ],
+      "template": "Brand basics:\nHandle (consistent everywhere): ____\nRecurring visual signature: ____\nBio (what I post, for whom): \"____\"\nVoice/tone in one sentence: \"____\"",
+      "checklist": [
+        "Picked a consistent handle",
+        "Developed one recurring visual signature",
+        "Wrote a specific, clear bio",
+        "Kept the same voice/tone across the last 5 posts"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Plan and film consistently",
+      "goal": "Build a repeatable weekly process so posting doesn't depend on daily motivation.",
+      "explanation": [
+        "Batch-film: pick one day to shoot several pieces of content back to back, rather than starting from zero each day.",
+        "Keep a running idea list (from chapter 1's 20 ideas, plus new ones as they come) so you're never staring at a blank page on filming day.",
+        "Set a realistic, sustainable posting rhythm you can actually maintain for 3 months — 2 solid posts a week beats 7 rushed ones followed by silence.",
+        "Use a simple content calendar (even just a notes app list) tracking what's filmed, edited, and scheduled.",
+        "Cross-post the same core content to a second platform with minor format adjustments, to get more value from each filming session."
+      ],
+      "example": "Maya filmed every Sunday for the week ahead — 4-5 videos in one sitting — then spent weekday evenings just on editing and posting, never having to think of an idea on the spot.",
+      "mistakes": [
+        "Filming and posting same-day, every day, which burns out quickly.",
+        "Having no running idea list, so filming day starts with a blank page.",
+        "Setting an unrealistic daily posting goal instead of a sustainable weekly one."
+      ],
+      "template": "Content rhythm plan:\nFilming day(s): ____\nPosting days/times: ____\nPosts per week: ____\nWhere I keep the running idea list: ____",
+      "checklist": [
+        "Set one batch-filming day per week",
+        "Started a running idea list",
+        "Picked a realistic, sustainable weekly posting rhythm",
+        "Cross-posted at least one piece of content to a second platform"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Get your first real engaged following",
+      "goal": "Grow from zero to a small group of people who actually come back for your content specifically.",
+      "explanation": [
+        "The first real milestone isn't a big number — it's a handful of people commenting, sharing, or coming back specifically for your content, not just randomly scrolling past it.",
+        "Reply to every comment in your first weeks/months — it's the fastest way to turn a passive viewer into someone who feels seen and returns.",
+        "Study your own analytics (available on every platform) for what specifically made your best-performing post work, and make more like it.",
+        "Engage genuinely with a few other creators in your niche — real comments, not spam — which puts your name in front of an audience that already likes similar content.",
+        "Expect most early posts to underperform — this is normal and is how you learn what actually resonates, not a sign to quit."
+      ],
+      "example": "Maya's fifth video (a very specific \"3 settings to change right now\" tip) outperformed everything before it 10x. She studied exactly why — specificity and a clear promise in the first two seconds — and built her next 10 videos on that same pattern.",
+      "mistakes": [
+        "Going silent on comments in the crucial early weeks when replies matter most.",
+        "Never checking analytics to understand what specifically worked.",
+        "Quitting after a string of underperforming posts instead of treating it as normal early-stage data."
+      ],
+      "template": "Early growth log:\nBest-performing post so far and why (from analytics): ____\nComments replied to this week: ____\nOther creators engaged with genuinely: ____",
+      "checklist": [
+        "Replied to comments consistently in the first weeks",
+        "Checked analytics after every post for patterns",
+        "Genuinely engaged with 3+ other creators in the niche",
+        "Identified what made my best-performing post work"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Build real community, not just views",
+      "goal": "Turn passive viewers into a community that trusts you enough to act on what you say.",
+      "explanation": [
+        "Ask your audience direct questions in captions/videos and actually use their answers to shape future content — it signals you're listening, not broadcasting.",
+        "Be consistent in showing up, even with imperfect content — a missed month does more damage to community trust than an average post.",
+        "Share some of the process, not just the polished result — a genuine struggle or mistake often builds more connection than another highlight.",
+        "Set boundaries early on what you will and won't share (no personal details, no identifying information) and stick to them even as the audience grows.",
+        "Moderate your own comments/DMs for anything inappropriate or unsafe, and know how to block/report — this matters more as an audience grows."
+      ],
+      "example": "Maya started asking \"what phone do you have?\" in captions and tailored her next batch of tips to the most common answers. She also posted one honest \"this edit didn't work and here's why\" video a month — those consistently got the most comments.",
+      "mistakes": [
+        "Treating the audience as a number instead of engaging with what they actually say.",
+        "Disappearing for long stretches without warning, which erodes trust built up over months.",
+        "Sharing identifying personal details (school, location, routine) that create real safety risk."
+      ],
+      "template": "Community plan:\nQuestion I'll ask my audience this week: \"____\"\nWhat I will never share publicly: ____\nHow I handle inappropriate comments/DMs: ____",
+      "checklist": [
+        "Asked the audience a direct question and used a real answer in content",
+        "Kept a consistent posting presence, no long unexplained gaps",
+        "Shared at least one honest behind-the-scenes moment",
+        "Set clear personal-safety boundaries on what never gets shared"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Payments and monetization accounts",
+      "goal": "Set up income sources correctly and legally as they start becoming real.",
+      "explanation": [
+        "Platform ad-revenue and payout programs almost universally require an 18+ account holder — under that age, a parent's account holds the payout, with you running the content.",
+        "Sponsorship payments usually go through direct bank transfer or PayPal — the same 18+ requirement generally applies to opening that payment account.",
+        "Get sponsorship terms in writing before posting: what's expected, the payment amount, and the payment timeline — verbally agreed deals are hard to enforce.",
+        "Never share banking details, passwords or one-time codes with a \"sponsor\" over DM — legitimate brands work through proper contracts and known payment methods.",
+        "Agree the payout arrangement with the account-holding parent before money starts moving, not after."
+      ],
+      "example": "Maya's mother held the YouTube monetization payout account and the PayPal used for sponsorship payments, with a written agreement that earnings transferred to Maya's own account monthly.",
+      "mistakes": [
+        "Accepting a sponsorship deal with nothing in writing about scope, payment amount or timeline.",
+        "Sharing banking or personal payment details in a DM with an unverified \"sponsor.\"",
+        "Not agreeing the payout arrangement with a parent before the first payment arrives."
+      ],
+      "template": "Payment setup record:\nMonetization/payout account holder (18+): ____\nSponsorship agreement checklist: scope in writing? payment amount? payment timeline?\nAgreed transfer arrangement to me: ____",
+      "checklist": [
+        "Confirmed the payout account meets the platform's age requirement",
+        "Got sponsorship terms in writing before posting",
+        "Never shared payment details over DM with an unverified sponsor",
+        "Agreed the payout arrangement with the account-holding parent"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Platform monetization payouts and most payment methods for sponsorships require an 18+ account holder. A parent needs to hold that account under this age.",
+      "imagePath": "images/content/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track every dollar earned from content and know what's owed.",
+      "explanation": [
+        "Ad revenue, sponsorship fees, and affiliate income are all taxable income in almost every country, including for minors, with rules that vary by country.",
+        "Keep one simple running log of every payment: source (ad revenue / sponsor name / affiliate program), amount, and date received.",
+        "Sponsorships sometimes include free products instead of or alongside cash — in many places the value of free products received for promotion also counts as taxable income, which is easy to forget.",
+        "Set aside a portion of every payment (a rough 20-25% placeholder is common) until the real applicable rate is known.",
+        "Have one real conversation with a parent, and once income is more than occasional pocket money, check your country's actual rules for minors' income from content creation."
+      ],
+      "example": "Maya logged every sponsorship payment and the estimated retail value of every free product received, in one spreadsheet her mother reviewed monthly.",
+      "mistakes": [
+        "Forgetting that free products received for a sponsored post can also count as taxable income in many places.",
+        "Not tracking small, irregular payments because they \"don't feel like a real income.\"",
+        "Spending sponsorship payments immediately with nothing set aside."
+      ],
+      "template": "Income log (one row per payment):\nDate | Source | Cash amount | Value of free product (if any) | Running total\nSet-aside plan: ____% saved so far: $____",
+      "checklist": [
+        "Started a running income log including free-product value",
+        "Set aside a percentage of every payment",
+        "Had one conversation with a parent about this income",
+        "Checked local rules once income became more than occasional"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Content income — including the value of free products received for sponsorships — is taxable in most places, including for minors. This needs a parent involved and, once meaningful, a real check with local tax rules.",
+      "imagePath": "images/content/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing past your first audience",
+      "goal": "Turn steady posting into a system that keeps compounding instead of plateauing.",
+      "explanation": [
+        "Study your best 10% of content across several months — the specific pattern (topic, hook style, length) that repeats is your actual formula, more useful than any single viral post.",
+        "Add one income stream at a time once the previous one is stable — don't launch sponsorships, your own product and an affiliate program all in the same month.",
+        "Consider a low-effort owned channel (an email list, a Discord) that doesn't depend on any one platform's algorithm, as insurance against sudden reach drops.",
+        "Revisit your niche and audience profile every few months — a growing audience sometimes shifts slightly from your original assumption, and that's useful data.",
+        "Review monthly: follower growth rate, engagement rate, and income by source — not daily view counts, which swing too much to mean anything alone."
+      ],
+      "example": "After 8 months, Maya noticed her \"one setting, huge difference\" format consistently outperformed everything else. She built a monthly content series around that exact formula and only then added a second income stream (an affiliate link for a specific accessory).",
+      "mistakes": [
+        "Chasing every new platform trend instead of doubling down on your own proven format.",
+        "Launching multiple new income streams at once before any is stable.",
+        "Obsessing over daily view swings instead of monthly trends."
+      ],
+      "template": "Monthly growth review:\nFollower growth: ____  Engagement rate: ____%  Income by source: ____\nBest-performing content pattern this quarter: ____\nOne new thing I'm trying next month: ____",
+      "checklist": [
+        "Identified my repeating best-content pattern across months, not just one post",
+        "Added income streams one at a time, each stable before the next",
+        "Considered one owned channel not dependent on a single platform",
+        "Set up a monthly (not daily) review"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/content/growth.jpg"
+    }
+  ]
+}
