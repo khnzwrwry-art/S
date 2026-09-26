@@ -1,0 +1,315 @@
+{
+  "id": "pod",
+  "name": "Print on Demand",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Design for a specific audience",
+      "goal": "Land on a print design and audience narrow enough that only that group would truly understand and want it.",
+      "explanation": [
+        "Start from a specific group you're already part of — a hobby, an inside joke, a niche fandom, a specific sport or subculture — generic designs for \"everyone\" rarely sell.",
+        "Browse existing print-on-demand marketplaces for your niche to see what's already selling and what's missing or done badly.",
+        "Sketch or mock up 3-5 design concepts before committing to one, and get real feedback from people in the actual target group.",
+        "Make sure your idea is 100% original — no fan art, band logos, movie quotes, or sports team names without a license, since this is the single most common reason print-on-demand accounts get shut down.",
+        "Write your one-sentence pitch: \"For people who [specific interest], this design says [what].\""
+      ],
+      "example": "Tomer was deep into a specific indie board game community. He designed an original illustration referencing an inside joke from that community — not the game's actual logo or art, which would have been a copyright problem — and it immediately made sense to anyone in that community.",
+      "mistakes": [
+        "Designing something generic that could apply to any audience, which rarely stands out enough to sell.",
+        "Using copyrighted characters, logos or quotes without a license — the top reason accounts get shut down in this business.",
+        "Committing to one design without getting feedback from real people in the target group first."
+      ],
+      "template": "Design worksheet:\nSpecific audience/niche: ____\nExisting designs I researched, and what's missing: ____\n3-5 concepts sketched — feedback from real target-group members: ____\nOriginality check: 100% my own work, no copyrighted characters/logos/quotes? Yes/No\nOne-sentence pitch: \"For people who ____, this design says ____.\"",
+      "checklist": [
+        "Identified a specific, narrow target audience",
+        "Researched existing designs in that niche",
+        "Sketched multiple concepts and got real feedback",
+        "Confirmed the design is 100% original with no copyright risk"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know your buyer's specific taste",
+      "goal": "Understand exactly what visual style and message this audience actually buys, not just what they'd casually like.",
+      "explanation": [
+        "There's a difference between an audience liking a design and buying it — look at what similar niches actually purchase (best-sellers on similar print-on-demand stores), not just what gets likes on social media.",
+        "Notice the specific visual style this audience responds to (minimalist line art vs. bold color vs. text-based humor) by studying existing successful designs in adjacent niches.",
+        "Find where this audience actually is online — a specific subreddit, Discord, or hashtag — and spend time there understanding their inside references and humor.",
+        "Write a short profile: who they are, what occasion they'd buy this for (for themselves, as a gift, for an event), and what would make them choose your design specifically.",
+        "Show 2-3 finished mockups to real people in this audience and ask directly: \"would you actually buy this, and why or why not?\""
+      ],
+      "example": "Tomer's audience profile: \"People active in this specific board game community who'd wear the shirt to game nights or conventions as a recognizable in-group signal.\" That reframed his design toward something instantly recognizable to insiders, not broadly appealing.",
+      "mistakes": [
+        "Confusing social media likes with actual buying intent — very different signals.",
+        "Designing in a visual style that doesn't match what this specific audience actually purchases.",
+        "Never directly asking real target-audience members if they'd actually buy it."
+      ],
+      "template": "Audience one-pager:\nWho: ____\nOccasion they'd buy for: ____\nVisual style that resonates (from research): ____\n\"Would you buy this?\" feedback from 2-3 real people: ____",
+      "checklist": [
+        "Studied best-sellers in adjacent niches, not just liked social posts",
+        "Identified the visual style this audience actually buys",
+        "Found where this audience spends time online",
+        "Asked real target-audience members directly if they'd buy it"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Price for the print-on-demand margin",
+      "goal": "Set a price that leaves real margin after the platform's printing cost, which is usually higher per-unit than bulk manufacturing.",
+      "explanation": [
+        "Check the print-on-demand platform's base cost for your exact product (shirt style, mug type, poster size/paper) — this varies a lot by product and platform.",
+        "A common approach: price = base cost + a fixed margin you're comfortable with, then sanity-check against what similar designs sell for on the same platform.",
+        "Remember print-on-demand base costs are higher per unit than bulk manufacturing, so percentage-based multipliers from other business models don't always translate directly — check the actual dollar margin, not just a percentage.",
+        "Factor in the platform's own transaction/selling fees (if selling on a marketplace like Etsy or Redbubble) on top of the base print cost.",
+        "Decide if you'll offer multiple product types (shirt, mug, poster) at launch or start with just one — one well-priced product beats five half-considered ones."
+      ],
+      "example": "Tomer's shirt design had a $12.40 base print cost on his platform. He priced at $27.99, leaving about $15.50 before the marketplace's own selling fees, and checked that similar niche designs sold in the $24-32 range.",
+      "mistakes": [
+        "Using a generic multiplier without checking the platform's actual base cost, which varies significantly by product.",
+        "Forgetting marketplace selling fees on top of the print cost when calculating real margin.",
+        "Launching 8 product types at once instead of nailing the price and demand for one first."
+      ],
+      "template": "Pricing calculator:\nPlatform base print cost: $____\nMy price: $____\nMargin before marketplace fees: $____\nMarketplace fee (if applicable): ____% → real margin: $____\nCompetitor price range for similar niche designs: $____ – $____",
+      "checklist": [
+        "Checked the platform's actual base print cost for the specific product",
+        "Set a price with real dollar margin, not just a rough percentage",
+        "Accounted for marketplace selling fees",
+        "Started with one product type before expanding"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Costs and startup budget",
+      "goal": "Know that uploading a design is essentially free, and the only real cost is optional advertising.",
+      "explanation": [
+        "Print-on-demand is one of the lowest-risk paths here — you never pay for stock, since items only print after a sale. Uploading designs is typically free.",
+        "The main potential cost is design software (many free options exist, like Canva's free tier) and, optionally, paid advertising to reach beyond organic marketplace traffic.",
+        "Order one physical sample of your own design before promoting it — checking print quality and color accuracy on the actual platform/product matters, since colors on screen don't always match print.",
+        "If testing paid ads, set a small hard cap you're prepared to lose completely, same as any other paid-traffic test in this app.",
+        "Track any recurring costs (a paid design tool subscription) and cancel anything unused after a free trial."
+      ],
+      "example": "Tomer spent $0 to launch — free design software and free platform listing. His only cost was ordering one $14 sample shirt to check the actual print quality before telling anyone about the store.",
+      "mistakes": [
+        "Skipping a physical sample order and discovering a color/quality problem only after a customer complains.",
+        "Spending on paid ads before confirming the design and print quality are actually good.",
+        "Forgetting a free design-tool trial converts to a paid subscription."
+      ],
+      "template": "Startup cost sheet:\nDesign tool (free/paid): ____\nSample ordered for quality check? Yes/No — cost: $____\nAd test hard cap (if any): $____",
+      "checklist": [
+        "Confirmed uploading and listing designs is free on my chosen platform",
+        "Ordered a physical sample to check print quality",
+        "Set a hard cap for any ad testing",
+        "Checked for any free-trial tools about to convert to paid"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Build a recognizable store",
+      "goal": "Make your print-on-demand store feel like a curated collection with a point of view, not a random design dump.",
+      "explanation": [
+        "Pick a store name that fits your niche's tone, and check it's not already taken or an obvious trademark conflict.",
+        "Keep a consistent visual style across your designs (a recurring color palette, line style, or theme) so the store feels curated rather than random.",
+        "Write a store description that speaks directly to your specific audience, referencing the shared interest/community, not a generic \"cool designs\" tagline.",
+        "Use real mockup photos (people or realistic product shots) rather than only flat design previews — it helps buyers imagine actually owning it.",
+        "State your policy on requests/customization clearly if you accept them, and just as clearly if you don't, to set expectations."
+      ],
+      "example": "Tomer's store name directly referenced the board game community's own slang, and every design shared a consistent minimalist line-art style — regulars in the community recognized his shop's \"look\" within a few designs.",
+      "mistakes": [
+        "A generic store name/description that doesn't signal it's made specifically for this audience.",
+        "Wildly inconsistent visual styles across designs, making the store feel random.",
+        "Using only flat design previews with no realistic product mockups."
+      ],
+      "template": "Store brand basics:\nStore name (checked for conflicts): ____\nConsistent visual theme: ____\nStore description (specific to audience): \"____\"\nCustomization policy: ____",
+      "checklist": [
+        "Picked a store name fitting the niche's tone",
+        "Kept a consistent visual style across designs",
+        "Wrote a specific, audience-aware store description",
+        "Used realistic mockups, not just flat previews"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Choose where to sell and promote",
+      "goal": "Pick the right marketplace and promotion channel to reach a niche audience efficiently.",
+      "explanation": [
+        "Marketplaces with built-in search traffic (like Redbubble or Etsy) can get you discovered without any marketing — worth using alongside or instead of a standalone store, especially early on.",
+        "For promotion, go directly to where your specific niche audience already gathers (a subreddit, Discord, community hashtag) rather than broad, generic social posting.",
+        "Photograph or film real people wearing/using the product for social content — real-use photos consistently outperform plain product mockups for conversion.",
+        "If running paid ads, keep the audience targeting as narrow and specific as the design itself — broad targeting wastes budget on people who'll never recognize the reference.",
+        "Track which platform/channel actually drives sales, not just views, and focus effort there."
+      ],
+      "example": "Tomer listed on Redbubble for built-in search traffic, and separately shared real-use photos (friends wearing the shirt at a game night) directly in the community's own Discord, which converted far better than any broad social post.",
+      "mistakes": [
+        "Only building a standalone store with no existing marketplace traffic to rely on.",
+        "Promoting broadly instead of directly in the specific community that would understand the reference.",
+        "Running ads with broad targeting for a design that only makes sense to a narrow group."
+      ],
+      "template": "Channel plan:\nMarketplace(s) used: ____\nPrimary promotion channel (specific community): ____\nReal-use content plan: ____",
+      "checklist": [
+        "Listed on at least one marketplace with built-in traffic",
+        "Promoted directly in the specific community the design targets",
+        "Created real-use photo/video content, not just flat mockups",
+        "Tracked which channel actually drives sales"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Land your first sale",
+      "goal": "Get one real stranger (or community member) to buy your design.",
+      "explanation": [
+        "Make sure your listing has clear sizing/product info and accurate mockup images before promoting it anywhere.",
+        "Share it authentically where your niche audience already trusts you — a real community member sharing something they made often converts better than an obvious ad.",
+        "Respond quickly to any questions about sizing, print quality, or shipping time — new-brand buyers are more hesitant and questions are often the last step before buying.",
+        "Consider a small launch discount to get your first review, since early social proof matters a lot for a completely new, unproven store.",
+        "Log what led to the first sale — which platform, which specific post or share — so you can repeat exactly that."
+      ],
+      "example": "Tomer's first sale came directly after he shared the design (as a genuine community member, not a marketer) in the game's Discord, offering a small launch discount to the first five buyers as thanks for the community's support.",
+      "mistakes": [
+        "Promoting before the listing has clear, accurate sizing and product information.",
+        "Coming across as an outside marketer rather than a genuine member of the community being sold to.",
+        "Going silent on pre-purchase questions about sizing or shipping."
+      ],
+      "template": "First-sale log:\nListing checked for clear sizing/info before promoting? Yes/No\nFirst sale source: ____\nQuestions asked before buying: \"____\"",
+      "checklist": [
+        "Confirmed listing has clear, accurate product information",
+        "Shared authentically within the target community",
+        "Replied quickly to any pre-purchase questions",
+        "Logged the source of the first real sale"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Handle sizing, quality and complaints",
+      "goal": "Keep buyers happy despite not personally controlling the actual printing and shipping.",
+      "explanation": [
+        "Since the platform handles printing and shipping, your service role is mostly setting accurate expectations upfront and handling issues fast when the platform gets something wrong.",
+        "Provide a clear sizing guide (not just \"true to size\") since apparel sizing varies by brand/platform and is a common source of returns.",
+        "Have a clear process ready for print defects or shipping problems — most platforms offer free reprints/refunds for their own errors, so know that policy before a customer asks.",
+        "Respond to reviews, especially critical ones, professionally — a print-on-demand platform issue that gets handled well often turns into a positive follow-up review.",
+        "Keep a running note of any recurring quality issues with a specific product/platform, and consider switching print providers if problems repeat."
+      ],
+      "example": "When a customer's shirt arrived with a slightly misprinted design, Tomer immediately used the platform's free-reprint policy for their error, and the customer's follow-up comment specifically praised the fast resolution.",
+      "mistakes": [
+        "Vague \"true to size\" sizing info instead of a real, specific size guide.",
+        "Not knowing the platform's own defect/reprint policy before a customer complains.",
+        "Ignoring recurring quality issues instead of considering a provider switch."
+      ],
+      "template": "Service playbook:\nSizing guide provided? Yes/No\nPlatform's defect/reprint policy: ____\nRecurring quality issues noted: ____",
+      "checklist": [
+        "Provided a specific, real sizing guide",
+        "Knew the platform's defect/reprint policy before it was needed",
+        "Responded professionally to at least one review",
+        "Tracked any recurring quality issues"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Payments and payouts",
+      "goal": "Get paid legally through the print-on-demand platform's payout system.",
+      "explanation": [
+        "Most print-on-demand marketplaces and payout systems require an 18+ account holder — under that age, a parent opens and holds the account.",
+        "Understand the platform's payout schedule and minimum threshold before expecting a specific payout date.",
+        "Agree the transfer arrangement with the account-holding parent before sales start generating real payouts.",
+        "Keep your own simple log of sales and payouts, separate from the platform's dashboard, since access to that dashboard could change.",
+        "Never share account login details or one-time codes with anyone outside your agreed arrangement."
+      ],
+      "example": "Tomer's Redbubble and Etsy accounts were both registered under his father's details, with payouts transferring to Tomer's own account monthly after the platform's own payout schedule cleared.",
+      "mistakes": [
+        "Registering accounts without meeting the platform's age requirement, risking account or payout issues later.",
+        "Not knowing the payout threshold/schedule and being confused when money doesn't arrive as expected.",
+        "Sharing account access outside the agreed family arrangement."
+      ],
+      "template": "Payment setup record:\nPlatform account holder (18+): ____\nPayout schedule and minimum threshold: ____\nAgreed transfer arrangement to me: ____",
+      "checklist": [
+        "Confirmed the account holder meets the platform's age requirement",
+        "Understood the payout schedule and minimum threshold",
+        "Agreed the transfer arrangement with the account-holding parent",
+        "Kept my own separate sales/payout log"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Print-on-demand marketplaces and their payout systems generally require an 18+ account holder. A parent needs to hold this account under this age.",
+      "imagePath": "images/pod/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track design-by-design profit and understand what's owed.",
+      "explanation": [
+        "Print-on-demand income is taxable business income in almost every country, including for minors, with specifics that vary by country.",
+        "Keep a log per sale: design, sale price, platform's base print cost, platform selling fee, and net profit — this also tells you which designs are actually worth making more of.",
+        "Set aside a percentage of net profit (a rough 20-25% placeholder is common) rather than spending all payouts immediately.",
+        "Watch for platforms that issue a tax form once you cross an earnings threshold, and keep your own records either way.",
+        "Have one real conversation with a parent, and once income is more than pocket change, check your country's actual rules for minors' business income."
+      ],
+      "example": "Tomer's spreadsheet tracked net profit per design, which also revealed his second design was actually more profitable per sale than his first, despite selling fewer units.",
+      "mistakes": [
+        "Tracking gross sales instead of net profit after print cost and platform fees.",
+        "Not tracking profit per design, missing which specific designs are actually worth expanding.",
+        "Spending all payouts immediately with nothing set aside."
+      ],
+      "template": "Design profit log (one row per design):\nDesign | Units sold | Sale price | Print cost | Platform fee | Net profit\nMonthly set-aside: ____% = $____",
+      "checklist": [
+        "Started a running log tracking net profit per design",
+        "Set aside a percentage of net profit",
+        "Checked whether the platform issues a tax form",
+        "Had one conversation with a parent about this income"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Print-on-demand income is taxable in most places, including for minors, and this needs a parent involved plus a real check with local tax rules once income is meaningful.",
+      "imagePath": "images/pod/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing your design catalog",
+      "goal": "Turn one working design into a small, growing catalog of proven sellers.",
+      "explanation": [
+        "Look at which design and which specific product type (shirt vs. mug vs. poster) actually sold, and make more variations in that proven direction before branching into unrelated designs.",
+        "Expand into adjacent niches or related inside references within the same broad community, reusing what you've already learned about their taste.",
+        "Retire designs that aren't selling after a fair test period, rather than letting an overcrowded store dilute attention from your proven winners.",
+        "Consider a small paid ad test only once you have at least one proven, consistently-selling design to promote.",
+        "Review monthly: which designs sold, real profit per design, and what the data suggests trying next — not daily view counts."
+      ],
+      "example": "After his first design sold steadily for two months, Tomer made three variations referencing other inside jokes from the same community, using the same proven visual style — two of the three became solid additional sellers.",
+      "mistakes": [
+        "Branching into unrelated niches before proving the first design's audience and style actually converts.",
+        "Letting an overcrowded, unfocused catalog of untested designs dilute attention from proven sellers.",
+        "Running paid ads before having any proven-selling design to promote."
+      ],
+      "template": "Monthly growth review:\nBest-selling design(s) and product type: ____\nNet profit this month: $____\nNext design variation planned, based on proven style: ____",
+      "checklist": [
+        "Identified which design/product type actually sold",
+        "Made new designs building on the proven style, not unrelated ones",
+        "Retired designs that weren't selling after a fair test",
+        "Set up a monthly review of sales and profit by design"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/pod/growth.jpg"
+    }
+  ]
+}

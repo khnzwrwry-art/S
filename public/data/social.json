@@ -1,0 +1,315 @@
+{
+  "id": "social",
+  "name": "Social Media Management",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Choose the type of business you'll serve",
+      "goal": "Pick one category of small business to specialize in, so you can learn it deeply instead of starting from scratch with every client.",
+      "explanation": [
+        "Small businesses (cafés, barbers, gyms, local shops) know they need consistent social media but usually lack the time or skill — that gap is the whole opportunity.",
+        "Pick one category you understand or are personally interested in — it's much easier to make good content and credible pitches for a business type you actually get.",
+        "Look at 5-10 local businesses in that category and note which already post well, which post rarely, and which have no real presence at all — the second and third groups are your opening.",
+        "Research what content actually works for this business type (behind-the-scenes, customer features, promotions) by studying accounts that do it well, even in other cities.",
+        "Write your one-sentence pitch: \"I help [business type] show up consistently on social media without them having to think about it.\""
+      ],
+      "example": "Dana chose local cafés and small restaurants — she already photographed food as a hobby and genuinely enjoyed the category, which made her pitches and content feel authentic rather than generic.",
+      "mistakes": [
+        "Trying to serve any and every type of small business instead of specializing, which makes pitches generic and content less confident.",
+        "Not researching what content actually performs well for the chosen business type before pitching.",
+        "Picking a category with zero personal interest, making consistent quality content harder to sustain."
+      ],
+      "template": "Specialization worksheet:\nBusiness category: ____\nWhy I understand/enjoy this category: \"____\"\nLocal businesses researched (posting well / rarely / not at all): ____\nOne-sentence pitch: \"I help ____ show up consistently on social media without them having to think about it.\"",
+      "checklist": [
+        "Picked one specific business category to specialize in",
+        "Researched 5-10 local businesses in that category",
+        "Studied what content actually performs well for this business type",
+        "Wrote the one-sentence pitch"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know your client, and their customers",
+      "goal": "Understand both the business owner's priorities and the actual audience their content needs to reach.",
+      "explanation": [
+        "A social media management client has two audiences you need to understand: the business owner (what results they actually care about) and their own customers (who you're creating content for).",
+        "Business owners usually care most about foot traffic, bookings, or sales — not follower count — so frame your pitch and reporting around results they actually value.",
+        "Research the business's actual customer base: age range, what they'd want to see (menu items, atmosphere, staff personality, promotions) by looking at what similar successful accounts post.",
+        "Ask a potential client directly, if you get the chance, what's frustrated them about social media so far — it tells you exactly what to promise to do differently.",
+        "Write a short profile covering both: the owner's real priority, and their customer's content preferences."
+      ],
+      "example": "Dana learned that café owners mostly cared about weekday lunch traffic being slow — so she framed her pitch around \"content that fills your slow lunch hours,\" not generic \"grow your following.\"",
+      "mistakes": [
+        "Pitching and reporting on follower count when the business owner actually cares about foot traffic or bookings.",
+        "Making content based on guesses about the customer base instead of researching similar successful accounts.",
+        "Never directly asking a potential client what's frustrated them about social media so far."
+      ],
+      "template": "Client and customer profile:\nOwner's real priority (not just followers): ____\nTheir customer base (age, preferences): ____\nWhat's frustrated them about social media before: \"____\"",
+      "checklist": [
+        "Identified what the business owner actually cares about, beyond followers",
+        "Researched the business's real customer base and preferences",
+        "Asked (or planned to ask) what's frustrated a potential client before",
+        "Wrote the combined owner/customer profile"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Set your monthly retainer",
+      "goal": "Price your service as a clear monthly package, not a vague hourly arrangement.",
+      "explanation": [
+        "A monthly retainer (a fixed fee for an agreed amount of content and management each month) is the standard model here, and gives you predictable, recurring income.",
+        "Research typical retainer ranges for a beginner in your area/category — pricing varies a lot by local market and how much content is included.",
+        "Define exactly what's included in the retainer (how many posts per week, any stories, one monthly report) so both sides know what they're getting.",
+        "Set a beginner price you're comfortable delivering well, and decide in advance what would justify raising it (more content, added services like ads management, or proven results).",
+        "Avoid pricing purely on \"whatever they can pay\" — a clear package price is easier to sell and easier to grow from."
+      ],
+      "example": "Dana's starting package: \"12 posts/month, 3 stories/week, one monthly performance summary — $150/month.\" Clear enough that a business owner could decide quickly.",
+      "mistakes": [
+        "Pricing hourly instead of as a clear monthly package, which is both harder to sell and to predict income from.",
+        "Not defining exactly what's included, leading to scope creep as the client expects more over time.",
+        "Underpricing to whatever a client says they can afford, instead of a clear package they can say yes or no to."
+      ],
+      "template": "Retainer package:\nPosts per month: ____  Stories per week: ____  Reporting: ____\nMonthly price: $____\nWhat would justify a price increase: ____",
+      "checklist": [
+        "Researched typical beginner retainer pricing in my category/area",
+        "Defined exactly what's included in the package",
+        "Set a clear, fixed monthly price",
+        "Decided in advance what would justify raising it"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Tools and startup costs",
+      "goal": "Confirm you can start with free tools, and know what (if anything) is worth paying for as clients grow.",
+      "explanation": [
+        "A phone and free design/scheduling tools cover a real first client — this is a low-cost business to start, similar to freelancing.",
+        "Free tiers of scheduling tools (posting multiple platforms from one place) and design tools (templates, branding kits) are usually enough for 1-2 clients.",
+        "As you take on more clients, a paid scheduling tool might save real time — evaluate that against how many clients you're actually managing, not before.",
+        "Any travel costs (visiting a client's café or shop to film content) should be factored into your pricing or agreed separately, not silently absorbed.",
+        "If a parent's card is needed for any paid tool, agree the amount together first."
+      ],
+      "example": "Dana managed her first two café clients entirely with free scheduling and design tool tiers, only upgrading to a paid scheduling tool once she had four clients and the free tier's post limit became a real constraint.",
+      "mistakes": [
+        "Paying for scheduling/design tools before having any client to justify the cost.",
+        "Silently absorbing travel time/cost to film content instead of factoring it into pricing.",
+        "Upgrading tools based on features rather than an actual, current client-count need."
+      ],
+      "template": "Startup cost sheet:\nTools used (free tier limits): ____\nTravel/on-site costs factored into pricing? Yes/No\nWhen I'd consider a paid tool upgrade: ____",
+      "checklist": [
+        "Confirmed free tools cover my current client count",
+        "Factored any travel/on-site time into pricing",
+        "Defined a clear trigger for upgrading to paid tools",
+        "Agreed any spending with a parent if their card is used"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Build your own credibility",
+      "goal": "Make a small business owner trust you enough to hand over their social media presence.",
+      "explanation": [
+        "Build 2-3 sample posts for a real (or realistic mock) business in your category before pitching anyone — a concrete example beats any description of your skills.",
+        "Create a simple one-page profile or portfolio showing your sample work, your package, and a short bio explaining your specific interest in this business category.",
+        "Consider offering your very first client a discounted or trial-month rate in exchange for a testimonial and permission to use the work in your portfolio.",
+        "Present yourself professionally in outreach — clear writing, a real profile photo, prompt replies — since trust with a business owner (often handing over their public brand voice) matters a lot.",
+        "Keep a running portfolio of your best client work (with permission) to show future prospects."
+      ],
+      "example": "Dana made three unsolicited sample posts for a local café using photos she took herself, then reached out to the owner directly with those samples attached — the concrete example was far more convincing than any pitch alone.",
+      "mistakes": [
+        "Pitching without any sample content to show, relying only on a description of skills.",
+        "An unprofessional or overly casual outreach approach for a service built on trust with someone's public brand.",
+        "Never asking permission to showcase client work in a portfolio, running out of examples to show new prospects."
+      ],
+      "template": "Credibility builder:\nSample posts made (for a real or mock business): ____\nOne-page profile/portfolio: done? Yes/No\nFirst-client discount/trial offer (if any): ____",
+      "checklist": [
+        "Made 2-3 real sample posts before pitching anyone",
+        "Built a simple portfolio/profile to share",
+        "Considered a trial-rate offer for a first client",
+        "Got permission to showcase completed client work"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Pitch and find your first clients",
+      "goal": "Get in front of real business owners with a concrete, specific pitch.",
+      "explanation": [
+        "Direct outreach — visiting or messaging local businesses in your chosen category with sample content attached — usually works better than waiting to be found.",
+        "Keep the pitch short and specific: what you noticed about their current presence, what you'd do differently, and your package price.",
+        "Local business groups, community boards, or even asking family/friends for introductions to business-owner contacts can open doors faster than cold outreach alone.",
+        "Follow up once if you don't hear back — business owners are busy, and a polite follow-up often succeeds where the first message didn't.",
+        "Track which pitch approach and message actually gets replies, and refine it as you go."
+      ],
+      "example": "Dana visited three local cafés in person with printed sample posts, introduced herself directly to the owner, and got a meeting with two of the three on the spot — faster than any message would have.",
+      "mistakes": [
+        "Only sending generic cold messages instead of a specific, sample-backed pitch.",
+        "Giving up after one unanswered message instead of a polite follow-up.",
+        "Not tracking which pitch approach actually works, repeating an ineffective one."
+      ],
+      "template": "Client outreach plan:\nBusinesses targeted: ____\nPitch approach (in person / message / referral): ____\nFollow-up plan if no response: ____",
+      "checklist": [
+        "Made direct contact with specific local businesses",
+        "Used a short, specific, sample-backed pitch",
+        "Planned a polite follow-up for non-responses",
+        "Tracked which pitch approach actually worked"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Land your first client",
+      "goal": "Sign your first real monthly client and deliver a strong first month.",
+      "explanation": [
+        "Once a business owner says yes, get the retainer agreement in writing — what's included, the price, and how/when content gets approved before posting.",
+        "Set up a simple approval workflow (send a batch of posts for review before scheduling) so the client feels in control of their own brand voice from day one.",
+        "Deliver the first month's content on time and exactly as scoped — the first month sets the tone for the whole relationship.",
+        "Check in proactively partway through the first month rather than waiting until the end to hear if they're happy.",
+        "Ask for honest feedback at the end of the first month, and use it to adjust before month two."
+      ],
+      "example": "Dana's first café client got a written agreement covering exactly what was included, plus a simple weekly review process where the owner approved a batch of posts every Friday before they went live the following week.",
+      "mistakes": [
+        "Starting work without a written agreement on scope, price and approval process.",
+        "Posting content without any client review process, risking a mismatch with their expectations.",
+        "Waiting until month-end to check in, missing the chance to adjust early."
+      ],
+      "template": "First-client log:\nAgreement in writing? Yes/No\nApproval workflow: ____\nMid-month check-in done? Yes/No\nEnd-of-month feedback: \"____\"",
+      "checklist": [
+        "Got the retainer agreement in writing",
+        "Set up a clear content approval workflow",
+        "Delivered the first month on time and as scoped",
+        "Checked in proactively and collected honest feedback"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Keep clients month after month",
+      "goal": "Deliver consistent quality and communication so the client renews every month without having to think about it.",
+      "explanation": [
+        "Plan a full month of content in advance (a simple content calendar) rather than scrambling week to week — it shows professionalism and reduces missed posts.",
+        "Communicate proactively about anything unusual — a post that underperformed, a delay, a schedule change — rather than letting the client wonder or find out themselves.",
+        "Respect the agreed approval process every time, even when you're confident the client would approve anyway — consistency builds trust.",
+        "Handle any feedback or requested changes professionally, distinguishing between reasonable adjustments within scope and requests that go beyond the agreed package.",
+        "Keep client accounts and login access secure and organized — losing access or mishandling credentials damages trust fast."
+      ],
+      "example": "Dana built a full month's content calendar in the last week of the prior month, so her client always saw the upcoming month's plan before it started rather than being surprised week to week.",
+      "mistakes": [
+        "Planning content week-to-week instead of a full month ahead, leading to rushed or missed posts.",
+        "Not proactively flagging an underperforming post or schedule change before the client notices.",
+        "Skipping the agreed approval process \"just this once,\" eroding trust over time."
+      ],
+      "template": "Client retention playbook:\nMonthly content calendar planned by: ____ (date each month)\nHow I flag issues proactively: ____\nHow I handle out-of-scope requests: \"____\"",
+      "checklist": [
+        "Planned a full month of content in advance",
+        "Proactively communicated any issues or changes",
+        "Consistently followed the agreed approval process",
+        "Handled at least one out-of-scope request professionally"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Getting paid monthly",
+      "goal": "Collect recurring retainer payments safely and legally.",
+      "explanation": [
+        "Most payment methods for recurring client payments (bank transfer, invoicing tools, PayPal) require an 18+ account holder — under that age, a parent's account handles this.",
+        "Set a clear payment schedule (e.g. due on the 1st of each month, before or after that month's work) and put it in the written agreement.",
+        "Use a simple invoicing tool (many have free tiers) to look professional and to keep a clear record of what's been billed and paid.",
+        "Agree the transfer arrangement with the account-holding parent before the first client payment arrives.",
+        "Follow up promptly and professionally on any late payment rather than letting it slide silently, which can become a pattern."
+      ],
+      "example": "Dana's father's account received client payments via a free invoicing tool, with invoices sent on the 25th of each month for the following month, and an agreed transfer to Dana's own account once payment cleared.",
+      "mistakes": [
+        "Not agreeing a clear payment schedule in writing, leading to awkward or late payments.",
+        "Using a payment method without checking its age requirement.",
+        "Letting a late payment slide without a polite, prompt follow-up, which can become a repeated pattern."
+      ],
+      "template": "Payment setup record:\nPayment method/account holder (18+ if needed): ____\nPayment schedule (due date): ____\nAgreed transfer arrangement to me: ____",
+      "checklist": [
+        "Confirmed the payment method's age requirement",
+        "Set and documented a clear monthly payment schedule",
+        "Used an invoicing tool for professional, clear records",
+        "Agreed the transfer arrangement with the account-holding parent"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Recurring payment collection generally requires an 18+ account holder for the bank/payment method involved. A parent needs to hold this under this age.",
+      "imagePath": "images/social/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track retainer income across all clients and understand what's owed.",
+      "explanation": [
+        "Social media management retainer income is taxable business income in almost every country, including for minors, with specifics that vary by country.",
+        "Keep a simple log per client: monthly retainer amount, payment date, and any extra agreed charges (e.g. for ad spend management).",
+        "As you take on multiple clients, track total monthly recurring income clearly — it's your most useful business health number.",
+        "Set aside a portion of income (a rough 20-25% placeholder is common) rather than spending it all as it arrives.",
+        "Have one real conversation with a parent, and once income is more than occasional, check your country's actual rules for minors' business income."
+      ],
+      "example": "Dana's spreadsheet listed each client's monthly retainer and payment date in one row per month, making her total recurring income immediately visible and trackable as she added clients.",
+      "mistakes": [
+        "Not tracking total monthly recurring income across all clients, losing sight of overall business health.",
+        "Forgetting to log extra agreed charges beyond the base retainer.",
+        "Spending all retainer income immediately with nothing set aside."
+      ],
+      "template": "Retainer income log (one row per client per month):\nClient | Retainer amount | Extra charges | Payment date | Running total\nSet-aside plan: ____% saved so far: $____",
+      "checklist": [
+        "Started a running retainer income log per client",
+        "Tracked total monthly recurring income across all clients",
+        "Set aside a percentage of income",
+        "Had one conversation with a parent about this income"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Retainer income from managing clients' social media is taxable business income in most places, including for minors. This needs a parent involved and a real check with local tax rules once income is meaningful.",
+      "imagePath": "images/social/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing your client base",
+      "goal": "Turn one or two clients into a small, sustainable roster without sacrificing quality.",
+      "explanation": [
+        "Ask happy clients for referrals directly — other business owners in the same local network often know each other and trust word-of-mouth.",
+        "Know your realistic capacity — decide how many clients you can serve well with the hours you actually have, and don't overcommit past that.",
+        "Consider adding a higher-tier service (light ad management, more frequent posting) for clients who want more, rather than only ever offering one package.",
+        "Use results from existing clients (real engagement, real business outcomes they've shared) as proof in pitches to new prospects.",
+        "Review monthly: number of clients, total recurring income, and client satisfaction — a client who doesn't renew is worth understanding why, not just replacing."
+      ],
+      "example": "Dana's first café client referred her to a neighboring restaurant after three months of steady results. She capped herself at 4 clients to keep quality high, and offered a higher-tier package for clients wanting more frequent posting.",
+      "mistakes": [
+        "Taking on more clients than can realistically be served well, hurting quality across all of them.",
+        "Never asking for referrals despite having happy clients.",
+        "Losing a client without understanding why, missing a chance to fix a pattern before it repeats."
+      ],
+      "template": "Monthly growth review:\nActive clients: ____  Total recurring income: $____\nReferrals asked for/received: ____\nCapacity check — am I overcommitted? Yes/No",
+      "checklist": [
+        "Asked at least one happy client for a referral",
+        "Set a realistic capacity limit for number of clients",
+        "Considered a higher-tier service for clients wanting more",
+        "Reviewed monthly client count, income and satisfaction"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/social/growth.jpg"
+    }
+  ]
+}

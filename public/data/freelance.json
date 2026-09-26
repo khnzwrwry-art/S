@@ -1,0 +1,315 @@
+{
+  "id": "freelance",
+  "name": "Freelancing",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Turn a skill into a clear offer",
+      "goal": "Define exactly what service you sell, what's included, and roughly what it costs — in a way a stranger could understand in one read.",
+      "explanation": [
+        "Start from something you're already decent at — editing, design, writing, code, tutoring — real skill matters more than a trendy service category.",
+        "Look at 3-5 people already offering similar services on a freelance platform and see how they scope and describe their offer.",
+        "Define your offer precisely: exactly what's included, how many revisions, and how long it takes — vague offers get fewer serious inquiries.",
+        "Set a beginner price that's fair but not so low it signals low quality — extremely cheap pricing often attracts the most difficult clients.",
+        "Write your one-sentence pitch: \"I help [who] get [result] by [what you do].\""
+      ],
+      "example": "Ben was already editing videos for his own content. He defined a clear offer: \"YouTube video editing, up to 10 minutes, 2 revision rounds, delivered in 4 days, $40\" — specific enough that anyone could immediately understand what they'd get.",
+      "mistakes": [
+        "Offering a vague service (\"I do editing\") instead of a precisely scoped package.",
+        "Pricing so low it signals low quality and attracts the most demanding clients for the least money.",
+        "Not checking what similar freelancers already charge and include before setting your own offer."
+      ],
+      "template": "Offer worksheet:\nSkill: ____\nWhat's included (be precise): ____\nRevisions included: ____\nDelivery time: ____\nBeginner price: $____\nOne-sentence pitch: \"I help ____ get ____ by ____.\"",
+      "checklist": [
+        "Chose a skill I'm already decent at",
+        "Researched 3-5 similar freelance offers for comparison",
+        "Defined a precise scope: what's included, revisions, delivery time",
+        "Set a fair beginner price and wrote the one-sentence pitch"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know who actually hires for this",
+      "goal": "Understand exactly who your realistic first clients are and what they care about most when choosing a freelancer.",
+      "explanation": [
+        "Your first clients are usually small businesses, other creators, or individuals with a specific, immediate need — not large companies, which typically hire more experienced freelancers.",
+        "Research what clients in your category actually complain about in reviews of freelancers (missed deadlines, poor communication, scope creep) — that's your opening to stand out.",
+        "Write a short client profile: what problem they have, what they've tried before, and what would make them trust a newer freelancer over an established one.",
+        "Identify where these clients actually look for freelancers — a specific platform, local business groups, or people you already know.",
+        "For your very first clients, consider people or small businesses you already have some connection to — trust is easier to build on an existing relationship."
+      ],
+      "example": "Ben's client profile: \"Small YouTubers with under 20k subscribers who can't afford a professional editor yet but need faster turnaround than they can manage alone.\" His first two clients were people from his own online gaming community.",
+      "mistakes": [
+        "Targeting large companies as a first client instead of realistic, reachable smaller clients.",
+        "Not researching what clients actually complain about with freelancers in this category.",
+        "Overlooking people you already have some connection to as realistic first clients."
+      ],
+      "template": "Client profile:\nWho: ____\nWhat they've tried before / are frustrated by: ____\nWhat makes them trust a newer freelancer: \"____\"\nWhere I'll find them: ____",
+      "checklist": [
+        "Wrote a realistic first-client profile",
+        "Researched common client complaints about freelancers in this category",
+        "Identified where these clients actually look for freelancers",
+        "Considered existing connections as realistic first clients"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Price your service and plan to raise it",
+      "goal": "Set a fair starting price and know exactly when and how you'll raise it.",
+      "explanation": [
+        "Per-project pricing is usually better than hourly for creative/skill work — as you get faster, you earn more for the same time, instead of being penalized for efficiency.",
+        "Research a realistic price range for your specific service and experience level on the platforms you'll use, and set your starting price within that range, not below it.",
+        "Decide your \"raise triggers\" in advance: for example, after 3 completed projects with good reviews, or after a certain number of client inquiries you're turning away.",
+        "Factor in platform fees (many freelance platforms take a percentage cut, especially on early transactions) when calculating what you'll actually receive.",
+        "Never work for free \"exposure\" as a starting strategy — a genuinely low beginner price with a real payment is better than free work with vague promises."
+      ],
+      "example": "Ben started at $40/video, decided he'd raise to $55 after 3 five-star reviews, and hit that milestone within six weeks — raising his price without losing his existing clients, who valued the reliability he'd already proven.",
+      "mistakes": [
+        "Pricing hourly for creative work, which penalizes getting faster and more skilled over time.",
+        "Working for free \"exposure\" instead of a real, even if modest, payment.",
+        "Never deciding in advance when to raise prices, so it never actually happens."
+      ],
+      "template": "Pricing plan:\nStarting price: $____ (per project)\nPlatform fee (if any): ____%\nRaise trigger: after ____ (projects/reviews/inquiries) → new price: $____",
+      "checklist": [
+        "Set a per-project price within a realistic researched range",
+        "Calculated real take-home after platform fees",
+        "Decided a specific trigger for the first price raise",
+        "Avoided working for free \"exposure\""
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Tools and startup costs",
+      "goal": "Confirm you can start with what you already have, and know what upgrade (if any) is actually worth paying for.",
+      "explanation": [
+        "Freelancing is one of the lowest-cost businesses here — a computer/phone and free or already-owned software usually cover a real first offer.",
+        "If a paid tool genuinely unlocks better client work (a specific software feature clients expect), evaluate the cost against several projects' worth of income before committing.",
+        "Most freelance platforms are free to join, though many take a percentage fee per transaction, especially on early transactions — factor that into pricing, not as a separate cost.",
+        "Avoid paying for \"freelancer success courses\" promising guaranteed clients — a well-scoped offer and genuine outreach (covered in the next chapters) matter far more.",
+        "If a parent's card is needed for any paid tool, agree the amount together first."
+      ],
+      "example": "Ben used software he already had for his own content and a free portfolio site builder — zero startup cost beyond his existing computer.",
+      "mistakes": [
+        "Buying expensive software before landing a single paying client to justify it.",
+        "Paying for a \"guaranteed clients\" course instead of doing real outreach.",
+        "Forgetting platform transaction fees when calculating real take-home pay."
+      ],
+      "template": "Startup cost sheet:\nWhat I'm starting with (already owned): ____\nAny paid tool considered, and why it's worth it: ____\nPlatform fees factored into pricing? Yes/No",
+      "checklist": [
+        "Confirmed I can start with tools I already own",
+        "Avoided paid \"guaranteed client\" courses",
+        "Factored platform fees into pricing, not as a separate surprise cost",
+        "Agreed any spending with a parent if their card is used"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Build a portfolio and profile",
+      "goal": "Make a stranger trust you enough to hire you, even with limited or no paid work history.",
+      "explanation": [
+        "If you have no paid work yet, make 3 sample pieces on your own initiative — nobody checks whether early portfolio work was paid, they check if it's good.",
+        "Write a clear, specific profile description: what you do, for whom, and what makes your work distinct — not a generic \"passionate and hardworking\" description everyone writes.",
+        "Use a real photo and consistent, professional presentation across your profile and any portfolio site — it builds basic trust fast.",
+        "Ask anyone you've done work for (even informally, even unpaid early samples for friends) for a short testimonial you can quote.",
+        "Keep the portfolio focused — 3-5 strong pieces beat 20 mediocre ones, since quality reads faster than quantity."
+      ],
+      "example": "With zero paid clients yet, Ben edited 3 sample videos using his own gameplay footage, specifically choosing footage similar to what his target clients would actually send him, and used those as his entire starting portfolio.",
+      "mistakes": [
+        "Waiting for paid work before building any portfolio, which makes it hard to ever get the first paid work.",
+        "A vague, generic profile description that doesn't say what makes you specifically worth hiring.",
+        "An overloaded portfolio of 20 mediocre pieces instead of 3-5 strong ones."
+      ],
+      "template": "Portfolio and profile plan:\nSample pieces made (aim for 3-5): ____\nProfile description: \"____\"\nTestimonials collected: ____",
+      "checklist": [
+        "Made 3-5 strong sample pieces even without paid work yet",
+        "Wrote a specific, non-generic profile description",
+        "Used a real photo and consistent presentation",
+        "Collected at least one testimonial, even from informal work"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Choose how you'll find clients",
+      "goal": "Pick a realistic mix of platform and direct outreach to actually get in front of potential clients.",
+      "explanation": [
+        "Freelance platforms (Fiverr, Upwork, Contra and similar) give you discoverability but usually require being 16-18+ depending on the platform — check the specific platform's terms.",
+        "Direct outreach — messaging small businesses or creators you already know or admire with a specific, short pitch — often lands a first client faster than waiting to be found on a platform.",
+        "A simple portfolio site or profile link makes it easy to share your work regardless of which platform or outreach method you use.",
+        "Whichever channel you pick, respond to inquiries fast — freelance clients often message several people at once and hire whoever replies first with a clear, confident answer.",
+        "Track which channel actually produces real client conversations, and focus more effort there over time."
+      ],
+      "example": "Ben joined a platform that allowed his age with parental consent, but his actual first two clients came from directly messaging small YouTubers in his own niche with a short, specific pitch and a portfolio link.",
+      "mistakes": [
+        "Only waiting passively on a platform instead of also doing direct outreach.",
+        "Signing up for a platform without checking its actual age requirements.",
+        "Responding slowly to inquiries, losing clients to faster-replying freelancers."
+      ],
+      "template": "Client-finding plan:\nPlatform(s) used (age requirement checked): ____\nDirect outreach targets: ____\nResponse-time goal: within ____ hours",
+      "checklist": [
+        "Checked age requirements of any freelance platform used",
+        "Did direct outreach to specific, realistic potential clients",
+        "Made work easy to share via a portfolio link",
+        "Set a fast response-time goal for inquiries"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Land your first paying client",
+      "goal": "Complete one real paid project, start to finish, professionally.",
+      "explanation": [
+        "Send a short, specific outreach or proposal message referencing the client's actual work/need, not a generic copy-pasted pitch.",
+        "Agree scope, price, revisions and deadline in writing before starting — even a short message confirming these details protects both sides.",
+        "Deliver on time, or communicate proactively if something will be late — silence is far worse than an honest heads-up.",
+        "Ask for a review or testimonial immediately after a successful delivery, while the good experience is fresh.",
+        "Treat the first client exceptionally well even if the price is modest — reviews and referrals from this one matter more than the payment itself."
+      ],
+      "example": "Ben's first client message specifically referenced a recent video of theirs and what he'd have edited differently, rather than a generic \"I can edit your videos!\" pitch — the client replied within the hour.",
+      "mistakes": [
+        "Sending generic, copy-pasted outreach that doesn't reference the specific client's work.",
+        "Starting work without agreeing scope, price and deadline in writing first.",
+        "Going silent instead of proactively communicating if a deadline will slip."
+      ],
+      "template": "First-client log:\nOutreach message sent (specific, not generic): \"____\"\nScope/price/deadline agreed in writing? Yes/No\nDelivered on time? Yes/No\nReview/testimonial requested? Yes/No",
+      "checklist": [
+        "Sent a specific, non-generic outreach message",
+        "Agreed scope, price and deadline in writing before starting",
+        "Delivered on time or communicated proactively about delays",
+        "Requested a review/testimonial right after delivery"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Handle revisions and difficult moments professionally",
+      "goal": "Keep clients happy and protect yourself when a project gets complicated.",
+      "explanation": [
+        "Stick to the revision count agreed upfront — if a client wants significantly more changes than scoped, it's fair to discuss an additional fee rather than absorbing unlimited free work.",
+        "Communicate proactively the moment you sense a delay or a misunderstanding about scope, rather than waiting for the client to ask.",
+        "If a client is unresponsive or unclear, ask specific clarifying questions rather than guessing and potentially delivering the wrong thing.",
+        "Handle a dissatisfied client calmly and professionally — offer a reasonable fix within the original scope, but don't agree to endless free revisions out of conflict-avoidance.",
+        "Keep a simple record of agreements and communications for every project, in case a dispute needs to be resolved later."
+      ],
+      "example": "When one client kept requesting changes beyond the two agreed revisions, Ben politely referenced their original agreement and offered a fair price for the additional round — the client agreed without any conflict.",
+      "mistakes": [
+        "Agreeing to unlimited free revisions out of a desire to avoid conflict, which trains clients to expect it.",
+        "Guessing at unclear instructions instead of asking specific clarifying questions.",
+        "Not keeping any record of what was agreed, making a later dispute hard to resolve fairly."
+      ],
+      "template": "Client service playbook:\nRevisions included per project: ____\nWhat I say if a client requests more: \"____\"\nHow I handle unclear instructions: ____",
+      "checklist": [
+        "Stuck to the agreed revision count, discussing extra fees for more",
+        "Communicated proactively about any delays",
+        "Asked clarifying questions instead of guessing",
+        "Kept a simple record of agreements for each project"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Getting paid",
+      "goal": "Receive payment safely, legally, and on the agreed schedule.",
+      "explanation": [
+        "Most freelance platforms and payment methods (PayPal, bank transfer, platform escrow) require an 18+ account holder — some platforms allow 16+ with documented parental consent, so check the specific platform's policy.",
+        "Use the platform's built-in payment protection (escrow) where available, rather than accepting payment entirely outside the platform, which removes that protection.",
+        "Agree payment timing clearly — before starting, on delivery, or in milestones for larger projects — and put it in writing.",
+        "If a parent's account is used for payment, agree the transfer arrangement to you before the first payment arrives.",
+        "Be cautious of a \"client\" who wants to pay through unusual methods or asks for personal financial details beyond what's needed for standard payment — a common scam pattern."
+      ],
+      "example": "Ben used his platform's escrow system for all his first jobs, with his mother's account receiving payouts (since he was 15) and a clear agreement that earnings transferred to Ben's own account after each project cleared.",
+      "mistakes": [
+        "Accepting payment entirely outside a platform's protection system, removing your recourse if something goes wrong.",
+        "Not checking a platform's actual age requirement before signing up.",
+        "Sharing unnecessary personal financial details with a client who asks for an unusual payment method."
+      ],
+      "template": "Payment setup record:\nPlatform/payment method (age requirement checked): ____\nAccount holder (parent if needed): ____\nPayment timing agreed: ____\nTransfer arrangement to me: ____",
+      "checklist": [
+        "Checked the age requirement of my payment platform/method",
+        "Used built-in payment protection (escrow) where available",
+        "Agreed payment timing in writing before starting each project",
+        "Agreed the transfer arrangement if a parent's account is used"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Most freelance platforms require 18+, with some allowing 16+ with documented parental consent — check the specific platform. Below that age, a parent's account and agreement are the standard route.",
+      "imagePath": "images/freelance/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track every project's income and understand what's owed.",
+      "explanation": [
+        "Freelance income is taxable business income in almost every country, including for minors, with specifics that vary by country.",
+        "Keep a simple log: date, client, project, amount, and platform fee taken — freelance platforms often provide an export of this too.",
+        "Set aside a portion of every payment (a rough 20-25% placeholder is common) rather than spending it all immediately.",
+        "Some platforms issue tax forms once you cross an earnings threshold — know whether yours does and keep your own records regardless.",
+        "Have one real conversation with a parent, and once income is more than occasional, check your country's actual rules for minors' freelance/self-employment income."
+      ],
+      "example": "Ben exported his earnings from his platform monthly into a spreadsheet his father reviewed, setting aside a quarter of every payment before spending any of it.",
+      "mistakes": [
+        "Assuming freelance income from a platform is automatically tracked for tax purposes without keeping your own records.",
+        "Not accounting for platform fees when calculating actual take-home income.",
+        "Spending every payment immediately with nothing set aside."
+      ],
+      "template": "Income log (one row per project):\nDate | Client | Amount | Platform fee | Net | Running total\nSet-aside plan: ____% saved so far: $____",
+      "checklist": [
+        "Started a running income log per project",
+        "Set aside a percentage of every payment",
+        "Checked whether my platform issues a tax form",
+        "Had one conversation with a parent about this income"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Freelance income is taxable in most places, including for minors. This needs a parent involved and, once income is meaningful, a real check with local tax rules for self-employment.",
+      "imagePath": "images/freelance/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing your freelance business",
+      "goal": "Turn one-off projects into a more stable, growing income with better clients and prices.",
+      "explanation": [
+        "Ask happy clients for referrals directly — a simple \"do you know anyone else who might need this?\" often works better than any marketing.",
+        "Consider offering a retainer (an ongoing monthly arrangement) to your best repeat clients instead of only one-off projects, for more predictable income.",
+        "Raise prices for new clients once you're consistently turning down or fully booked with work at your current rate — that's the clearest signal it's time.",
+        "Specialize further into what you're best at and enjoy most, rather than accepting every type of project that comes your way.",
+        "Review monthly: number of projects, average price, and repeat-client rate — a rising repeat-client rate is often the strongest sign of a healthy freelance business."
+      ],
+      "example": "After steady client work for four months, Ben asked his three best repeat clients if they'd want an ongoing monthly package instead of per-video pricing — two said yes, giving him predictable income each month.",
+      "mistakes": [
+        "Never asking happy clients for referrals, missing the easiest source of new business.",
+        "Keeping prices flat despite being consistently fully booked or turning down work.",
+        "Accepting every type of project instead of specializing in what actually pays and satisfies most."
+      ],
+      "template": "Monthly growth review:\nProjects completed: ____  Average price: $____  Repeat-client rate: ____%\nReferrals asked for: ____\nOne pricing/specialization decision this month: ____",
+      "checklist": [
+        "Asked at least one happy client for a referral",
+        "Considered a retainer arrangement with a repeat client",
+        "Raised prices once consistently fully booked",
+        "Set up a monthly review of projects, pricing and repeat rate"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/freelance/growth.jpg"
+    }
+  ]
+}
