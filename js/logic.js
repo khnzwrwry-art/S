@@ -77,12 +77,12 @@ function saveProgress(){
 function doneCount(id){return (progress[id]||[]).length;}
 let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
 
-const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','ages','visual'];
+const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual'];
 function showView(n){VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});document.getElementById('backBtn').hidden=(n==='home');window.scrollTo(0,0);}
 function go(n){showView(n);if(n==='home')renderHome();}
 
 /* ---------- auth gate (Firebase Authentication) ---------- */
-let authModule=null, firestoreModule=null, workerModule=null, currentUser=null, selectedCountry='';
+let authModule=null, firestoreModule=null, workerModule=null, legalModule=null, currentUser=null, selectedCountry='';
 
 async function loadFirestore(){
  if(!firestoreModule)firestoreModule=await import('./firestore-integration.js');
@@ -91,6 +91,13 @@ async function loadFirestore(){
 async function loadWorker(){
  if(!workerModule)workerModule=await import('./worker-client.js');
  return workerModule;
+}
+async function loadLegal(){
+ if(!legalModule)legalModule=await import('./legal-pages.js');
+ return legalModule;
+}
+function consentNotice(key,fallback){
+ return (legalModule&&legalModule.CONSENT_TEXT&&legalModule.CONSENT_TEXT[key])||fallback;
 }
 
 async function syncRemoteProgress(){
@@ -147,7 +154,9 @@ function renderGate(){
    '<button class="auth-btn" id="googleBtn"><span class="ai">G</span> Continue with Google</button>'
   )+
   '<label class="agree"><input type="checkbox" id="agreeBox">'+
-   '<span>I have read and accept the <span class="link" id="gateTerms">Terms of Use</span>, including that the guides, templates and content in this app are copyright protected and <b>may not be copied, republished, resold or used to build a competing product</b>.</span></label>'+
+   '<span>I confirm I am 13 or older (and, if under 18, that my parent or guardian agrees to my use of this service). '+
+   'I have read and accept the <span class="link" id="gateTerms">Terms of Use</span> and the <span class="link" id="gatePrivacy">Privacy Policy</span>, '+
+   'including that the guides, templates and content in this app are copyright protected and <b>may not be copied, republished, resold or used to build a competing product</b>.</span></label>'+
   '<button class="btn-primary" id="gateGo" style="margin-top:14px">'+(currentUser?'Enter Launchpad':'Sign in with Google to continue')+'</button>'+
   '<p class="hint" id="gateHint"></p>'+
  '</div>';
@@ -165,6 +174,7 @@ function renderGate(){
   };
  }
  document.getElementById('gateTerms').onclick=function(){renderTerms();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('terms');};
+ document.getElementById('gatePrivacy').onclick=function(){renderPrivacy();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('privacy');};
  document.getElementById('gateGo').onclick=async function(){
   var hint=document.getElementById('gateHint');
   var country=document.getElementById('gateCountry').value;
@@ -219,10 +229,13 @@ function renderHome(){
   '<span><h3>'+cat.name+'</h3><p>'+cat.desc+'</p></span>'+
   '<span class="w"><span class="mini-progress"><i style="width:'+p+'%;background:'+cat.color+'"></i></span><span class="mini-label">'+dc+'/'+t+' steps</span></span></button>';
  }).join('')+'</div>'+
- '<p class="hint" style="margin-top:24px;text-align:center"><span class="link" id="tLink">Terms of Use</span> · <span class="link" id="aLink">Accessibility statement</span> · <span class="link" id="soLink">Sign out</span></p>';
+ '<p class="hint" style="margin-top:24px;text-align:center"><span class="link" id="tLink">Terms of Use</span> · <span class="link" id="pLink">Privacy Policy</span> · <span class="link" id="cLink">Cookie Policy</span> · <span class="link" id="rLink">Refund Policy</span> · <span class="link" id="aLink">Accessibility statement</span> · <span class="link" id="soLink">Sign out</span></p>';
 
  document.getElementById('legalCard').onclick=function(){renderLegal();showView('legal');};
  document.getElementById('tLink').onclick=function(){renderTerms();showView('terms');};
+ document.getElementById('pLink').onclick=function(){renderPrivacy();showView('privacy');};
+ document.getElementById('cLink').onclick=function(){renderCookies();showView('cookies');};
+ document.getElementById('rLink').onclick=function(){renderRefunds();showView('refunds');};
  document.getElementById('aLink').onclick=function(){renderAccess();showView('access');};
  document.getElementById('soLink').onclick=async function(){
   if(authModule){try{await authModule.logout();}catch(e){}}
@@ -355,10 +368,59 @@ function renderTerms(){
  '<div class="panel warn"><p class="muted-sm">This is a working draft. Have a lawyer review and adapt it before the app goes live to the public.</p></div>'+
  panelList(TERMS);
 }
-function renderAccess(){
+async function renderAccess(){
  document.getElementById('view-access').innerHTML=
  '<div class="hero"><h1 class="sm">Accessibility statement</h1><p>How this app is built to be usable by as many people as possible, and how to tell us when it is not.</p></div>'+
- panelList(ACCESSIBILITY);
+ '<p class="hint">Loading...</p>';
+ try{
+  await loadLegal();
+  document.getElementById('view-access').innerHTML=
+  '<div class="hero"><h1 class="sm">Accessibility statement</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
+  panelList(legalModule.ACCESSIBILITY_STATEMENT);
+ }catch(e){
+  document.getElementById('view-access').innerHTML=
+  '<div class="hero"><h1 class="sm">Accessibility statement</h1></div><p class="hint">Could not load this page. Try again later.</p>';
+ }
+}
+async function renderPrivacy(){
+ document.getElementById('view-privacy').innerHTML=
+ '<div class="hero"><h1 class="sm">Privacy Policy</h1></div><p class="hint">Loading...</p>';
+ try{
+  await loadLegal();
+  document.getElementById('view-privacy').innerHTML=
+  '<div class="hero"><h1 class="sm">Privacy Policy</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
+  '<div class="panel warn"><p class="muted-sm">This is a well-researched starting draft, not legal advice. Have a lawyer review it before this app is publicly promoted or takes payments.</p></div>'+
+  panelList(legalModule.PRIVACY_POLICY);
+ }catch(e){
+  document.getElementById('view-privacy').innerHTML=
+  '<div class="hero"><h1 class="sm">Privacy Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>';
+ }
+}
+async function renderCookies(){
+ document.getElementById('view-cookies').innerHTML=
+ '<div class="hero"><h1 class="sm">Cookie Policy</h1></div><p class="hint">Loading...</p>';
+ try{
+  await loadLegal();
+  document.getElementById('view-cookies').innerHTML=
+  '<div class="hero"><h1 class="sm">Cookie Policy</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
+  panelList(legalModule.COOKIE_POLICY);
+ }catch(e){
+  document.getElementById('view-cookies').innerHTML=
+  '<div class="hero"><h1 class="sm">Cookie Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>';
+ }
+}
+async function renderRefunds(){
+ document.getElementById('view-refunds').innerHTML=
+ '<div class="hero"><h1 class="sm">Refund Policy</h1></div><p class="hint">Loading...</p>';
+ try{
+  await loadLegal();
+  document.getElementById('view-refunds').innerHTML=
+  '<div class="hero"><h1 class="sm">Refund Policy</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
+  panelList(legalModule.REFUND_POLICY);
+ }catch(e){
+  document.getElementById('view-refunds').innerHTML=
+  '<div class="hero"><h1 class="sm">Refund Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>';
+ }
 }
 function renderGlossary(){
  document.getElementById('view-glossary').innerHTML=
@@ -424,6 +486,7 @@ function renderContentTool(preset){
  var biz='';try{biz=localStorage.getItem('sg_biz')||'';}catch(e){}
  document.getElementById('view-content').innerHTML=
  '<div class="hero"><h1 class="sm">AI content tool</h1><p>Describe your business, pick what you need, and get a draft written for you.</p></div>'+
+ '<p class="hint">'+esc(consentNotice('aiTools','What you type here is sent to an AI provider to generate a reply. Do not enter personal, financial, or confidential information. AI responses can be wrong — check anything important before acting on it.'))+'</p>'+
  '<label class="field-label" for="bizInput">What is your business?</label>'+
  '<textarea id="bizInput" placeholder="e.g. an online store selling phone accessories with original designs, aimed at 14-18 year olds">'+esc(biz)+'</textarea>'+
  (preset?'<label class="field-label" for="customTask">What to write</label><textarea id="customTask">'+esc(preset)+'</textarea>':'<span class="field-label">Content type</span><div class="chip-row" id="typeChips"></div>')+
@@ -459,6 +522,7 @@ function renderAssistant(prefill){
  var sug=['How do I find my first client?','How much money do I need to start?','How do I market with no budget?','Nobody is buying — what now?'];
  document.getElementById('view-assistant').innerHTML=
  '<div class="hero"><h1 class="sm">AI mentor</h1><p>Ask anything about your business — from the first step to the first customer. Direct answers, no promises.</p></div>'+
+ '<p class="hint">'+esc(consentNotice('aiTools','What you type here is sent to an AI provider to generate a reply. Do not enter personal, financial, or confidential information. AI responses can be wrong — check anything important before acting on it.'))+'</p>'+
  '<div class="chip-row" id="sugChips">'+sug.map(function(s){return '<button class="chip">'+s+'</button>';}).join('')+'</div>'+
  '<div class="chat-log" id="chatLog" aria-live="polite"></div>'+
  '<div class="chat-input-row"><textarea id="chatInput" aria-label="Message the mentor" placeholder="Ask anything...">'+esc(prefill||'')+'</textarea>'+
@@ -504,7 +568,7 @@ async function startFeedWatch(){
 function renderFeed(){
  document.getElementById('view-feed').innerHTML=
  '<div class="hero"><h1 class="sm">Community feed</h1><p>What other people are building right now. Share progress, ask when you are stuck, and see that getting stuck is normal.</p></div>'+
- '<div class="panel warn"><p class="muted-sm">Posts are visible to everyone using the app. Never post your full name, phone number, address or payment details.</p></div>'+
+ '<div class="panel warn"><p class="muted-sm">'+esc(consentNotice('feedPost','Posts are visible to everyone using the app. Never post your full name, phone number, address or payment details.'))+'</p></div>'+
  '<div id="composer"></div>'+
  '<h2 class="section-label">Filter</h2>'+
  '<label class="field-label" for="feedSearch">Search posts</label>'+
@@ -630,6 +694,7 @@ function renderLeaderboard(){
  document.getElementById('view-leaderboard').innerHTML=
  '<div class="hero"><h1 class="sm">Leaderboard</h1><p>Active businesses and reported sales. Every number here is <b>self-reported</b> by the person who entered it, not independently verified — treat it as a rough signal, not a certified fact.</p></div>'+
  '<div class="panel"><h4>Add or update your entry</h4>'+
+  '<p class="hint">'+esc(consentNotice('leaderboard','Your entry — including your name, business type, reported sales figure and any link you provide — will be visible to all signed-in users. Sales figures are self-reported and are not verified by us.'))+'</p>'+
   '<label class="field-label" for="lbBiz">Business type</label>'+
   '<select id="lbBiz">'+DATA.map(function(c){return '<option value="'+c.id+'">'+c.name+'</option>';}).join('')+'</select>'+
   '<label class="field-label" for="lbSales">Sales so far (self-reported)</label>'+
@@ -664,4 +729,5 @@ function renderLeaderboard(){
 document.getElementById('backBtn').onclick=function(){go('home');};
 document.getElementById('brandHome').onclick=function(){go('home');};
 initAuth();
+loadLegal().catch(function(){});
 showView('home');
