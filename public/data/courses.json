@@ -1,0 +1,315 @@
+{
+  "id": "courses",
+  "name": "Digital Products & Courses",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Pick a topic you actually know",
+      "goal": "Choose one specific topic people have genuinely asked you about more than once — the clearest signal of real demand.",
+      "explanation": [
+        "Think back to questions people have asked you repeatedly — a skill, a hobby, a subject you help classmates with. Repetition is the signal that this knowledge is genuinely wanted.",
+        "Narrow the topic to a specific outcome, not a broad subject: not \"guitar\" but \"learn your first 10 songs on guitar without reading sheet music.\"",
+        "Check that this specific angle isn't already covered extremely well and for free — if it is, find a more specific or differently-explained angle.",
+        "Outline the course in one sentence: what someone will be able to DO by the end, not just what they'll \"learn about.\"",
+        "Test the idea before building anything — mention it to 5-10 people who'd be the target audience and see if they'd actually want it."
+      ],
+      "example": "Liam kept getting asked by classmates how he edited his gaming clips so fast. He narrowed it to \"edit a montage video in under 20 minutes using free software\" — a specific, outcome-focused promise, not a vague \"video editing basics\" course.",
+      "mistakes": [
+        "Picking a topic based on what seems popular rather than what people have genuinely asked you about.",
+        "Keeping the topic broad instead of narrowing to one specific, describable outcome.",
+        "Building the full course before testing whether anyone actually wants this specific angle."
+      ],
+      "template": "Course idea worksheet:\nRepeated question/topic: ____\nSpecific outcome (what they'll be able to DO): \"____\"\nExisting free coverage of this exact angle: ____\nTested with 5-10 people — reaction: ____",
+      "checklist": [
+        "Identified a topic people have genuinely asked me about repeatedly",
+        "Narrowed to one specific, outcome-focused promise",
+        "Checked this specific angle isn't already covered well for free",
+        "Tested the idea with 5-10 real potential buyers before building"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know exactly who this is for",
+      "goal": "Describe the specific person who's stuck right where your course starts, and know what would make them buy.",
+      "explanation": [
+        "Your buyer is someone at a specific stuck point — not \"anyone interested in the topic,\" but someone who's tried and hit a specific wall.",
+        "Figure out their current skill level precisely — a course pitched at the wrong level (too basic or too advanced) won't convert even genuinely interested people.",
+        "Research what free content already exists for this audience and identify the gap — usually depth, organization, or a faster path to the specific outcome.",
+        "Write a short profile: their current stuck point, what they've already tried, and what would make them trust your course to actually fix it.",
+        "Ask 2-3 people matching this profile directly what price and format (video, text, live) they'd actually want."
+      ],
+      "example": "Liam's buyer profile: \"Someone who's watched a dozen scattered YouTube tutorials but still can't put together a smooth montage in reasonable time.\" That precisely matched what his course promised to fix.",
+      "mistakes": [
+        "Pitching to a vague, broad audience instead of someone at a specific stuck point.",
+        "Getting the skill level wrong, pitching too basic or too advanced for the real target buyer.",
+        "Never asking real target buyers what format or price they'd actually want."
+      ],
+      "template": "Audience one-pager:\nWho: ____\nTheir specific stuck point: \"____\"\nWhat they've already tried: ____\nFormat/price preference from real feedback: ____",
+      "checklist": [
+        "Wrote the specific buyer profile and stuck point",
+        "Confirmed the right skill level for the target buyer",
+        "Researched the gap in existing free content",
+        "Asked real potential buyers about format and price preference"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Price the product",
+      "goal": "Set a price that reflects the value of the specific outcome, not just the length of content.",
+      "explanation": [
+        "Price based on the value of the outcome (time saved, skill gained, problem solved) rather than by the hour of content — a focused 45-minute course solving a real problem can outprice a rambling 5-hour one.",
+        "Research 3-5 similar digital products/courses (even in adjacent topics) for a realistic price range.",
+        "Consider a launch price lower than your long-term price, explicitly framed as limited-time, to get early buyers and reviews faster.",
+        "Factor in the sales platform's fee (many take a percentage cut) when calculating real take-home per sale.",
+        "Decide whether to sell once at a fixed price or use a pay-what-you-want/tiered model — a simple fixed price is usually easiest to start with."
+      ],
+      "example": "Liam priced his 45-minute focused course at $19, launched at $12 for the first week with that framed clearly as limited-time, and checked against similar creator-made mini-courses selling $15-30.",
+      "mistakes": [
+        "Pricing based on content length instead of the value of the specific outcome delivered.",
+        "Not researching any comparable products before setting a price.",
+        "Forgetting the sales platform's fee when calculating real take-home per sale."
+      ],
+      "template": "Pricing plan:\nLaunch price: $____ (limited time)\nLong-term price: $____\nComparable products researched: $____ – $____\nPlatform fee: ____% → real take-home per sale: $____",
+      "checklist": [
+        "Priced based on outcome value, not content length",
+        "Researched comparable products for a realistic range",
+        "Considered a limited-time launch price",
+        "Calculated real take-home after platform fees"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Tools and startup costs",
+      "goal": "Confirm you can build and sell this for close to $0, and know what's actually worth spending on.",
+      "explanation": [
+        "Free screen-recording tools and a sales platform with a free tier (taking a percentage per sale instead of an upfront fee) cover a real first product — this can genuinely start at $0.",
+        "The real cost here is TIME, not money — a focused course can take 15-30 hours to build well, which is worth planning for realistically.",
+        "If considering a paid tool (nicer screen recording, a course platform with more features), evaluate it against expected sales, not before any sales exist.",
+        "Avoid paying for \"how to sell courses\" meta-courses — the free documentation of your chosen sales platform, plus this app's own guidance, covers what's needed to start.",
+        "If a parent's card is needed for any paid tool, agree the amount together first."
+      ],
+      "example": "Liam built his entire course with free screen-recording software and a free-tier sales platform that only took a percentage per sale — zero upfront cost, about 20 hours of his own time.",
+      "mistakes": [
+        "Paying for expensive course-creation software before validating anyone wants to buy the course at all.",
+        "Underestimating the real time investment needed to build a genuinely good course.",
+        "Buying a \"how to sell courses\" meta-course instead of using free platform documentation."
+      ],
+      "template": "Startup cost sheet:\nTools used (free tier): ____\nEstimated time to build: ____ hours\nAny paid tool considered, and why: ____",
+      "checklist": [
+        "Confirmed I can build and sell this with $0 upfront cost",
+        "Estimated the real time investment realistically",
+        "Avoided paid \"how to sell courses\" meta-products",
+        "Agreed any spending with a parent if their card is used"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Present it professionally",
+      "goal": "Make the product page and materials look trustworthy enough for a stranger to pay before seeing the actual content.",
+      "explanation": [
+        "Write a product page that says exactly what the learner will be able to do by the end — the same specific outcome from chapter 1 — not a vague description.",
+        "Design a simple, clean cover image/thumbnail — free design tools make this a same-day task, and it's often the first thing a potential buyer judges.",
+        "Include a short preview (a free sample lesson or clip) so buyers can judge quality before paying — this builds crucial trust for a new, unproven creator.",
+        "Write 2-3 sample \"who this is for\" and \"who this is NOT for\" lines — being clear about who it's not for actually increases trust and conversion for the right buyers.",
+        "If you get early buyers' permission, add real testimonials to the page as soon as they exist."
+      ],
+      "example": "Liam's product page opened with the exact outcome (\"edit a montage in under 20 minutes\"), included a 90-second free preview clip, and explicitly said \"this isn't for people wanting professional cinematic editing — it's for fast, good-enough gaming content.\"",
+      "mistakes": [
+        "A vague product description that doesn't state the specific outcome clearly.",
+        "No free preview, making it hard for a new, unproven creator to earn a stranger's trust before payment.",
+        "Trying to appeal to everyone instead of being clear about who it's specifically for."
+      ],
+      "template": "Product page checklist:\nSpecific outcome stated clearly? Yes/No\nCover image/thumbnail: done? Yes/No\nFree preview included? Yes/No\n\"Who this is NOT for\" line: \"____\"",
+      "checklist": [
+        "Wrote a product page stating the specific outcome clearly",
+        "Made a simple, clean cover image",
+        "Included a free preview sample",
+        "Wrote a clear \"who this is NOT for\" line"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Launch and get it in front of buyers",
+      "goal": "Get the first wave of traffic to the product page from people likely to actually buy.",
+      "explanation": [
+        "Announce it first to any existing audience you already have (social followers, a community you're part of) — warm traffic converts far better than cold.",
+        "If you don't have an existing audience, go directly to the specific community where your target buyer profile (from chapter 2) actually hangs out.",
+        "Create one or two pieces of content demonstrating a small, useful piece of the course's value for free — it proves the quality and naturally leads into the paid offer.",
+        "Time the launch around your limited-time launch price (from the pricing chapter) to create a genuine, honest reason to act now rather than later.",
+        "Track exactly where each sale came from so you know which channel to focus more effort on."
+      ],
+      "example": "Liam posted a free \"1 quick editing tip\" video to his existing following, mentioned the full course was launching that week at a discount, and tracked that most sales came directly from that one video's link.",
+      "mistakes": [
+        "Launching only to cold audiences instead of an existing warm one first, even a small one.",
+        "Not creating any free demonstration of value before asking people to pay.",
+        "Not tracking which channel actually drove sales, wasting effort on ones that don't work."
+      ],
+      "template": "Launch plan:\nWarm audience I'll announce to first: ____\nFree demonstration content: ____\nLaunch window (tied to limited-time price): ____\nSale source tracking: ____",
+      "checklist": [
+        "Announced first to any existing warm audience",
+        "Created free content demonstrating real value",
+        "Launched within a clear, honest limited-time window",
+        "Tracked which channel each sale came from"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Sell your first copies",
+      "goal": "Get real strangers or your existing audience to buy and actually start the course.",
+      "explanation": [
+        "Make sure the checkout and delivery flow actually works — buy it yourself (or have a friend) to confirm access arrives correctly before promoting widely.",
+        "Respond fast to any pre-purchase questions — for a new creator's first product, hesitation is normal and a quick, honest answer often closes the sale.",
+        "Welcome new buyers personally if the platform allows it (a short welcome message) — it's a small touch that builds trust for a new, unproven product.",
+        "Check in with early buyers partway through to see if they're actually progressing, not just to ask for a review immediately.",
+        "Log what led to each early sale — which piece of content, which specific question they asked — to understand what's actually convincing people."
+      ],
+      "example": "Liam bought his own course through the checkout flow first to confirm delivery worked, then personally replied to every pre-purchase question in his community, closing several of his first ten sales that way.",
+      "mistakes": [
+        "Promoting before confirming the checkout/delivery flow actually works.",
+        "Going silent on pre-purchase questions from a hesitant first-time buyer.",
+        "Asking for a review immediately at purchase instead of after they've had a chance to actually use it."
+      ],
+      "template": "First-sales log:\nCheckout/delivery tested myself? Yes/No\nPre-purchase questions and my answers: \"____\"\nSale source | Buyer progress check-in done?",
+      "checklist": [
+        "Tested checkout and delivery myself before promoting widely",
+        "Responded quickly to pre-purchase questions",
+        "Welcomed new buyers personally where possible",
+        "Checked in on buyer progress before asking for a review"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Support buyers and collect feedback",
+      "goal": "Help buyers actually finish and get the promised outcome, and use their feedback to improve the product.",
+      "explanation": [
+        "Offer a simple way for buyers to ask questions while going through the course (email, a comment section, a community) — a support channel significantly increases completion and satisfaction.",
+        "Watch for where buyers commonly get stuck or drop off, if your platform shows any completion data, and treat that as the most valuable feedback for version 2.",
+        "Respond to every support question, even simple ones — for a small, early-stage product, this kind of personal attention is a real differentiator from bigger, more impersonal courses.",
+        "Ask for honest feedback (not just a star rating) from your first 10 buyers specifically, since detailed feedback is what actually improves the product.",
+        "Have a clear, fair refund policy stated upfront, and honor it without an argument if someone genuinely isn't satisfied."
+      ],
+      "example": "Liam noticed from buyer questions that everyone got stuck on the same export-settings step. He added a short clarifying clip specifically for that step, which visibly reduced repeat questions afterward.",
+      "mistakes": [
+        "No support channel at all, leaving confused buyers to give up silently instead of asking.",
+        "Ignoring a common sticking point instead of treating it as the most valuable feedback for improving the product.",
+        "No clear refund policy, or arguing with a genuinely dissatisfied buyer instead of honoring a fair policy."
+      ],
+      "template": "Support and improvement log:\nSupport channel: ____\nCommon sticking point noticed: \"____\"\nFix made in response: ____\nRefund policy: \"____\"",
+      "checklist": [
+        "Set up a simple support channel for buyers",
+        "Identified a common sticking point from buyer questions/data",
+        "Made a specific improvement based on that feedback",
+        "Stated a clear, fair refund policy"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Getting paid",
+      "goal": "Set up sales and payouts correctly and legally.",
+      "explanation": [
+        "Most digital product sales platforms require an 18+ payout account holder — under that age, a parent opens and holds the account.",
+        "Understand the platform's payout schedule and minimum threshold before expecting a specific payout date.",
+        "Agree the transfer arrangement with the account-holding parent before the first sale.",
+        "Keep your own simple log of sales, separate from the platform dashboard, since platform access or reporting formats can change.",
+        "Never share account login details or one-time codes with anyone outside your agreed arrangement."
+      ],
+      "example": "Liam's course sales went through his mother's account on the sales platform, with a written agreement that revenue transferred to Liam's own account monthly after the platform's payout cleared.",
+      "mistakes": [
+        "Setting up a sales account without meeting the platform's age requirement.",
+        "Not understanding the payout schedule/threshold and being confused when money doesn't arrive as expected.",
+        "Sharing account access outside the agreed family arrangement."
+      ],
+      "template": "Payment setup record:\nPlatform account holder (18+): ____\nPayout schedule and minimum threshold: ____\nAgreed transfer arrangement to me: ____",
+      "checklist": [
+        "Confirmed the account holder meets the platform's age requirement",
+        "Understood the payout schedule and threshold",
+        "Agreed the transfer arrangement with the account-holding parent",
+        "Kept my own separate sales log"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Digital product sales platforms generally require an 18+ payout account holder. A parent needs to hold this account under this age.",
+      "imagePath": "images/courses/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track sales income and understand what's owed.",
+      "explanation": [
+        "Digital product income is taxable business income in almost every country, including for minors, with specifics that vary by country.",
+        "Keep a log per sale: date, amount, platform fee, and net income — most platforms provide a sales export to help with this.",
+        "Set aside a portion of net income (a rough 20-25% placeholder is common) rather than spending it all immediately.",
+        "Watch for platforms that issue a tax form once you cross an earnings threshold, and keep your own records either way.",
+        "Have one real conversation with a parent, and once income is more than pocket change, check your country's actual rules for minors' business income."
+      ],
+      "example": "Liam exported his sales data monthly and tracked net income (after the platform's fee) separately from gross revenue, setting aside a quarter of net income each month.",
+      "mistakes": [
+        "Tracking gross sales instead of net income after platform fees.",
+        "Not exporting/keeping sales records independent of the platform's own dashboard.",
+        "Spending all sales income immediately with nothing set aside."
+      ],
+      "template": "Sales income log (one row per sale or per batch):\nDate | Gross sales | Platform fee | Net income | Running total\nSet-aside plan: ____% saved so far: $____",
+      "checklist": [
+        "Started a running sales income log tracking net income",
+        "Set aside a percentage of net income",
+        "Checked whether the platform issues a tax form",
+        "Had one conversation with a parent about this income"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Digital product sales income is taxable in most places, including for minors. This needs a parent involved and a real check with local tax rules once income is meaningful.",
+      "imagePath": "images/courses/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing beyond the first launch",
+      "goal": "Turn one successful launch into a repeatable, slowly-improving product line.",
+      "explanation": [
+        "Use buyer feedback and completion data from the service chapter to release an improved version 2, rather than treating the first version as final.",
+        "Consider a second, related product for buyers who finished the first — an easier upsell than finding entirely new buyers.",
+        "Once you have real testimonials and a proven product, raise the price slightly from the launch price — social proof lets you charge more without losing conversion.",
+        "Keep promoting periodically rather than only at initial launch — most sales for a digital product happen well after the first-week spike, through ongoing mentions and content.",
+        "Review monthly: sales count, completion rate (if trackable), and buyer feedback themes — not just launch-week numbers."
+      ],
+      "example": "After his initial launch, Liam used common buyer questions to release an improved version 2 with an extra module, raised the price once he had 15 genuine testimonials, and kept mentioning the course in his regular content instead of only at launch.",
+      "mistakes": [
+        "Treating the first version as final instead of improving it with real buyer feedback.",
+        "Only promoting during the initial launch week and going silent afterward.",
+        "Never raising the price despite having strong, genuine social proof."
+      ],
+      "template": "Monthly growth review:\nSales this month: ____  Completion rate (if known): ____%\nFeedback themes for version 2: ____\nOne promotion planned this month, beyond launch: ____",
+      "checklist": [
+        "Used feedback/data to plan a version 2 improvement",
+        "Considered a second, related product for existing buyers",
+        "Raised price once real social proof existed",
+        "Kept promoting periodically beyond the initial launch"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/courses/growth.jpg"
+    }
+  ]
+}

@@ -820,8 +820,8 @@ document.getElementById('backBtn').onclick=function(){go('home');};
 document.getElementById('brandHome').onclick=function(){go('home');};
 initAuth();
 loadLegal().catch(function(){});
-// Businesses with a real chapters JSON at public/data/<id>.json — add more ids here as they get piloted.
-['dropship'].forEach(function(id){
+// Businesses with a real chapters JSON at public/data/<id>.json.
+DATA.map(function(c){return c.id;}).forEach(function(id){
  loadChapters(id).then(function(ch){
   if(ch&&!document.getElementById('view-home').hidden)renderHome();
  });

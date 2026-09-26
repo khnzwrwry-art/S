@@ -1,0 +1,315 @@
+{
+  "id": "websites",
+  "name": "Website Building for Businesses",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Find businesses that need a website",
+      "goal": "Identify a specific list of local businesses with no website or a badly outdated one — your warmest possible leads.",
+      "explanation": [
+        "Search local businesses on a maps app in categories like barbers, tutors, bakeries, small repair shops — businesses that clearly still rely on word-of-mouth and foot traffic alone.",
+        "A business with NO website link listed, or a broken/very outdated-looking one, already knows on some level they need this — that awareness makes the pitch much easier than convincing someone from zero.",
+        "Build a shortlist of 10-15 such businesses in your area, noting what's missing on each (no site, no menu/price info, no contact form, not mobile-friendly).",
+        "Pick 2-3 to focus on first rather than trying to pitch all fifteen at once — quality of pitch beats quantity of targets.",
+        "Write a one-sentence value promise: \"A real website with your hours, services and contact info, live in one week.\""
+      ],
+      "example": "Dor searched \"barber\" on a local maps app, found six shops with no website link at all, and shortlisted the two closest to his neighborhood to approach first with a real, unsolicited demo.",
+      "mistakes": [
+        "Pitching businesses that already have a good, modern website — a much harder sell than one with an obvious, visible gap.",
+        "Trying to approach fifteen businesses with the same generic effort instead of focusing on 2-3 with a strong, specific pitch.",
+        "Not noting exactly what's missing on each prospect's current presence before reaching out."
+      ],
+      "template": "Lead-finding worksheet:\nBusiness category targeted: ____\nBusinesses found with no/outdated website: ____\nWhat's missing on each (list): ____\nTop 2-3 to approach first: ____\nOne-sentence value promise: \"____\"",
+      "checklist": [
+        "Searched local businesses in a category likely to need this",
+        "Built a shortlist of 10-15 businesses with no/outdated websites",
+        "Noted exactly what's missing on each prospect",
+        "Picked 2-3 to focus on first"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Understand what the business owner actually needs",
+      "goal": "Know exactly what information and features a small business owner's customers actually look for, before building anything.",
+      "explanation": [
+        "Small business website needs are usually simple and consistent: hours, location, contact info, services/menu/prices, and photos — not complex custom features.",
+        "Look at what similar successful local businesses' websites include, to understand the real baseline expected in that category.",
+        "Consider the business owner's OWN comfort level too — will they need to update this themselves later, or rely on you? That affects what platform/complexity makes sense.",
+        "Write a short brief: the business's core info, what a customer visiting the site would want to find fastest, and the owner's likely comfort with maintaining it.",
+        "If you get a chance to talk to the owner before building, ask directly what's frustrated them about not having a good site so far."
+      ],
+      "example": "Dor noticed local barbershop sites that worked well all led with hours, a simple price list, and a \"book now\" contact button above the fold — so that became the standard structure for every site he built in this category.",
+      "mistakes": [
+        "Overbuilding with unnecessary complex features the business and its customers don't actually need.",
+        "Not considering whether the owner needs to update the site themselves later.",
+        "Skipping research on what successful similar businesses' sites actually include."
+      ],
+      "template": "Business brief:\nCore info needed: hours ____, location ____, services/prices ____, contact ____\nWhat customers want to find fastest: \"____\"\nOwner's comfort with updating it themselves: ____",
+      "checklist": [
+        "Identified the core info every visitor to this site type needs",
+        "Researched successful similar businesses' site structure",
+        "Considered the owner's comfort level with future updates",
+        "Wrote a short brief before starting to build"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Price the build and ongoing hosting",
+      "goal": "Set a fair one-time build price, plus decide whether to offer ongoing hosting/updates as recurring income.",
+      "explanation": [
+        "A one-time build fee is the core price — research typical rates for a simple small-business site to set a realistic starting number.",
+        "Consider a separate, smaller monthly fee for hosting and occasional updates — this turns one-time projects into a source of recurring income across multiple clients.",
+        "Keep pricing simple and clearly scoped: what's included (number of pages, revisions, timeline) at the stated price, with anything extra priced separately.",
+        "Factor in any real costs (a domain name, hosting if not free-tier) when calculating your actual margin, especially if you're covering these upfront.",
+        "Decide your price before pitching, not during the conversation — a confident, pre-decided price is easier to say clearly than one improvised on the spot."
+      ],
+      "example": "Dor's package: \"$250 one-time build, up to 5 pages, 2 revision rounds, live in one week — plus optional $25/month for hosting and small updates.\" Clear, and the monthly piece became steady income across several clients.",
+      "mistakes": [
+        "No clear scope attached to the price, leading to endless \"just one more change\" requests.",
+        "Never offering the ongoing hosting/update fee, missing an easy source of recurring income.",
+        "Improvising a price on the spot during the pitch instead of deciding it beforehand."
+      ],
+      "template": "Pricing plan:\nOne-time build fee: $____ (pages/revisions/timeline included)\nMonthly hosting/update fee: $____\nReal costs to cover (domain/hosting): $____",
+      "checklist": [
+        "Set a clear, scoped one-time build price",
+        "Decided whether to offer a monthly hosting/update fee",
+        "Factored in real domain/hosting costs",
+        "Decided the price before pitching, not during"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Tools and startup costs",
+      "goal": "Confirm you can build a real demo for free, and know the small costs involved in actually going live for a client.",
+      "explanation": [
+        "AI website builders with free tiers can produce a full, real demo site from a short description — this is usually enough to pitch with, at zero cost.",
+        "The main real costs come once a client says yes: a domain name (usually $10-20/year) and possibly hosting beyond a free tier, depending on the builder used.",
+        "Decide upfront whether the client pays for their own domain/hosting directly, or whether you cover it and bill them (simpler to have them pay directly, avoiding you fronting costs).",
+        "Avoid paying for a premium website-builder plan before having a paying client who justifies the ongoing cost.",
+        "If a parent's card is needed for any tool or domain purchase, agree the amount and reimbursement plan together first."
+      ],
+      "example": "Dor built free demo sites for his first two prospects entirely on a free-tier AI website builder, and had the client pay for their own $14/year domain directly rather than Dor fronting that cost.",
+      "mistakes": [
+        "Paying for a premium website-builder plan before landing any paying client.",
+        "Fronting domain/hosting costs for a client instead of having them pay directly, creating unnecessary financial risk.",
+        "Building demos that require paid features before confirming a free tier can't do the job."
+      ],
+      "template": "Startup cost sheet:\nBuilder tool (free tier limits): ____\nDomain cost (who pays): $____ / year — payer: ____\nHosting beyond free tier needed? Yes/No",
+      "checklist": [
+        "Confirmed a free-tier builder can produce a real demo",
+        "Decided who pays for domain/hosting costs directly",
+        "Avoided paid builder plans before a real paying client",
+        "Agreed any spending with a parent if their card is used"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Build credibility with a real sample",
+      "goal": "Show up to a pitch with something finished, not just a description of what you could build.",
+      "explanation": [
+        "Build a free, real demo site for one specific business (ideally one of your actual prospects) before ever pitching — a finished example converts far better than any verbal pitch.",
+        "Make a simple one-page portfolio or profile showing 1-2 demo sites, your package price, and a short line about why you do this (local businesses deserve a real online presence).",
+        "Use your own professional, working contact info and a clear way to reach you — building trust as a young business owner starts with basic professionalism.",
+        "Once you have a real paying client, ask permission to use their finished site as a portfolio example for future pitches.",
+        "Keep your portfolio focused on your best 2-3 examples rather than every site you've ever touched."
+      ],
+      "example": "Dor built a complete demo site for one of his shortlisted barbershops — unsolicited, using only public info about their hours and services — and brought it to the pitch already finished rather than describing what he could build.",
+      "mistakes": [
+        "Pitching with no demo or sample at all, relying only on a description of skills.",
+        "Not asking permission to showcase a finished client site in future portfolios.",
+        "An unprofessional first contact (no clear way to reach you, casual/unclear communication) for a service built on trust."
+      ],
+      "template": "Credibility builder:\nDemo site built (for a real or realistic prospect): ____\nOne-page portfolio: done? Yes/No\nProfessional contact info ready? Yes/No",
+      "checklist": [
+        "Built at least one real, unsolicited demo site before pitching",
+        "Made a simple portfolio/profile to share",
+        "Set up clear, professional contact info",
+        "Got permission to showcase completed client work"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Pitch with the finished demo",
+      "goal": "Present the free demo to the business owner and get a clear yes/no on moving forward.",
+      "explanation": [
+        "Show up (in person if possible, or with a clear message) with the finished demo already built — \"I made this for you, take a look\" is far more compelling than \"I could build you a website.\"",
+        "Keep the pitch short: what you noticed was missing, what you built, and your clear price for making it live under their own domain.",
+        "Be ready to answer the obvious question — \"why should I trust a teenager with this\" — with your portfolio and the demo itself as the answer, not defensiveness.",
+        "If the owner says not now, leave the demo link with them anyway and follow up politely once, a few weeks later — circumstances change.",
+        "Track which pitch approach and which business types actually convert, to focus effort efficiently as you approach more prospects."
+      ],
+      "example": "Dor showed the barbershop owner the finished demo on his phone in person, said \"this could be live under your own name in a week for $250,\" and got a yes on the spot — the finished demo did most of the convincing before he said a word about price.",
+      "mistakes": [
+        "Pitching without the demo actually finished and ready to show.",
+        "Being defensive about age instead of letting the finished, professional work speak for itself.",
+        "Never following up with a prospect who said \"not now,\" losing a lead that might convert later."
+      ],
+      "template": "Pitch plan:\nDemo ready to show: Yes/No\nPitch script (short): \"____\"\nFollow-up plan if \"not now\": ____",
+      "checklist": [
+        "Brought a finished demo to the pitch, not just a description",
+        "Kept the pitch short and confident",
+        "Had a clear answer ready for trust/age concerns",
+        "Planned a polite follow-up for any \"not now\" responses"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Close the deal and agree scope in writing",
+      "goal": "Turn a yes into a signed, clear agreement before building the final version.",
+      "explanation": [
+        "Put the agreement in writing, even briefly: price, what's included (pages, revisions), timeline, and who owns the domain and content afterward.",
+        "Clarify domain ownership explicitly — the business should own their own domain (registered in their name or a name they control), not one locked to your account.",
+        "Agree what happens if the client wants to leave or switch providers later — this builds trust and is simply fair, especially for a new, unproven working relationship.",
+        "Set a realistic delivery timeline (roughly a week is reasonable for a simple small-business site) and communicate proactively if anything will be late.",
+        "Get a deposit or full payment upfront or on delivery, agreed clearly in the written scope, rather than an informal \"pay me whenever.\""
+      ],
+      "example": "Dor's one-page agreement with the barbershop covered the $250 price, 5 pages, 2 revisions, one-week delivery, domain registered in the owner's own name, and payment due on delivery — signed by both before he touched the final build.",
+      "mistakes": [
+        "Starting the final build on a verbal agreement with nothing written down.",
+        "Registering the client's domain under your own account instead of theirs, creating an ownership problem later.",
+        "No clear payment timing agreed, leading to awkward collection later."
+      ],
+      "template": "Agreement checklist:\nPrice and scope in writing? Yes/No\nDomain registered in client's name? Yes/No\nDelivery timeline: ____\nPayment timing: ____",
+      "checklist": [
+        "Got the agreement in writing before final build",
+        "Confirmed the domain is registered in the client's own name",
+        "Set a realistic delivery timeline",
+        "Agreed clear payment timing"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Deliver, connect the domain, and support the launch",
+      "goal": "Get the finished site live under the client's own domain and make sure they know how to use it going forward.",
+      "explanation": [
+        "Connect the client's domain to the finished site carefully, testing it fully (all pages, contact forms, mobile view) before telling them it's live.",
+        "Walk the owner through anything they'll need to do themselves (checking a contact form inbox, requesting future changes) so they're not confused after launch.",
+        "Fix any launch-day issues fast — a broken link or form on day one is the worst possible first impression for a paying client.",
+        "If you offered ongoing hosting/updates, make sure the client clearly understands what's included in that monthly fee versus what counts as a new, separately-priced project.",
+        "Ask for a review or referral once the site has been live and working well for a couple of weeks, not immediately at launch."
+      ],
+      "example": "Dor tested every page and the contact form on both desktop and phone before telling the barbershop owner it was live, then sent a short video walking through where to check for new contact-form messages.",
+      "mistakes": [
+        "Announcing the site as live without fully testing it first, including on mobile.",
+        "Leaving the owner confused about how to check for messages or request future changes.",
+        "Asking for a review immediately at launch instead of after it's been live and working for a while."
+      ],
+      "template": "Launch checklist:\nDomain connected and tested (all pages, forms, mobile)? Yes/No\nOwner walkthrough done? Yes/No\nOngoing fee scope explained clearly? Yes/No",
+      "checklist": [
+        "Fully tested the live site including mobile before announcing it",
+        "Walked the owner through how to use/maintain it",
+        "Fixed any launch-day issues quickly",
+        "Clarified what's included in any ongoing monthly fee"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Getting paid",
+      "goal": "Collect the build fee and any recurring hosting fee safely and legally.",
+      "explanation": [
+        "Most payment methods for client invoicing (bank transfer, invoicing tools, PayPal) require an 18+ account holder — under that age, a parent's account handles this.",
+        "Use a simple invoicing tool (many have free tiers) for a professional record of what's owed and paid.",
+        "Agree the transfer arrangement with the account-holding parent before the first client payment arrives.",
+        "For recurring hosting fees, set a clear, consistent monthly billing date so it doesn't become awkward or forgotten.",
+        "Follow up promptly and professionally on any late payment."
+      ],
+      "example": "Dor's father's account received client payments via a free invoicing tool, with the one-time build fee invoiced on delivery and any monthly hosting fee billed on the 1st of each month.",
+      "mistakes": [
+        "Not agreeing a clear payment schedule for both the one-time fee and any recurring fee.",
+        "Using a payment method without checking its age requirement.",
+        "Letting a late payment go unaddressed instead of a prompt, polite follow-up."
+      ],
+      "template": "Payment setup record:\nPayment method/account holder (18+ if needed): ____\nBuild fee payment timing: ____\nRecurring fee billing date (if any): ____",
+      "checklist": [
+        "Confirmed the payment method's age requirement",
+        "Set clear payment timing for the one-time build fee",
+        "Set a consistent billing date for any recurring fee",
+        "Agreed the transfer arrangement with the account-holding parent"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Client invoicing and payment collection generally require an 18+ account holder for the bank/payment method involved. A parent needs to hold this under this age.",
+      "imagePath": "images/websites/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Track build fees and recurring hosting income, and understand what's owed.",
+      "explanation": [
+        "Website-building income (both one-time build fees and recurring hosting fees) is taxable business income in almost every country, including for minors, with specifics that vary by country.",
+        "Keep a log per client: build fee, date paid, and any recurring monthly fee — separating one-time from recurring income helps you see your real predictable income.",
+        "Set aside a portion of income (a rough 20-25% placeholder is common) rather than spending it all as it arrives.",
+        "Track any real costs you covered (if any) — like a domain you fronted and got reimbursed for — separately from your actual profit.",
+        "Have one real conversation with a parent, and once income is more than occasional, check your country's actual rules for minors' business income."
+      ],
+      "example": "Dor's spreadsheet had one column for one-time build fees and another for recurring monthly hosting fees, making it easy to see his growing predictable monthly income as he added clients.",
+      "mistakes": [
+        "Mixing one-time and recurring income together, losing visibility into real predictable monthly income.",
+        "Not tracking reimbursed costs (like a fronted domain fee) separately from actual profit.",
+        "Spending all income immediately with nothing set aside."
+      ],
+      "template": "Income log (one row per client):\nClient | Build fee | Date paid | Recurring fee | Running monthly recurring total\nSet-aside plan: ____% saved so far: $____",
+      "checklist": [
+        "Started a running income log separating one-time and recurring fees",
+        "Set aside a percentage of income",
+        "Tracked any reimbursed costs separately from profit",
+        "Had one conversation with a parent about this income"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Website-building income, including recurring hosting fees, is taxable in most places, including for minors. This needs a parent involved and a real check with local tax rules once income is meaningful.",
+      "imagePath": "images/websites/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing your client base",
+      "goal": "Turn one successful build into a small, growing roster of clients with steady recurring income.",
+      "explanation": [
+        "Ask happy clients for referrals directly — local business owners often know other local business owners, and a personal recommendation is powerful.",
+        "Use each finished site as a new, real portfolio example, making your next pitch even more convincing than the last.",
+        "Watch your recurring hosting income grow as a percentage of total income — it's the most stable part of this business and worth actively encouraging every client to opt into.",
+        "Know your realistic capacity for build timelines as you take on more clients, and don't overcommit past what you can deliver well and on time.",
+        "Review monthly: number of clients, recurring monthly income, and referral sources — a strong referral rate is often the clearest sign the business model is working."
+      ],
+      "example": "After the barbershop, Dor got two referrals from that same owner within a month. He kept every client's demo in his growing portfolio and watched his recurring hosting income slowly become a meaningful steady base as he added clients.",
+      "mistakes": [
+        "Never asking for referrals despite having happy, satisfied clients.",
+        "Taking on more build projects than can realistically be delivered well and on time.",
+        "Not tracking recurring hosting income separately, missing how it's becoming the more stable part of the business."
+      ],
+      "template": "Monthly growth review:\nActive clients: ____  Recurring monthly income: $____\nReferrals received this month: ____\nCapacity check — realistic to take on another build right now? Yes/No",
+      "checklist": [
+        "Asked at least one happy client for a referral",
+        "Added the latest finished site to my portfolio",
+        "Tracked recurring hosting income as a growing share of total income",
+        "Checked realistic capacity before committing to a new build"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/websites/growth.jpg"
+    }
+  ]
+}
