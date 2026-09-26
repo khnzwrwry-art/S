@@ -1,0 +1,315 @@
+{
+  "id": "dropship",
+  "name": "Dropshipping",
+  "lastUpdated": "September 2026",
+  "chapters": [
+    {
+      "id": "idea",
+      "title": "Find your niche and product",
+      "goal": "Land on one specific product, for one specific type of buyer, that you can explain in a single sentence.",
+      "explanation": [
+        "Start from a problem, not a product. Look at your own daily annoyances, your friends' complaints, or recurring questions in a hobby community you're already part of — that's where real demand hides.",
+        "Narrow to a niche before you pick a product. \"Phone accessories\" is not a niche. \"Cable organizers for gamers with multi-monitor setups\" is.",
+        "Check real demand with free tools: Google Trends (is interest flat, rising, or seasonal?), TikTok and Instagram search (are people posting about this unprompted?), and Amazon/Etsy bestseller lists in your category.",
+        "Shortlist 3-5 candidate products and compare them on one sheet: unit cost, realistic selling price, shipping time from supplier to customer, and how saturated the ads for it already look.",
+        "Pick the one with the best gap between cost and price, the fewest existing big competitors, and shipping under 10 days — not necessarily the one you personally like most."
+      ],
+      "example": "Dana kept seeing classmates complain that their phone cases scratched up after two weeks. She searched \"durable phone case\" on Google Trends (flat, oversaturated) but then narrowed to \"clear phone case that doesn't yellow\" — a specific complaint with rising search interest and far fewer ads competing for it.",
+      "mistakes": [
+        "Picking a product because it's trending everywhere — by the time you notice a trend, ads for it are already expensive.",
+        "Choosing something you love instead of something with proven search demand.",
+        "Skipping the shipping-time check — a great product that takes 25 days to arrive gets refund requests, not repeat customers."
+      ],
+      "template": "Niche worksheet — fill in for each candidate product:\nProduct: ____\nWho exactly buys this (age, situation, why now): ____\nSupplier cost: $____  Realistic sell price: $____  Gap: $____\nShipping time to customer: ____ days\nHow many ads for this have I already seen this week: ____\nOne-sentence pitch: \"For [who], this [product] fixes [problem] because [reason].\"",
+      "checklist": [
+        "Wrote down 5 problems I or people I know actually complain about",
+        "Checked Google Trends for at least 3 candidate products",
+        "Compared candidates on the niche worksheet",
+        "Picked one product and can say the one-sentence pitch out loud without notes"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/dropship/idea.jpg"
+    },
+    {
+      "id": "audience",
+      "title": "Know your target audience",
+      "goal": "Be able to describe your exact buyer well enough that a stranger could recognize them from your description alone.",
+      "explanation": [
+        "Go beyond age and gender. Write down what your buyer is doing right before they'd search for your product, what they're frustrated by, and where they spend time online.",
+        "Read the negative reviews of similar products on Amazon or AliExpress — they're a free list of exactly what your audience cares about and what to fix or highlight.",
+        "Find 2-3 online communities (a subreddit, a Discord, a Facebook group, a hashtag) where your buyer already hangs out, and read — don't post yet — for a week.",
+        "Write a one-paragraph profile: name, age range, the specific moment they'd need your product, and the one objection that would stop them from buying.",
+        "Test the profile by showing your product page to 3 real people who match it and asking what confused them — not what they liked."
+      ],
+      "example": "For the anti-yellowing phone case, Dana's profile became: \"16-18 year olds who just got a new phone and are anxious about it looking beaten up before the school year ends. They've already owned a case that yellowed and felt annoyed/cheated by it. Their objection: 'how is this one actually different?'\" That objection became the headline on her product page.",
+      "mistakes": [
+        "Writing an audience profile that's really just \"everyone\" — that's not targeting, and your ads will be expensive and vague.",
+        "Guessing the audience instead of reading real reviews and forum posts.",
+        "Never updating the profile after actual sales start coming in with different buyers than expected."
+      ],
+      "template": "Audience one-pager:\nWho: ____ (age range, situation)\nMoment of need: \"They need this right when ____\"\nWhere they hang out online: ____\nBiggest objection to buying: \"____\"\nHow my product page answers that objection: \"____\"",
+      "checklist": [
+        "Read at least 15 reviews (positive and negative) of similar products",
+        "Found and read 2+ online communities where my buyer hangs out",
+        "Wrote the one-paragraph buyer profile",
+        "Showed my planned product page to someone matching the profile and noted their confusion"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/dropship/audience.jpg"
+    },
+    {
+      "id": "pricing",
+      "title": "Price it right",
+      "goal": "Set a price that covers costs, leaves room for ads, and still looks fair next to competitors.",
+      "explanation": [
+        "List every real cost per order: product cost, shipping cost (if not already in product cost), payment processor fee (~2.9% + $0.30 is typical), and a rough per-order ad cost estimate.",
+        "A common starting formula: price = (product cost + shipping) × 2.5 to 4. Higher multiplier for cheap, impulse-buy items; lower for anything over $40.",
+        "Check 3-5 competitor prices for the same or similar product and place yourself within a sensible range — noticeably cheaper looks suspicious, noticeably pricier needs a clear reason (better material, faster shipping, bundle).",
+        "Decide on one upsell or bundle (buy 2 save 10%, add a matching accessory) — raising average order value is usually easier than raising traffic.",
+        "Write down your break-even ad cost per sale: if you spend more than (price − product cost − processor fee) to get one sale, you're losing money on that sale."
+      ],
+      "example": "Dana's case cost $3.20 landed + $0.90 shipping = $4.10. At a 3.5× multiplier that's roughly $14.35 — she rounded to $14.99, checked 4 competitors selling similar cases for $12-19, and added a \"2 for $24\" bundle that became her best-selling option.",
+      "mistakes": [
+        "Pricing based only on \"what feels right\" instead of the real cost math.",
+        "Racing competitors to the bottom on price instead of competing on trust and speed.",
+        "Forgetting payment processor fees when calculating real profit per sale."
+      ],
+      "template": "Pricing calculator:\nProduct cost: $____  + Shipping: $____  = Landed cost: $____\nLanded cost × 3 = Suggested price: $____\nCompetitor price range seen: $____ – $____\nMy price: $____\nBreak-even ad spend per sale: Price − Landed cost − (Price × 3%) = $____",
+      "checklist": [
+        "Calculated landed cost per unit",
+        "Applied the multiplier formula and compared to at least 3 competitors",
+        "Decided on one bundle or upsell",
+        "Wrote down my break-even ad cost per sale"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/dropship/pricing.jpg"
+    },
+    {
+      "id": "equipmentCosts",
+      "title": "Equipment and startup costs",
+      "goal": "Know the real, total amount of money you need before your first sale, and never risk more than that.",
+      "explanation": [
+        "Separate one-time costs (store theme, initial small ad tests) from ongoing costs (store subscription, apps, ad budget) — ongoing costs are the ones that quietly drain money if the store sits unused.",
+        "A realistic first-month budget for dropshipping is usually $50-150: most of that is test ad spend, not store software, since many store platforms offer a free trial period.",
+        "Set a hard cap you are fully prepared to lose entirely — dropshipping ad testing is inherently a bit of gambling with data, and this must be money you (or your parent, if it's their card) can afford to lose without real harm.",
+        "List every recurring subscription you're about to start (store platform, any paid apps) with its monthly price and a calendar reminder to cancel anything unused after the free trial.",
+        "If a parent's payment card is involved (very likely, since most platforms require an adult account holder), agree on the cap together in writing before spending starts, not after."
+      ],
+      "example": "Dana's parents agreed to a $100 total test budget: $0 for the store (free trial), $80 for a first ad test, and $20 held back as a buffer. They put a calendar reminder for the trial's last day so it wouldn't silently convert to a paid plan.",
+      "mistakes": [
+        "Starting ad spend without a hard cap and a way to stop it (most ad platforms let you set a daily budget — use it).",
+        "Forgetting a free trial converts to a paid subscription automatically.",
+        "Spending the whole budget on one product test instead of spreading small tests across a few product/audience combinations."
+      ],
+      "template": "Startup budget sheet:\nStore platform (trial length, price after trial): ____\nPaid apps (name, monthly price): ____\nTest ad budget (hard cap): $____\nTotal I'm prepared to lose completely: $____\nTrial-end reminder set for: ____ (date)",
+      "checklist": [
+        "Wrote the full list of one-time and recurring costs",
+        "Set a hard ad-spend cap I can afford to lose entirely",
+        "If using a parent's card, agreed the cap with them in writing",
+        "Set a calendar reminder for every free trial's last day"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Store platforms and ad accounts require a payment method and, in most places, an account holder aged 18+. A parent's card and agreement on the spending cap should be settled before any money moves.",
+      "imagePath": "images/dropship/equipmentCosts.jpg"
+    },
+    {
+      "id": "branding",
+      "title": "Build a brand, not just a store",
+      "goal": "Give your store a name, look and voice that make it feel like a real, trustworthy business — not a random product dump.",
+      "explanation": [
+        "Pick a name that's short, easy to say out loud, and not already a registered trademark in your category — a quick search engine check and a look at the trademark office's free search tool covers most obvious conflicts.",
+        "Build one simple, consistent look: one or two brand colors, one font pairing, and a logo you can make free in a tool like Canva — consistency matters far more than fancy design.",
+        "Write your \"why us\" in one short paragraph — what specifically makes your store worth trusting over the dozens of similar ones (faster shipping, a guarantee, a clear return policy, a story).",
+        "Add real trust signals to your homepage: a clear contact method, an accurate shipping-time estimate, and your return policy — their absence is the #1 reason strangers don't buy from a new store.",
+        "Keep your product photos and descriptions honest to what will actually arrive — mismatched expectations are the top cause of refund requests and chargebacks."
+      ],
+      "example": "Dana named her store \"Clearline\" — short, said what the product did (clear cases that stay clear), and the .com and Instagram handle were both free. Her whole brand kit was two colors (white and one accent blue) and one font, made in an afternoon in Canva.",
+      "mistakes": [
+        "Spending weeks perfecting a logo before validating anyone wants the product at all.",
+        "Copying product photos and descriptions straight from the supplier, typos and all.",
+        "Leaving out a visible return policy or contact method — it reads as untrustworthy even if you'd honor a return anyway."
+      ],
+      "template": "Brand one-pager:\nStore name: ____ (checked available: domain / social handle / obvious trademark conflict)\nBrand colors: ____ / ____\nOne-paragraph \"why us\": \"____\"\nReturn policy in one sentence: \"____\"\nContact method shown on-site: ____",
+      "checklist": [
+        "Checked the store name for domain, social handle and obvious trademark conflicts",
+        "Made a simple, consistent logo and color pair",
+        "Wrote the \"why us\" paragraph for the homepage",
+        "Added a visible return policy and contact method to the store"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/dropship/branding.jpg"
+    },
+    {
+      "id": "channels",
+      "title": "Choose your sales channels",
+      "goal": "Pick one primary channel to get your first traffic from, instead of spreading thin across all of them at once.",
+      "explanation": [
+        "Match the channel to your audience profile from the earlier chapter — where you found them hanging out is usually where you should advertise or post first.",
+        "For most teen-audience physical products, short-form video (TikTok, Instagram Reels) organic content plus a small paid test is the fastest realistic path to first sales.",
+        "If you have some budget, run one small, tightly-targeted paid ad test before scaling anything — set a firm daily cap and let it run at least 2-3 days before judging results.",
+        "If you have little to no budget, commit to a content posting schedule instead (e.g. 4 short videos a week) — organic reach is slower but free.",
+        "Whichever channel you pick first, install its tracking pixel on your store before you spend a single dollar, so you can actually see what's working."
+      ],
+      "example": "Dana filmed 5 short \"case yellow test\" comparison videos for TikTok before spending anything on ads. The third video got real views, so she put $30 behind boosting content similar to that one instead of guessing what to promote.",
+      "mistakes": [
+        "Running ads on 4 platforms at once with a tiny budget split between them — none gets enough data to tell you anything.",
+        "Judging an ad test after a few hours instead of a few days.",
+        "Forgetting to install the tracking pixel before spending on ads, making it impossible to see what worked."
+      ],
+      "template": "Channel test plan:\nPrimary channel: ____\nContent or ad plan for week 1: ____\nDaily/weekly budget (if paid): $____\nPixel installed before spending? Yes / No\nWhat I'll check after 3 days: click-through rate, cost per click, any sales",
+      "checklist": [
+        "Picked one primary channel matching my audience",
+        "Installed the tracking pixel on my store",
+        "Ran or posted for at least 3 days before judging results",
+        "Wrote down what worked and what didn't after the first test"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/dropship/channels.jpg"
+    },
+    {
+      "id": "firstCustomer",
+      "title": "Land your first customer",
+      "goal": "Get one real, paying stranger to complete an order — the hardest and most important sale you'll make.",
+      "explanation": [
+        "Make sure the actual checkout works end to end before driving any traffic to it: place a real test order yourself if your platform allows it.",
+        "Remove friction from checkout — the fewer required fields and clicks, the higher the odds a nervous first-time visitor finishes the purchase.",
+        "For your very first sales, consider a small, honest incentive (a modest discount code shared with people who match your audience) to get initial reviews and real feedback faster.",
+        "Respond to every question or comment within a few hours in the first weeks — early buyers are forgiving of a new store but not of being ignored.",
+        "The moment you get a sale, write down everything about it: what ad or post led to it, what almost stopped them (if they mention it), and what they said afterward."
+      ],
+      "example": "Dana's first sale came from a comment reply, not an ad — someone asked \"does this really not yellow?\" under her video, she replied with a direct answer and a 10%-off code, and they bought within the hour.",
+      "mistakes": [
+        "Launching traffic to a store with a broken or confusing checkout flow, discovered only after the first visitor bounces.",
+        "Going silent when a potential buyer asks a question, instead of replying fast.",
+        "Treating the first sale as \"done\" instead of a source of information about what actually convinced someone to buy."
+      ],
+      "template": "First-sale checklist and log:\nTest order placed myself? Yes / No\nCheckout has fewer than 5 required fields? Yes / No\nFirst-sale source (ad / post / comment / other): ____\nWhat they said or asked before buying: \"____\"",
+      "checklist": [
+        "Placed a real test order to confirm checkout works",
+        "Simplified checkout to the fewest fields needed",
+        "Replied to every question/comment within a few hours",
+        "Logged the details of the first real sale"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/dropship/firstCustomer.jpg"
+    },
+    {
+      "id": "service",
+      "title": "Service that keeps customers",
+      "goal": "Turn a one-time buyer into someone who trusts you enough to buy again or tell a friend.",
+      "explanation": [
+        "Send a shipping confirmation and tracking link as soon as an order ships — most complaints happen simply because a buyer feels forgotten, not because anything actually went wrong.",
+        "Set expectations honestly on the product page (\"ships in 7-12 days\") so reality matches what was promised, rather than promising 2-day shipping you can't guarantee.",
+        "Have one clear, simple process ready for the two most common issues: item never arrived, and item arrived damaged/wrong — decide your response in advance so you're not improvising under stress.",
+        "Ask for a review a few days after delivery, when the product has actually been used — timing the ask matters more than the wording.",
+        "Treat a complaint as a chance to fix a real customer's problem fast, not as an attack — a well-handled complaint often becomes your best review."
+      ],
+      "example": "When a case arrived cracked, Dana's pre-written policy (replace immediately, no argument, ask for a photo just for supplier records) meant she resolved it in one reply. That customer left a 5-star review specifically mentioning the fast fix.",
+      "mistakes": [
+        "Making the customer argue or prove fault before getting help — it turns a small problem into a public complaint.",
+        "Not setting a shipping-time expectation, so any wait feels broken even when it's normal.",
+        "Asking for a review the moment an order ships, before the buyer has actually used the product."
+      ],
+      "template": "Service playbook:\nShipping-time promise shown on product page: ____\nIf item never arrives: \"____\" (your standard reply)\nIf item arrives damaged/wrong: \"____\" (your standard reply)\nReview request sent: ____ days after delivery",
+      "checklist": [
+        "Set an honest shipping-time estimate on the product page",
+        "Wrote a standard reply for \"never arrived\"",
+        "Wrote a standard reply for \"damaged or wrong item\"",
+        "Set a review-request timing a few days after expected delivery"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/dropship/service.jpg"
+    },
+    {
+      "id": "payment",
+      "title": "Payments and checkout",
+      "goal": "Accept money safely and legally, with the money actually landing somewhere you're allowed to access.",
+      "explanation": [
+        "Payment processors (Stripe, PayPal, Shopify Payments and similar) require the account holder to be 18 or older — under that age, the account is opened and owned by a parent, with you running the store day to day.",
+        "Set up the payout schedule and destination bank account together with the parent who holds the account, and agree in advance how/when money moves from that account to you.",
+        "Turn on whatever basic fraud protection the processor offers by default (address verification, card verification code) — it's usually on already, just don't turn it off for convenience.",
+        "Keep a simple record of every sale, refund and fee — you'll need this for the accounting and tax chapter, and untangling it later from memory is much harder.",
+        "Never share full card numbers, passwords, or one-time codes with anyone claiming to be from a supplier or payment provider — legitimate ones never ask for these over chat or email."
+      ],
+      "example": "Dana's mother opened the Shopify Payments account under her own name and ID, since Dana was 16. They agreed in writing that Dana would track every sale in a shared spreadsheet, and profit would be transferred monthly after costs.",
+      "mistakes": [
+        "Trying to work around the 18+ requirement with someone else's unrelated account — this breaches the processor's terms and can get funds frozen.",
+        "Not agreeing on the payout arrangement with the account-holding parent before sales start.",
+        "Giving out payment details or one-time codes to anyone in a DM claiming to be \"support\"."
+      ],
+      "template": "Payment setup record:\nProcessor account holder (must be 18+): ____\nPayout bank account: ____\nAgreed transfer schedule to me: ____\nWhere I log every sale/refund/fee: ____",
+      "checklist": [
+        "Payment processor account opened by an adult 18+",
+        "Agreed payout schedule in writing with that adult",
+        "Fraud protection settings confirmed on",
+        "Set up a simple sales/refund/fee log"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Payment processing accounts legally require an 18+ account holder almost everywhere. This chapter cannot be completed without a parent or guardian opening and holding that account.",
+      "imagePath": "images/dropship/payment.jpg"
+    },
+    {
+      "id": "accountingTax",
+      "title": "Accounting and taxes",
+      "goal": "Know what you owe, to whom, and keep clean enough records that tax time is boring instead of scary.",
+      "explanation": [
+        "Business income is taxable in almost every country, including small amounts and including income earned by a minor — the exact rules (who files, thresholds, forms) vary a lot by country and sometimes by state or region, so this needs a real check for where you live, not a guess.",
+        "Keep a simple running log from day one: date, sale amount, product cost, ad spend, processor fees, and any refunds — a basic spreadsheet is enough at this stage.",
+        "Separate business money from personal spending money as early as possible, even informally, so it's clear what's profit versus what's just cash sitting in an account.",
+        "Set aside a percentage of profit (many small businesses use a rough 25-30% placeholder until a real number is known) rather than spending every dollar of revenue as it comes in.",
+        "Before there's meaningful, ongoing income, have one real conversation with a parent and, where it matters, an accountant or your local tax authority's guidance for minors/small business income."
+      ],
+      "example": "Dana's family used the free spreadsheet template from this chapter, updated it weekly, and set aside 25% of profit into a separate savings account so tax time wouldn't be a scramble.",
+      "mistakes": [
+        "Assuming small or \"side hustle\" income isn't taxable — in most places it is, regardless of amount.",
+        "Not tracking expenses, which means overpaying tax later on profit that wasn't actually all profit.",
+        "Spending 100% of revenue immediately, leaving nothing set aside when tax or supplier bills come due."
+      ],
+      "template": "Bookkeeping starter log (one row per sale):\nDate | Sale amount | Product cost | Ad spend | Processor fee | Refund (if any) | Net\nMonthly: total revenue $____ − total costs $____ = profit $____ → set aside ____% = $____",
+      "checklist": [
+        "Started a running sales/cost log",
+        "Separated business money from personal spending",
+        "Set aside a percentage of profit rather than spending it all",
+        "Had one conversation with a parent (and, once income is real, checked local tax rules for minors)"
+      ],
+      "parentNeeded": true,
+      "parentNote": "Tax registration and filing for a minor's business income is a real legal question that depends on your country and sometimes region — this needs a parent involved and, once income is more than pocket change, a proper check with a tax authority or accountant. See the Legal section in this app for country-specific starting notes.",
+      "imagePath": "images/dropship/accountingTax.jpg"
+    },
+    {
+      "id": "growth",
+      "title": "Growing beyond the first sale",
+      "goal": "Turn one working product and channel into a small, repeatable, slowly-scaling system instead of a one-off lucky sale.",
+      "explanation": [
+        "Once you have 5-10 real sales, look for patterns: which product variant, which ad or post, which audience segment actually converted — double down on what's proven, not what you assumed would work.",
+        "Reinvest a fixed, planned portion of profit into more of what's working (more of the winning ad, a second product for the same audience) rather than randomly trying something new each week.",
+        "Slowly raise prices or introduce a bundle once you have real reviews — social proof lets you charge a bit more without losing conversion.",
+        "Watch your numbers weekly, not daily — conversion rate, return/refund rate, and cost per sale tell you more over a week than any single day's swings.",
+        "Decide deliberately whether to keep this as a small side project, grow it further, or wind it down — all three are legitimate outcomes, and knowing which one you're aiming for changes what to prioritize next."
+      ],
+      "example": "After 12 sales, Dana noticed the \"2 for $24\" bundle outsold single cases 3-to-1, and her TikTok comment replies converted far better than her paid ads. She stopped the ad spend, doubled down on content and the bundle, and grew from there.",
+      "mistakes": [
+        "Chasing a new trending product every week instead of doubling down on what's already proven to work.",
+        "Reinvesting every dollar of profit with no plan, instead of pointing it at the specific thing that's working.",
+        "Never stepping back to decide on purpose whether to keep scaling, stay small, or stop."
+      ],
+      "template": "Weekly growth review:\nSales this week: ____  Conversion rate: ____%  Refund rate: ____%\nBest-performing product/ad/post this week: ____\nWhere I'm reinvesting profit this week: ____\nThis week's one decision: double down / hold steady / change course",
+      "checklist": [
+        "Reviewed at least 5-10 real sales for patterns",
+        "Reinvested profit into one specific proven thing, not randomly",
+        "Set up a simple weekly numbers review",
+        "Made one deliberate decision about where this is heading"
+      ],
+      "parentNeeded": false,
+      "parentNote": "",
+      "imagePath": "images/dropship/growth.jpg"
+    }
+  ]
+}

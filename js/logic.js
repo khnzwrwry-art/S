@@ -100,6 +100,24 @@ function consentNotice(key,fallback){
  return (legalModule&&legalModule.CONSENT_TEXT&&legalModule.CONSENT_TEXT[key])||fallback;
 }
 
+/* ---------- deep chapters (per-business, JSON-backed — pilot: dropship only) ---------- */
+let chaptersCache={};
+async function loadChapters(bizId){
+ if(chaptersCache[bizId]!==undefined)return chaptersCache[bizId];
+ try{
+  var res=await fetch('public/data/'+bizId+'.json');
+  if(!res.ok){chaptersCache[bizId]=null;return null;}
+  chaptersCache[bizId]=await res.json();
+ }catch(e){chaptersCache[bizId]=null;}
+ return chaptersCache[bizId];
+}
+function chapterTotal(chData){return chData.chapters.reduce(function(s,c){return s+c.checklist.length;},0);}
+function chapterFlatStart(chData,ci){var off=0;for(var i=0;i<ci;i++){off+=chData.chapters[i].checklist.length;}return off;}
+function totalStepsFor(cat){
+ var ch=chaptersCache[cat.id];
+ return ch?chapterTotal(ch):cat.steps.length;
+}
+
 async function syncRemoteProgress(){
  try{
   var remote=await firestoreModule.loadProgress();
@@ -202,7 +220,7 @@ function enterApp(){
 
 /* ---------- home ---------- */
 function renderHome(){
- var total=DATA.reduce(function(s,c){return s+c.steps.length;},0);
+ var total=DATA.reduce(function(s,c){return s+totalStepsFor(c);},0);
  var d=DATA.reduce(function(s,c){return s+doneCount(c.id);},0);
  var pct=total?Math.round(d/total*100):0,C=2*Math.PI*19;
  var tiles=[
@@ -224,7 +242,7 @@ function renderHome(){
  '<div class="nav-tiles">'+tiles.map(function(t){return '<button class="tile" data-go="'+t.k+'"><span class="g" style="background:'+t.c+'">'+svg(t.i,19)+'</span><span><b>'+t.b+'</b><span>'+t.s+'</span></span></button>';}).join('')+'</div>'+
  '<h2 class="section-label">Nine business paths</h2>'+
  '<div class="grid">'+DATA.map(function(cat){
-  var dc=doneCount(cat.id),t=cat.steps.length,p=Math.round(dc/t*100);
+  var dc=doneCount(cat.id),t=totalStepsFor(cat),p=Math.round(dc/t*100);
   return '<button class="card" data-cat="'+cat.id+'"><span class="card-row"><span class="badge" style="background:'+cat.color+'">'+svg(cat.icon,19)+'</span><span class="age-tag">'+cat.age+'</span></span>'+
   '<span><h3>'+cat.name+'</h3><p>'+cat.desc+'</p></span>'+
   '<span class="w"><span class="mini-progress"><i style="width:'+p+'%;background:'+cat.color+'"></i></span><span class="mini-label">'+dc+'/'+t+' steps</span></span></button>';
@@ -261,8 +279,21 @@ function renderHome(){
 /* ---------- category ---------- */
 function openCategory(id){activeCat=DATA.find(function(c){return c.id===id;});if(!activeCat)return;renderCategory();showView('category');}
 function renderCategory(){
- var cat=activeCat,dc=doneCount(cat.id),t=cat.steps.length;
- var body=activeTab==='intro'?introHtml(cat):activeTab==='steps'?stepsHtml(cat):platformsHtml(cat);
+ var cat=activeCat,dc=doneCount(cat.id),t=totalStepsFor(cat);
+ var body;
+ if(activeTab==='intro'){body=introHtml(cat);}
+ else if(activeTab==='platforms'){body=platformsHtml(cat);}
+ else{
+  var chData=chaptersCache[cat.id];
+  if(chData===undefined){
+   body='<p class="hint">Loading...</p>';
+   loadChapters(cat.id).then(function(){if(activeCat===cat&&activeTab==='steps')renderCategory();});
+  }else if(chData){
+   body=chaptersHtml(cat,chData);
+  }else{
+   body=stepsHtml(cat);
+  }
+ }
  document.getElementById('view-category').innerHTML=
  '<div class="cat-hero"><div class="badge badge-lg" style="background:'+cat.color+'">'+svg(cat.icon,25)+'</div>'+
  '<h1>'+cat.name+'</h1><p>'+cat.desc+'</p><p class="age-line">Typically suitable from: <b>'+cat.age+'</b></p></div>'+
@@ -306,14 +337,73 @@ function stepsHtml(cat){
   '<div class="ai-tool"><span class="dot" style="background:'+cat.color+'"></span><span><b>AI tool for this step: '+s.tool+'</b><span>'+s.toolUse+'</span></span></div></div></div>';
  }).join('');
 }
+function chaptersHtml(cat,chData){
+ var doneArr=progress[cat.id]||[];
+ var offset=0;
+ return chData.chapters.map(function(ch,ci){
+  var start=offset;offset+=ch.checklist.length;
+  var doneInCh=ch.checklist.filter(function(_,ii){return doneArr.indexOf(start+ii)>-1;}).length;
+  var allDone=doneInCh===ch.checklist.length&&ch.checklist.length>0;
+  var explanationHtml=ch.explanation.map(function(s,i){return '<div class="beat"><i>Step '+(i+1)+'</i><div>'+esc(s)+'</div></div>';}).join('');
+  var mistakesHtml=ch.mistakes.map(function(m){return '<div class="beat"><i>✕</i><div>'+esc(m)+'</div></div>';}).join('');
+  var checklistHtml=ch.checklist.map(function(item,ii){
+   var flat=start+ii,checked=doneArr.indexOf(flat)>-1;
+   return '<label class="agree" style="margin-bottom:8px"><input type="checkbox" data-check="'+flat+'" '+(checked?'checked':'')+'><span>'+esc(item)+'</span></label>';
+  }).join('');
+  var parentBanner=ch.parentNeeded?'<div class="panel warn"><h4>Here you need a parent</h4><p class="muted-sm">'+esc(ch.parentNote)+'</p></div>':'';
+  return '<div class="step" data-idx="'+ci+'"><div class="step-head">'+
+  '<span class="step-check '+(allDone?'done':'')+'" data-check-chapter="'+ci+'" role="checkbox" aria-checked="'+allDone+'" tabindex="0" style="'+(allDone?'background:'+cat.color:'')+'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>'+
+  '<span class="step-num">'+(ci<9?'0':'')+(ci+1)+'</span><span class="step-title '+(allDone?'done':'')+'">'+esc(ch.title)+'</span>'+
+  '<span class="muted-xs" style="margin:0 8px">'+doneInCh+'/'+ch.checklist.length+'</span>'+
+  '<span class="chev">'+svg('<path d="M6 9l6 6 6-6"/>',16)+'</span></div>'+
+  '<div class="step-body">'+
+   '<div class="ai-tool"><span class="dot" style="background:'+cat.color+'"></span><span><b>Goal</b><span>'+esc(ch.goal)+'</span></span></div>'+
+   '<div class="chapter-image"><img src="'+esc(ch.imagePath)+'" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'+
+   '<div class="chapter-image-fallback" style="display:none;background:'+cat.color+'">'+svg(cat.icon,26)+'</div></div>'+
+   '<h4 style="margin:14px 0 4px">Step by step</h4>'+explanationHtml+
+   '<div class="panel" style="margin-top:12px"><h4>Example</h4><p>'+esc(ch.example)+'</p></div>'+
+   '<h4 style="margin:14px 0 4px">Common mistakes</h4>'+mistakesHtml+
+   '<h4 style="margin:14px 0 4px">Template</h4><div class="script">'+esc(ch.template)+'</div>'+
+   parentBanner+
+   '<h4 style="margin:14px 0 4px">Checklist</h4>'+checklistHtml+
+   '<div class="row-links" style="margin-top:8px"><span class="pill" data-ask-chapter="'+ci+'" role="button" tabindex="0">'+svg(I.spark,14)+' Ask the mentor about this chapter</span></div>'+
+  '</div></div>';
+ }).join('');
+}
 function bindCategory(){
  var cat=activeCat;
+ var chData=chaptersCache[cat.id];
  var b=document.getElementById('startSteps');if(b)b.onclick=function(){activeTab='steps';renderCategory();};
  var a=document.getElementById('askCat');if(a)a.onclick=function(){renderAssistant('I want to start '+cat.name+'. Where do I begin, and what is the most common mistake?');showView('assistant');};
- document.querySelectorAll('.step-head').forEach(function(el){el.onclick=function(e){if(e.target.closest('[data-check]'))return;el.closest('.step').classList.toggle('open');};});
+ document.querySelectorAll('.step-head').forEach(function(el){el.onclick=function(e){if(e.target.closest('[data-check],[data-check-chapter]'))return;el.closest('.step').classList.toggle('open');};});
  document.querySelectorAll('[data-check]').forEach(function(el){
   var fn=function(e){e.stopPropagation();var i=parseInt(el.dataset.check,10);progress[cat.id]=progress[cat.id]||[];var k=progress[cat.id].indexOf(i);if(k>-1)progress[cat.id].splice(k,1);else progress[cat.id].push(i);saveProgress();renderCategory();};
   el.onclick=fn;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' ')fn(e);};
+ });
+ document.querySelectorAll('[data-check-chapter]').forEach(function(el){
+  var fn=function(e){
+   e.stopPropagation();
+   if(!chData)return;
+   var ci=parseInt(el.dataset.checkChapter,10),start=chapterFlatStart(chData,ci),len=chData.chapters[ci].checklist.length;
+   progress[cat.id]=progress[cat.id]||[];
+   var allDone=true;
+   for(var k=0;k<len;k++){if(progress[cat.id].indexOf(start+k)===-1){allDone=false;break;}}
+   for(var k2=0;k2<len;k2++){
+    var idx=progress[cat.id].indexOf(start+k2);
+    if(allDone){if(idx>-1)progress[cat.id].splice(idx,1);}
+    else if(idx===-1){progress[cat.id].push(start+k2);}
+   }
+   saveProgress();renderCategory();
+  };
+  el.onclick=fn;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' ')fn(e);};
+ });
+ document.querySelectorAll('[data-ask-chapter]').forEach(function(el){
+  el.onclick=function(){
+   if(!chData)return;
+   var ch=chData.chapters[parseInt(el.dataset.askChapter,10)];
+   renderAssistant('I am doing '+cat.name+', on the chapter "'+ch.title+'". Walk me through exactly how to do it, and what a good example looks like.');
+   showView('assistant');
+  };
  });
  document.querySelectorAll('[data-ask]').forEach(function(el){el.onclick=function(){var s=cat.steps[parseInt(el.dataset.ask,10)];renderAssistant('I am doing '+cat.name+', on the step "'+s.title+'". Walk me through exactly how to do it.');showView('assistant');};});
 }
@@ -730,4 +820,10 @@ document.getElementById('backBtn').onclick=function(){go('home');};
 document.getElementById('brandHome').onclick=function(){go('home');};
 initAuth();
 loadLegal().catch(function(){});
+// Businesses with a real chapters JSON at public/data/<id>.json — add more ids here as they get piloted.
+['dropship'].forEach(function(id){
+ loadChapters(id).then(function(ch){
+  if(ch&&!document.getElementById('view-home').hidden)renderHome();
+ });
+});
 showView('home');
