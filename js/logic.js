@@ -76,7 +76,7 @@ function saveProgress(){
 }
 function doneCount(id){return (progress[id]||[]).length;}
 let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
-let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all';
+let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all',openChapterIdx={};
 const CATEGORY_LABELS={online:'Online',services:'Services',creative:'Creative',food:'Food'};
 
 const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual','help','profile'];
@@ -454,7 +454,7 @@ function renderProfile(){
 }
 
 /* ---------- category ---------- */
-function openCategory(id){activeCat=DATA.find(function(c){return c.id===id;});if(!activeCat)return;renderCategory();showView('category');}
+function openCategory(id){if(!activeCat||activeCat.id!==id)openChapterIdx={};activeCat=DATA.find(function(c){return c.id===id;});if(!activeCat)return;renderCategory();showView('category');}
 function renderCategory(){
  var cat=activeCat,dc=doneCount(cat.id),t=totalStepsFor(cat);
  var body;
@@ -530,30 +530,37 @@ function chaptersHtml(cat,chData){
   var start=offset;offset+=ch.checklist.length;
   var doneInCh=ch.checklist.filter(function(_,ii){return doneArr.indexOf(start+ii)>-1;}).length;
   var allDone=doneInCh===ch.checklist.length&&ch.checklist.length>0;
+  var pct=ch.checklist.length?Math.round(doneInCh/ch.checklist.length*100):0;
   var explanationHtml=ch.explanation.map(function(s,i){return '<div class="beat"><i>Step '+(i+1)+'</i><div>'+esc(s)+'</div></div>';}).join('');
   var mistakesHtml=ch.mistakes.map(function(m){return '<div class="beat"><i>✕</i><div>'+esc(m)+'</div></div>';}).join('');
   var checklistHtml=ch.checklist.map(function(item,ii){
    var flat=start+ii,checked=doneArr.indexOf(flat)>-1;
-   return '<label class="agree" style="margin-bottom:8px"><input type="checkbox" data-check="'+flat+'" '+(checked?'checked':'')+'><span>'+esc(item)+'</span></label>';
+   return '<div class="check-row"><button type="button" class="check-btn '+(checked?'done':'')+'" data-check="'+flat+'" role="checkbox" aria-checked="'+checked+'" style="'+(checked?'background:'+cat.color+';border-color:'+cat.color:'')+'">'+svg('<path d="M20 6L9 17l-5-5"/>',16)+'</button><span class="'+(checked?'done':'')+'">'+esc(item)+'</span></div>';
   }).join('');
-  var parentBanner=ch.parentNeeded?'<div class="panel warn"><h4>Here you need a parent</h4><p class="muted-sm">'+esc(ch.parentNote)+'</p></div>':'';
+  var parentBanner=ch.parentNeeded?'<div class="panel info"><h4>You need a parent here</h4><p class="muted-sm">'+esc(ch.parentNote)+'</p></div>':'';
   var badgeState=allDone?'done':(doneInCh>0?'progress':'');
   var statusText=allDone?'Done':(doneInCh>0?'In progress':'Not started');
-  return '<div class="step" data-idx="'+ci+'"><div class="step-head">'+
+  return '<div class="step '+(openChapterIdx[ci]?'open':'')+'" data-idx="'+ci+'"><div class="step-head">'+
   '<span class="ch-badge '+badgeState+'" data-check-chapter="'+ci+'" role="checkbox" aria-checked="'+allDone+'" tabindex="0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span class="ch-num">'+(ci+1)+'</span></span>'+
   '<span class="step-title '+(allDone?'done':'')+'">'+esc(ch.title)+'</span>'+
   '<span class="muted-xs" style="margin:0 8px">'+statusText+'</span>'+
   '<span class="chev">'+svg('<path d="M6 9l6 6 6-6"/>',16)+'</span></div>'+
   '<div class="step-body">'+
-   '<div class="ai-tool"><span class="dot" style="background:'+cat.color+'"></span><span><b>Goal</b><span>'+esc(ch.goal)+'</span></span></div>'+
+   '<p class="muted-xs">Chapter '+(ci+1)+' of '+chData.chapters.length+' · ~'+(ch.estimatedMinutes||15)+' min · '+ch.checklist.length+' steps</p>'+
+   '<div class="mini-progress" style="margin:8px 0 14px"><i style="width:'+pct+'%;background:'+cat.color+'"></i></div>'+
+   '<div class="dark-card" style="cursor:default"><h4>Your goal</h4><p>'+esc(ch.goal)+'</p></div>'+
+   '<p class="muted-sm" style="margin:12px 0"><b>Why this matters:</b> each chapter builds on the one before it — skipping ahead usually means redoing the work later.</p>'+
    '<div class="chapter-image"><img src="'+esc(ch.imagePath)+'" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'+
    '<div class="chapter-image-fallback" style="display:none;background:'+cat.color+'">'+svg(cat.icon,26)+'</div></div>'+
    '<h4 style="margin:14px 0 4px">Step by step</h4>'+explanationHtml+
    '<div class="panel" style="margin-top:12px"><h4>Example</h4><p>'+esc(ch.example)+'</p></div>'+
    '<h4 style="margin:14px 0 4px">Common mistakes</h4>'+mistakesHtml+
    '<h4 style="margin:14px 0 4px">Template</h4><div class="script">'+esc(ch.template)+'</div>'+
+   '<button type="button" class="btn-ghost" data-copy-template="'+ci+'">Copy template</button>'+
    parentBanner+
    '<h4 style="margin:14px 0 4px">Checklist</h4>'+checklistHtml+
+   '<button type="button" class="btn-primary" data-mark-done="'+ci+'" style="margin-top:10px" '+(allDone?'':'disabled')+'>Mark chapter as done</button>'+
+   '<div id="doneMsg-'+ci+'"></div>'+
    '<div class="row-links" style="margin-top:8px"><span class="pill" data-ask-chapter="'+ci+'" role="button" tabindex="0">'+svg(I.spark,14)+' Ask the mentor about this chapter</span></div>'+
   '</div></div>';
  }).join('');
@@ -569,7 +576,7 @@ function bindCategory(){
   if(!chData)return;
   var info=continueChapterInfo(cat.id,chData);if(!info)return;
   var stepEl=document.querySelector('.step[data-idx="'+info.index+'"]');
-  if(stepEl){stepEl.classList.add('open');stepEl.scrollIntoView({behavior:'smooth',block:'start'});}
+  if(stepEl){stepEl.classList.add('open');openChapterIdx[info.index]=true;stepEl.scrollIntoView({behavior:'smooth',block:'start'});}
  };
  var am=document.getElementById('continueAskMentor');
  if(am)am.onclick=function(e){
@@ -579,7 +586,12 @@ function bindCategory(){
   renderAssistant('I am doing '+cat.name+', on the chapter "'+info.chapter.title+'". Walk me through exactly how to do it, and what a good example looks like.');
   showView('assistant');
  };
- document.querySelectorAll('.step-head').forEach(function(el){el.onclick=function(e){if(e.target.closest('[data-check],[data-check-chapter]'))return;el.closest('.step').classList.toggle('open');};});
+ document.querySelectorAll('.step-head').forEach(function(el){el.onclick=function(e){
+  if(e.target.closest('[data-check],[data-check-chapter]'))return;
+  var stepEl=el.closest('.step'),idx=parseInt(stepEl.dataset.idx,10);
+  stepEl.classList.toggle('open');
+  openChapterIdx[idx]=stepEl.classList.contains('open');
+ };});
  document.querySelectorAll('[data-check]').forEach(function(el){
   var fn=function(e){
    e.stopPropagation();var i=parseInt(el.dataset.check,10);progress[cat.id]=progress[cat.id]||[];var k=progress[cat.id].indexOf(i);var checking=k===-1;
@@ -608,6 +620,40 @@ function bindCategory(){
    renderCategory();
   };
   el.onclick=fn;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' ')fn(e);};
+ });
+ document.querySelectorAll('[data-copy-template]').forEach(function(el){
+  el.onclick=function(){
+   if(!chData)return;
+   var ci=parseInt(el.dataset.copyTemplate,10),text=chData.chapters[ci].template;
+   if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+     var old=el.textContent;el.textContent='Copied!';
+     setTimeout(function(){el.textContent=old;},1500);
+    }).catch(function(){});
+   }
+  };
+ });
+ document.querySelectorAll('[data-mark-done]').forEach(function(el){
+  el.onclick=function(){
+   if(!chData||el.disabled)return;
+   var ci=parseInt(el.dataset.markDone,10),ch=chData.chapters[ci];
+   trackActivity(cat.id,ch.id,ch.title);
+   var nextCi=ci+1,msgBox=document.getElementById('doneMsg-'+ci);
+   if(msgBox){
+    msgBox.innerHTML='<div class="panel highlight" style="margin-top:10px"><h4>Chapter complete — badge unlocked</h4><p class="muted-sm">'+
+     (nextCi<chData.chapters.length?'Next up: '+esc(chData.chapters[nextCi].title):'You have finished every chapter in '+esc(cat.name)+'.')+
+     '</p></div>';
+   }
+   if(nextCi<chData.chapters.length){
+    openChapterIdx={};openChapterIdx[nextCi]=true;
+    document.querySelectorAll('.step').forEach(function(s){s.classList.remove('open');});
+    var nextEl=document.querySelector('.step[data-idx="'+nextCi+'"]');
+    if(nextEl){
+     nextEl.classList.add('open');
+     setTimeout(function(){nextEl.scrollIntoView({behavior:'smooth',block:'start'});},50);
+    }
+   }
+  };
  });
  document.querySelectorAll('[data-ask-chapter]').forEach(function(el){
   el.onclick=function(){

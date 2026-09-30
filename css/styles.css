@@ -83,6 +83,14 @@
  .panel.warn{border-left:3px solid #E0A020;}
  .panel.accent{border-left:3px solid var(--accent);}
  .panel.highlight{background:var(--highlight-bg);border-color:var(--highlight-border);}
+ .panel.info{background:var(--info-bg);border-color:var(--info-border);}
+ .panel.info h4,.panel.info p{color:var(--info-text);}
+ .check-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+ .check-btn{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;padding:0;}
+ .check-btn svg{display:none;}
+ .check-btn.done svg{display:block;}
+ .check-row span{font-size:14px;line-height:1.5;}
+ .check-row span.done{color:var(--text-muted);text-decoration:line-through;}
  .dark-card{background:var(--dark-card-bg);color:var(--dark-card-text);border-radius:16px;padding:16px;margin-bottom:11px;box-shadow:var(--shadow);cursor:pointer;border:none;width:100%;text-align:left;}
  .dark-card h4{color:var(--dark-card-text);margin:0 0 4px;}
  .dark-card p{color:var(--dark-card-subtitle);margin:0;font-size:13px;line-height:1.5;}
