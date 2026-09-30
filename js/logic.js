@@ -342,22 +342,33 @@ function bindToolTiles(){
  });
 }
 function footerLinksHTML(){
- return '<p class="hint" style="margin-top:24px;text-align:center"><span class="link" id="tLink">Terms of Use</span> · <span class="link" id="pLink">Privacy Policy</span> · <span class="link" id="cLink">Cookie Policy</span> · <span class="link" id="rLink">Refund Policy</span> · <span class="link" id="aLink">Accessibility statement</span> · <span class="link" id="soLink">Sign out</span></p>';
+ return '<p class="hint" style="margin-top:24px;text-align:center">'+
+ '<span class="link" data-legal="terms">Terms of Use</span> · '+
+ '<span class="link" data-legal="privacy">Privacy Policy</span> · '+
+ '<span class="link" data-legal="cookies">Cookie Policy</span> · '+
+ '<span class="link" data-legal="refunds">Refund Policy</span> · '+
+ '<span class="link" data-legal="access">Accessibility statement</span> · '+
+ '<span class="link" data-legal="signout">Sign out</span></p>';
 }
-function bindFooterLinks(){
- document.getElementById('tLink').onclick=function(){renderTerms();showView('terms');};
- document.getElementById('pLink').onclick=function(){renderPrivacy();showView('privacy');};
- document.getElementById('cLink').onclick=function(){renderCookies();showView('cookies');};
- document.getElementById('rLink').onclick=function(){renderRefunds();showView('refunds');};
- document.getElementById('aLink').onclick=function(){renderAccess();showView('access');};
- document.getElementById('soLink').onclick=async function(){
-  if(authModule){try{await authModule.logout();}catch(e){}}
-  document.getElementById('bottomNav').hidden=true;
-  document.getElementById('profileCircle').hidden=true;
-  document.getElementById('app').hidden=true;
-  renderGate();
-  document.getElementById('gate').hidden=false;
- };
+function bindFooterLinks(root){
+ (root||document).querySelectorAll('[data-legal]').forEach(function(el){
+  el.onclick=async function(){
+   var k=el.dataset.legal;
+   if(k==='terms'){renderTerms();showView('terms');}
+   else if(k==='privacy'){renderPrivacy();showView('privacy');}
+   else if(k==='cookies'){renderCookies();showView('cookies');}
+   else if(k==='refunds'){renderRefunds();showView('refunds');}
+   else if(k==='access'){renderAccess();showView('access');}
+   else if(k==='signout'){
+    if(authModule){try{await authModule.logout();}catch(e){}}
+    document.getElementById('bottomNav').hidden=true;
+    document.getElementById('profileCircle').hidden=true;
+    document.getElementById('app').hidden=true;
+    renderGate();
+    document.getElementById('gate').hidden=false;
+   }
+  };
+ });
 }
 const HOME_CATEGORIES=[['all','All'],['food','Food'],['services','Services'],['creative','Creative'],['online','Online']];
 function filteredData(){
@@ -439,7 +450,7 @@ function renderHome(){
  copyrightNotice();
 
  document.getElementById('legalCard').onclick=function(){renderLegal();showView('legal');};
- bindFooterLinks();
+ bindFooterLinks(document.getElementById('view-home'));
  bindToolTiles();
  renderHomeCatChips();
  renderBusinessGrid();
@@ -470,7 +481,7 @@ function renderProfile(){
  '<div class="hero"><h1 class="sm">Profile</h1></div>'+
  footerLinksHTML()+
  copyrightNotice();
- bindFooterLinks();
+ bindFooterLinks(document.getElementById('view-profile'));
 }
 
 /* ---------- category ---------- */
@@ -1054,7 +1065,7 @@ function timeAgo(ts){
 }
 
 /* ---------- leaderboard ---------- */
-let leaderboardModule=null,leaderboardEntries=[],leaderboardLoaded=false,leaderboardUnsub=null;
+let leaderboardModule=null,leaderboardEntries=[],leaderboardLoaded=false,leaderboardUnsub=null,leaderboardSearch='';
 async function loadLeaderboard(){
  if(!leaderboardModule)leaderboardModule=await import('./leaderboard-integration.js');
  return leaderboardModule;
@@ -1080,7 +1091,13 @@ function renderLeaderboardList(){
  var el=document.getElementById('lbList');if(!el)return;
  if(!leaderboardLoaded){el.innerHTML='<p class="hint">Loading...</p>';return;}
  if(!leaderboardEntries.length){el.innerHTML='<p class="hint">No entries yet. Be the first.</p>';return;}
- el.innerHTML=leaderboardEntries.map(function(e,i){
+ var q=leaderboardSearch.trim().toLowerCase();
+ var list=leaderboardEntries.filter(function(e){
+  return !q||(String(e.businessName||'')+' '+String(e.displayName||'')).toLowerCase().indexOf(q)>-1;
+ });
+ if(!list.length){el.innerHTML='<p class="hint">No entries match your search.</p>';return;}
+ el.innerHTML=list.map(function(e){
+  var i=leaderboardEntries.indexOf(e);
   var proof=safeUrl(e.proofUrl);
   return '<div class="panel"><div class="post-top">'+
   '<span class="post-tag" style="background:var(--accent)">#'+(i+1)+'</span>'+
@@ -1104,7 +1121,10 @@ function renderLeaderboard(){
   '<input type="text" id="lbProof" placeholder="https://...">'+
   '<button class="btn-primary" id="lbSubmit">Update my entry</button>'+
   '<p class="hint" id="lbHint"></p></div>'+
+ '<label class="field-label" for="lbSearch">Search by business</label>'+
+ '<input type="text" id="lbSearch" placeholder="Search the leaderboard..." value="'+esc(leaderboardSearch)+'">'+
  '<div id="lbList"><p class="hint">Loading...</p></div>';
+ document.getElementById('lbSearch').oninput=function(e){leaderboardSearch=e.target.value;renderLeaderboardList();};
  document.getElementById('lbSubmit').onclick=async function(){
   var hint=document.getElementById('lbHint');
   var sales=parseInt(document.getElementById('lbSales').value,10);
