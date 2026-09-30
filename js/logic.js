@@ -77,9 +77,36 @@ function saveProgress(){
 function doneCount(id){return (progress[id]||[]).length;}
 let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
 
-const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual'];
-function showView(n){VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});document.getElementById('backBtn').hidden=(n==='home');window.scrollTo(0,0);}
+const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual','help','profile'];
+function showView(n){VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});document.getElementById('backBtn').hidden=(n==='home');updateBottomNavActive(n);window.scrollTo(0,0);}
 function go(n){showView(n);if(n==='home')renderHome();}
+
+/* ---------- bottom nav (redesign stage 1) ---------- */
+const BOTTOM_NAV=[
+ {id:'businesses',label:'Businesses',icon:I.box,views:['home','category','quiz','ages'],go:function(){go('home');}},
+ {id:'help',label:'Help',icon:I.help,views:['help','assistant','templates','content','editing','glossary','legal','terms','access','privacy','cookies','refunds','visual'],go:function(){renderHelp();showView('help');}},
+ {id:'feed',label:'Feed',icon:I.chat,views:['feed'],go:function(){renderFeed();showView('feed');}},
+ {id:'leaderboard',label:'Leaderboard',icon:I.mega,views:['leaderboard'],go:function(){renderLeaderboard();showView('leaderboard');}},
+ {id:'profile',label:'Profile',icon:I.access,views:['profile'],go:function(){renderProfile();showView('profile');}}
+];
+function renderBottomNav(){
+ var nav=document.getElementById('bottomNav');
+ nav.innerHTML=BOTTOM_NAV.map(function(t){
+  return '<button class="bottom-nav-item" data-nav="'+t.id+'"><span class="nav-icon">'+svg(t.icon,20)+'</span><span>'+t.label+'</span></button>';
+ }).join('');
+ nav.querySelectorAll('[data-nav]').forEach(function(el){
+  el.onclick=function(){var tab=BOTTOM_NAV.find(function(t){return t.id===el.dataset.nav;});if(tab)tab.go();};
+ });
+}
+function updateBottomNavActive(viewName){
+ var nav=document.getElementById('bottomNav');if(!nav||!nav.children.length)return;
+ var active=BOTTOM_NAV.find(function(t){return t.views.indexOf(viewName)>-1;});
+ nav.querySelectorAll('.bottom-nav-item').forEach(function(el){
+  var isActive=!!active&&el.dataset.nav===active.id;
+  el.classList.toggle('active',isActive);
+  if(isActive)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');
+ });
+}
 
 /* ---------- auth gate (Firebase Authentication) ---------- */
 let authModule=null, firestoreModule=null, workerModule=null, legalModule=null, currentUser=null, selectedCountry='';
@@ -137,7 +164,7 @@ async function initAuth(){
  }
  authModule.watchAuthState(async function(user){
   currentUser=user;
-  if(!user){stopFeedWatch();stopLeaderboardWatch();renderGate();return;}
+  if(!user){stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;renderGate();return;}
   var rec=null;
   try{
    await loadFirestore();
@@ -215,53 +242,17 @@ function renderGate(){
 function enterApp(){
  document.getElementById('gate').hidden=true;
  document.getElementById('app').hidden=false;
+ renderBottomNav();
+ document.getElementById('bottomNav').hidden=false;
  renderHome();
+ updateBottomNavActive('home');
 }
 
 /* ---------- home ---------- */
-function renderHome(){
- var total=DATA.reduce(function(s,c){return s+totalStepsFor(c);},0);
- var d=DATA.reduce(function(s,c){return s+doneCount(c.id);},0);
- var pct=total?Math.round(d/total*100):0,C=2*Math.PI*19;
- var tiles=[
-  {k:'quiz',c:'#FF6B4A',i:I.compass,b:'Which business fits me?',s:'Five questions, three matches'},
-  {k:'assistant',c:'#6C7BD1',i:I.spark,b:'AI mentor',s:'Ask anything about your business'},
-  {k:'templates',c:'#2FB6A6',i:I.film,b:'Ad templates',s:'8 trending formats with scripts'},
-  {k:'content',c:'#F4B740',i:I.chat,b:'AI content tool',s:'Captions, scripts, hashtags'},
-  {k:'editing',c:'#EF6FA0',i:I.scissors,b:'Filming and editing',s:'Tools, rules and illustrated steps'},
-  {k:'feed',c:'#4F9DDE',i:I.chat,b:'Community feed',s:'Search and filter by business type'},
-  {k:'leaderboard',c:'#EF6FA0',i:I.mega,b:'Leaderboard',s:'Self-reported sales, ranked'},
-  {k:'ages',c:'#A8C94A',i:I.shield,b:'What fits your age',s:'Rules and realistic options by age'},
-  {k:'glossary',c:'#9B8AFB',i:I.bookmark,b:'Glossary',s:'Every term explained plainly'}];
- document.getElementById('view-home').innerHTML=
- '<div class="hero"><svg class="hero-motif" width="120" height="70" viewBox="0 0 120 70" aria-hidden="true"><circle cx="18" cy="14" r="5" fill="#FF6B4A" opacity=".55"/><circle cx="46" cy="6" r="3.5" fill="#F4B740" opacity=".55"/><circle cx="78" cy="16" r="4.5" fill="#2FB6A6" opacity=".5"/><circle cx="102" cy="30" r="3" fill="#9B8AFB" opacity=".5"/><path d="M4 40 Q60 10 116 44" fill="none" stroke="var(--border)" stroke-width="1.4" stroke-dasharray="3 5"/></svg><h1>From idea to your first business</h1><p>Nine real paths, each with a full explanation before you start, clear steps, the platforms to sign up to, and an AI tool for every stage.</p></div>'+
- '<div class="progress-strip"><svg width="46" height="46" viewBox="0 0 46 46" role="img" aria-label="'+pct+' percent of all steps complete"><circle cx="23" cy="23" r="19" fill="none" stroke="var(--surface-2)" stroke-width="5"/><circle cx="23" cy="23" r="19" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-pct/100))+'" stroke-linecap="round" transform="rotate(-90 23 23)"/></svg>'+
- '<div class="info"><b>'+pct+'% complete</b><span>'+d+' of '+total+' steps done</span></div></div>'+
- '<div class="panel warn" id="legalCard" style="cursor:pointer"><h4>Read this before you start</h4><p class="muted-sm">Age limits, parental consent, tax, copyright and how not to get scammed. The legal groundwork for anyone starting a business under 18.</p></div>'+
- '<h2 class="section-label">Tools</h2>'+
- '<div class="nav-tiles">'+tiles.map(function(t){return '<button class="tile" data-go="'+t.k+'"><span class="g" style="background:'+t.c+'">'+svg(t.i,19)+'</span><span><b>'+t.b+'</b><span>'+t.s+'</span></span></button>';}).join('')+'</div>'+
- '<h2 class="section-label">Nine business paths</h2>'+
- '<div class="grid">'+DATA.map(function(cat){
-  var dc=doneCount(cat.id),t=totalStepsFor(cat),p=Math.round(dc/t*100);
-  return '<button class="card" data-cat="'+cat.id+'"><span class="card-row"><span class="badge" style="background:'+cat.color+'">'+svg(cat.icon,19)+'</span><span class="age-tag">'+cat.age+'</span></span>'+
-  '<span><h3>'+cat.name+'</h3><p>'+cat.desc+'</p></span>'+
-  '<span class="w"><span class="mini-progress"><i style="width:'+p+'%;background:'+cat.color+'"></i></span><span class="mini-label">'+dc+'/'+t+' steps</span></span></button>';
- }).join('')+'</div>'+
- '<p class="hint" style="margin-top:24px;text-align:center"><span class="link" id="tLink">Terms of Use</span> · <span class="link" id="pLink">Privacy Policy</span> · <span class="link" id="cLink">Cookie Policy</span> · <span class="link" id="rLink">Refund Policy</span> · <span class="link" id="aLink">Accessibility statement</span> · <span class="link" id="soLink">Sign out</span></p>'+
- copyrightNotice();
-
- document.getElementById('legalCard').onclick=function(){renderLegal();showView('legal');};
- document.getElementById('tLink').onclick=function(){renderTerms();showView('terms');};
- document.getElementById('pLink').onclick=function(){renderPrivacy();showView('privacy');};
- document.getElementById('cLink').onclick=function(){renderCookies();showView('cookies');};
- document.getElementById('rLink').onclick=function(){renderRefunds();showView('refunds');};
- document.getElementById('aLink').onclick=function(){renderAccess();showView('access');};
- document.getElementById('soLink').onclick=async function(){
-  if(authModule){try{await authModule.logout();}catch(e){}}
-  document.getElementById('app').hidden=true;
-  renderGate();
-  document.getElementById('gate').hidden=false;
- };
+function toolTilesHTML(){
+ return TOOL_TILES.map(function(t){return '<button class="tile" data-go="'+t.k+'"><span class="g" style="background:'+t.c+'">'+svg(t.i,19)+'</span><span><b>'+t.b+'</b><span>'+t.s+'</span></span></button>';}).join('');
+}
+function bindToolTiles(){
  document.querySelectorAll('[data-go]').forEach(function(el){
   el.onclick=function(){var k=el.dataset.go;
    if(k==='quiz'){renderQuiz();showView('quiz');}
@@ -274,7 +265,62 @@ function renderHome(){
    else if(k==='leaderboard'){renderLeaderboard();showView('leaderboard');}
    else if(k==='ages'){renderAges();showView('ages');}};
  });
+}
+function footerLinksHTML(){
+ return '<p class="hint" style="margin-top:24px;text-align:center"><span class="link" id="tLink">Terms of Use</span> · <span class="link" id="pLink">Privacy Policy</span> · <span class="link" id="cLink">Cookie Policy</span> · <span class="link" id="rLink">Refund Policy</span> · <span class="link" id="aLink">Accessibility statement</span> · <span class="link" id="soLink">Sign out</span></p>';
+}
+function bindFooterLinks(){
+ document.getElementById('tLink').onclick=function(){renderTerms();showView('terms');};
+ document.getElementById('pLink').onclick=function(){renderPrivacy();showView('privacy');};
+ document.getElementById('cLink').onclick=function(){renderCookies();showView('cookies');};
+ document.getElementById('rLink').onclick=function(){renderRefunds();showView('refunds');};
+ document.getElementById('aLink').onclick=function(){renderAccess();showView('access');};
+ document.getElementById('soLink').onclick=async function(){
+  if(authModule){try{await authModule.logout();}catch(e){}}
+  document.getElementById('bottomNav').hidden=true;
+  document.getElementById('app').hidden=true;
+  renderGate();
+  document.getElementById('gate').hidden=false;
+ };
+}
+function renderHome(){
+ var total=DATA.reduce(function(s,c){return s+totalStepsFor(c);},0);
+ var d=DATA.reduce(function(s,c){return s+doneCount(c.id);},0);
+ var pct=total?Math.round(d/total*100):0,C=2*Math.PI*19;
+ document.getElementById('view-home').innerHTML=
+ '<div class="hero"><svg class="hero-motif" width="120" height="70" viewBox="0 0 120 70" aria-hidden="true"><circle cx="18" cy="14" r="5" fill="#FF6B4A" opacity=".55"/><circle cx="46" cy="6" r="3.5" fill="#F4B740" opacity=".55"/><circle cx="78" cy="16" r="4.5" fill="#2FB6A6" opacity=".5"/><circle cx="102" cy="30" r="3" fill="#9B8AFB" opacity=".5"/><path d="M4 40 Q60 10 116 44" fill="none" stroke="var(--border)" stroke-width="1.4" stroke-dasharray="3 5"/></svg><h1>From idea to your first business</h1><p>Nine real paths, each with a full explanation before you start, clear steps, the platforms to sign up to, and an AI tool for every stage.</p></div>'+
+ '<div class="progress-strip"><svg width="46" height="46" viewBox="0 0 46 46" role="img" aria-label="'+pct+' percent of all steps complete"><circle cx="23" cy="23" r="19" fill="none" stroke="var(--progress-track)" stroke-width="5"/><circle cx="23" cy="23" r="19" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-pct/100))+'" stroke-linecap="round" transform="rotate(-90 23 23)"/></svg>'+
+ '<div class="info"><b>'+pct+'% complete</b><span>'+d+' of '+total+' steps done</span></div></div>'+
+ '<div class="panel warn" id="legalCard" style="cursor:pointer"><h4>Read this before you start</h4><p class="muted-sm">Age limits, parental consent, tax, copyright and how not to get scammed. The legal groundwork for anyone starting a business under 18.</p></div>'+
+ '<h2 class="section-label">Tools</h2>'+
+ '<div class="nav-tiles">'+toolTilesHTML()+'</div>'+
+ '<h2 class="section-label">Nine business paths</h2>'+
+ '<div class="grid">'+DATA.map(function(cat){
+  var dc=doneCount(cat.id),t=totalStepsFor(cat),p=Math.round(dc/t*100);
+  return '<button class="card" data-cat="'+cat.id+'"><span class="card-row"><span class="badge" style="background:'+cat.color+'">'+svg(cat.icon,19)+'</span><span class="age-tag">'+cat.age+'</span></span>'+
+  '<span><h3>'+cat.name+'</h3><p>'+cat.desc+'</p></span>'+
+  '<span class="w"><span class="mini-progress"><i style="width:'+p+'%;background:'+cat.color+'"></i></span><span class="mini-label">'+dc+'/'+t+' steps</span></span></button>';
+ }).join('')+'</div>'+
+ footerLinksHTML()+
+ copyrightNotice();
+
+ document.getElementById('legalCard').onclick=function(){renderLegal();showView('legal');};
+ bindFooterLinks();
+ bindToolTiles();
  document.querySelectorAll('.card[data-cat]').forEach(function(el){el.onclick=function(){activeTab='intro';openCategory(el.dataset.cat);};});
+}
+function renderHelp(){
+ document.getElementById('view-help').innerHTML=
+ '<div class="hero"><h1 class="sm">Help</h1><p>Tools and guides for wherever you\'re stuck.</p></div>'+
+ '<div class="nav-tiles">'+toolTilesHTML()+'</div>';
+ bindToolTiles();
+}
+function renderProfile(){
+ document.getElementById('view-profile').innerHTML=
+ '<div class="hero"><h1 class="sm">Profile</h1></div>'+
+ footerLinksHTML()+
+ copyrightNotice();
+ bindFooterLinks();
 }
 
 /* ---------- category ---------- */
