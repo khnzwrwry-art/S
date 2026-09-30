@@ -323,8 +323,9 @@ function renderTopbarProfile(){
 }
 
 /* ---------- home ---------- */
-function toolTilesHTML(){
- return TOOL_TILES.map(function(t){return '<button class="tile" data-go="'+t.k+'"><span class="g" style="background:'+t.c+'">'+svg(t.i,19)+'</span><span><b>'+t.b+'</b><span>'+t.s+'</span></span></button>';}).join('');
+function toolTilesHTML(keys){
+ var list=keys?TOOL_TILES.filter(function(t){return keys.indexOf(t.k)>-1;}):TOOL_TILES;
+ return list.map(function(t){return '<button class="tile" data-go="'+t.k+'"><span class="g" style="background:'+t.c+'">'+svg(t.i,19)+'</span><span><b>'+t.b+'</b><span>'+t.s+'</span></span></button>';}).join('');
 }
 function bindToolTiles(){
  document.querySelectorAll('[data-go]').forEach(function(el){
@@ -388,10 +389,20 @@ function renderHomeCatChips(){
  el.innerHTML=HOME_CATEGORIES.map(function(c){return '<button class="chip '+(homeCategoryFilter===c[0]?'active':'')+'" data-hf="'+c[0]+'">'+c[1]+'</button>';}).join('');
  el.querySelectorAll('[data-hf]').forEach(function(b){b.onclick=function(){homeCategoryFilter=b.dataset.hf;renderHomeCatChips();renderBusinessGrid();};});
 }
+function startedBusinesses(){
+ return DATA.filter(function(c){return doneCount(c.id)>0;});
+}
+function progressStripHtml(cat){
+ var chData=chaptersCache[cat.id];
+ var dc=doneCount(cat.id),t=totalStepsFor(cat),pct=t?Math.round(dc/t*100):0,C=2*Math.PI*19;
+ var label=chData?(chaptersDoneCount(cat.id)+' of '+chData.chapters.length+' chapters done'):(dc+' of '+t+' steps done');
+ return '<button class="progress-strip" data-cat="'+cat.id+'"><svg width="46" height="46" viewBox="0 0 46 46" role="img" aria-label="'+pct+' percent complete for '+esc(cat.name)+'"><circle cx="23" cy="23" r="19" fill="none" stroke="var(--progress-track)" stroke-width="5"/><circle cx="23" cy="23" r="19" fill="none" stroke="'+cat.color+'" stroke-width="5" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-pct/100))+'" stroke-linecap="round" transform="rotate(-90 23 23)"/></svg>'+
+ '<div class="info"><b>'+esc(cat.name)+' — '+pct+'%</b><span>'+label+'</span></div></button>';
+}
 function renderHome(){
- var total=DATA.reduce(function(s,c){return s+totalStepsFor(c);},0);
- var d=DATA.reduce(function(s,c){return s+doneCount(c.id);},0);
- var pct=total?Math.round(d/total*100):0,C=2*Math.PI*19;
+ var started=startedBusinesses();
+ var progressSectionHtml=started.length?
+  ('<h2 class="section-label">Your progress</h2>'+started.map(progressStripHtml).join('')):'';
 
  var continueCat=null,continueInfo=null;
  if(lastActivity&&lastActivity.businessId){
@@ -413,8 +424,7 @@ function renderHome(){
 
  document.getElementById('view-home').innerHTML=
  '<div class="hero"><svg class="hero-motif" width="120" height="70" viewBox="0 0 120 70" aria-hidden="true"><circle cx="18" cy="14" r="5" fill="#FF6B4A" opacity=".55"/><circle cx="46" cy="6" r="3.5" fill="#F4B740" opacity=".55"/><circle cx="78" cy="16" r="4.5" fill="#2FB6A6" opacity=".5"/><circle cx="102" cy="30" r="3" fill="#9B8AFB" opacity=".5"/><path d="M4 40 Q60 10 116 44" fill="none" stroke="var(--border)" stroke-width="1.4" stroke-dasharray="3 5"/></svg><h1>From idea to your first business</h1><p>Ten real paths, each with a full explanation before you start, clear steps, the platforms to sign up to, and an AI tool for every stage.</p></div>'+
- '<div class="progress-strip"><svg width="46" height="46" viewBox="0 0 46 46" role="img" aria-label="'+pct+' percent of all steps complete"><circle cx="23" cy="23" r="19" fill="none" stroke="var(--progress-track)" stroke-width="5"/><circle cx="23" cy="23" r="19" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-pct/100))+'" stroke-linecap="round" transform="rotate(-90 23 23)"/></svg>'+
- '<div class="info"><b>'+pct+'% complete</b><span>'+d+' of '+total+' steps done</span></div></div>'+
+ progressSectionHtml+
  continueCardHtml+streakCardHtml+stepCardHtml+
  '<div class="panel warn" id="legalCard" style="cursor:pointer"><h4>Read this before you start</h4><p class="muted-sm">Age limits, parental consent, tax, copyright and how not to get scammed. The legal groundwork for anyone starting a business under 18.</p></div>'+
  '<button class="tile" data-go="quiz" style="width:100%;margin-bottom:6px"><span class="g" style="background:#FF6B4A">'+svg(I.compass,19)+'</span><span><b>Which business fits me?</b><span>Three quick questions, matched to you</span></span></button>'+
@@ -438,12 +448,22 @@ function renderHome(){
  if(cc)cc.onclick=function(){activeTab='steps';openCategory(continueCat.id);};
  var sc=document.getElementById('todayStepCard');
  if(sc)sc.onclick=function(){activeTab='steps';openCategory(step.cat.id);};
+ document.querySelectorAll('.progress-strip[data-cat]').forEach(function(el){el.onclick=function(){activeTab='steps';openCategory(el.dataset.cat);};});
 }
 function renderHelp(){
  document.getElementById('view-help').innerHTML=
  '<div class="hero"><h1 class="sm">Help</h1><p>Tools and guides for wherever you\'re stuck.</p></div>'+
- '<div class="nav-tiles">'+toolTilesHTML()+'</div>';
+ '<h2 class="section-label">AI tools</h2>'+
+ '<div class="nav-tiles">'+toolTilesHTML(['assistant','templates','content','editing'])+'</div>'+
+ '<h2 class="section-label">Guides</h2>'+
+ '<div class="nav-tiles">'+toolTilesHTML(['glossary','ages'])+'</div>'+
+ '<h2 class="section-label">Community</h2>'+
+ '<div class="nav-tiles">'+toolTilesHTML(['feed','leaderboard'])+'</div>'+
+ '<h2 class="section-label">Legal & policies</h2>'+
+ '<button class="tile" data-go="legal" style="width:100%"><span class="g" style="background:#6C7BD1">'+svg(I.shield,19)+'</span><span><b>The legal side</b><span>Age rules, contracts, tax, copyright and more</span></span></button>';
  bindToolTiles();
+ var lg=document.querySelector('[data-go="legal"]');
+ if(lg)lg.onclick=function(){renderLegal();showView('legal');};
 }
 function renderProfile(){
  document.getElementById('view-profile').innerHTML=
@@ -684,6 +704,18 @@ function renderAges(){
 /* ---------- static views ---------- */
 function panelList(items){return items.map(function(x){return '<div class="panel"><h4>'+x.t+'</h4><p>'+x.d+'</p></div>';}).join('');}
 function copyrightNotice(){return '<p class="hint" style="text-align:center;margin-top:18px">© 2026 Launchpad. All rights reserved.</p>';}
+function accItem(key,title,desc){
+ return '<div class="acc" data-acc="'+key+'"><button type="button" class="acc-head" aria-expanded="false" aria-controls="'+key+'-body"><h4>'+title+'</h4><span class="chev">'+svg('<path d="M6 9l6 6 6-6"/>',16)+'</span></button>'+
+ '<div class="acc-body" id="'+key+'-body"><p>'+desc+'</p></div></div>';
+}
+function bindAccordions(root){
+ (root||document).querySelectorAll('.acc-head').forEach(function(el){
+  el.onclick=function(){
+   var acc=el.closest('.acc'),open=acc.classList.toggle('open');
+   el.setAttribute('aria-expanded',open?'true':'false');
+  };
+ });
+}
 function renderLegal(){
  if(!selectedCountry) selectedCountry='other';
  var c=COUNTRY_LEGAL[selectedCountry]||COUNTRY_LEGAL.other;
@@ -692,10 +724,15 @@ function renderLegal(){
  '<label class="field-label" for="legalCountry">Showing rules for</label>'+
  '<select id="legalCountry">'+countryOptions()+'</select>'+
  '<h2 class="section-label">'+c.name+' — key rules</h2>'+
- c.rules.map(function(r){return '<div class="panel"><h4>'+r[0]+'</h4><p style="font-size:13.7px">'+r[1]+'</p></div>';}).join('')+
+ c.rules.map(function(r,i){return accItem('cr'+i,r[0],r[1]);}).join('')+
  '<h2 class="section-label">General principles — everywhere</h2>'+
- panelList(LEGAL)+
- '<button class="btn-ghost full" id="toTerms">Read the Terms of Use</button>'+
+ LEGAL.map(function(x,i){return accItem('gp'+i,x.t,x.d);}).join('')+
+ '<h2 class="section-label">Read the full policies</h2>'+
+ '<button class="btn-ghost full" id="toTerms">Terms of Use</button>'+
+ '<button class="btn-ghost full" id="toPrivacy">Privacy Policy</button>'+
+ '<button class="btn-ghost full" id="toCookies">Cookie Policy</button>'+
+ '<button class="btn-ghost full" id="toRefunds">Refund Policy</button>'+
+ '<button class="btn-ghost full" id="toAccess">Accessibility statement</button>'+
  copyrightNotice();
  document.getElementById('legalCountry').value=selectedCountry;
  document.getElementById('legalCountry').onchange=async function(e){
@@ -711,6 +748,11 @@ function renderLegal(){
   renderLegal();
  };
  document.getElementById('toTerms').onclick=function(){renderTerms();showView('terms');};
+ document.getElementById('toPrivacy').onclick=function(){renderPrivacy();showView('privacy');};
+ document.getElementById('toCookies').onclick=function(){renderCookies();showView('cookies');};
+ document.getElementById('toRefunds').onclick=function(){renderRefunds();showView('refunds');};
+ document.getElementById('toAccess').onclick=function(){renderAccess();showView('access');};
+ bindAccordions(document.getElementById('view-legal'));
 }
 function renderTerms(){
  document.getElementById('view-terms').innerHTML=
