@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/dropship/idea.jpg"
+      "imagePath": "images/dropship/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/dropship/audience.jpg"
+      "imagePath": "images/dropship/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/dropship/pricing.jpg"
+      "imagePath": "images/dropship/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Store platforms and ad accounts require a payment method and, in most places, an account holder aged 18+. A parent's card and agreement on the spending cap should be settled before any money moves.",
-      "imagePath": "images/dropship/equipmentCosts.jpg"
+      "imagePath": "images/dropship/equipmentCosts.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/dropship/branding.jpg"
+      "imagePath": "images/dropship/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/dropship/channels.jpg"
+      "imagePath": "images/dropship/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/dropship/firstCustomer.jpg"
+      "imagePath": "images/dropship/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/dropship/service.jpg"
+      "imagePath": "images/dropship/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Payment processing accounts legally require an 18+ account holder almost everywhere. This chapter cannot be completed without a parent or guardian opening and holding that account.",
-      "imagePath": "images/dropship/payment.jpg"
+      "imagePath": "images/dropship/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Tax registration and filing for a minor's business income is a real legal question that depends on your country and sometimes region — this needs a parent involved and, once income is more than pocket change, a proper check with a tax authority or accountant. See the Legal section in this app for country-specific starting notes.",
-      "imagePath": "images/dropship/accountingTax.jpg"
+      "imagePath": "images/dropship/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/dropship/growth.jpg"
+      "imagePath": "images/dropship/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }

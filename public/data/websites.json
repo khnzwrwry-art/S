@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/idea.jpg"
+      "imagePath": "images/websites/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/audience.jpg"
+      "imagePath": "images/websites/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/pricing.jpg"
+      "imagePath": "images/websites/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/equipmentCosts.jpg"
+      "imagePath": "images/websites/equipmentCosts.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/branding.jpg"
+      "imagePath": "images/websites/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/channels.jpg"
+      "imagePath": "images/websites/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/firstCustomer.jpg"
+      "imagePath": "images/websites/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/service.jpg"
+      "imagePath": "images/websites/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Client invoicing and payment collection generally require an 18+ account holder for the bank/payment method involved. A parent needs to hold this under this age.",
-      "imagePath": "images/websites/payment.jpg"
+      "imagePath": "images/websites/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Website-building income, including recurring hosting fees, is taxable in most places, including for minors. This needs a parent involved and a real check with local tax rules once income is meaningful.",
-      "imagePath": "images/websites/accountingTax.jpg"
+      "imagePath": "images/websites/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/websites/growth.jpg"
+      "imagePath": "images/websites/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }

@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/idea.jpg"
+      "imagePath": "images/freelance/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/audience.jpg"
+      "imagePath": "images/freelance/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/pricing.jpg"
+      "imagePath": "images/freelance/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/equipmentCosts.jpg"
+      "imagePath": "images/freelance/equipmentCosts.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/branding.jpg"
+      "imagePath": "images/freelance/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/channels.jpg"
+      "imagePath": "images/freelance/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/firstCustomer.jpg"
+      "imagePath": "images/freelance/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/service.jpg"
+      "imagePath": "images/freelance/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Most freelance platforms require 18+, with some allowing 16+ with documented parental consent — check the specific platform. Below that age, a parent's account and agreement are the standard route.",
-      "imagePath": "images/freelance/payment.jpg"
+      "imagePath": "images/freelance/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Freelance income is taxable in most places, including for minors. This needs a parent involved and, once income is meaningful, a real check with local tax rules for self-employment.",
-      "imagePath": "images/freelance/accountingTax.jpg"
+      "imagePath": "images/freelance/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/freelance/growth.jpg"
+      "imagePath": "images/freelance/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }

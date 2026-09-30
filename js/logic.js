@@ -76,6 +76,8 @@ function saveProgress(){
 }
 function doneCount(id){return (progress[id]||[]).length;}
 let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
+let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all';
+const CATEGORY_LABELS={online:'Online',services:'Services',creative:'Creative',food:'Food'};
 
 const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual','help','profile'];
 function showView(n){VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});document.getElementById('backBtn').hidden=(n==='home');updateBottomNavActive(n);window.scrollTo(0,0);}
@@ -144,6 +146,55 @@ function totalStepsFor(cat){
  var ch=chaptersCache[cat.id];
  return ch?chapterTotal(ch):cat.steps.length;
 }
+function chaptersDoneCount(bizId){
+ var chData=chaptersCache[bizId];if(!chData)return 0;
+ var doneArr=progress[bizId]||[],offset=0,count=0;
+ chData.chapters.forEach(function(ch){
+  var len=ch.checklist.length,allDone=len>0;
+  for(var i=0;i<len;i++){if(doneArr.indexOf(offset+i)===-1){allDone=false;break;}}
+  if(allDone)count++;
+  offset+=len;
+ });
+ return count;
+}
+function findChapterForIndex(chData,i){
+ if(!chData)return null;
+ var offset=0;
+ for(var ci=0;ci<chData.chapters.length;ci++){
+  var len=chData.chapters[ci].checklist.length;
+  if(i<offset+len)return chData.chapters[ci];
+  offset+=len;
+ }
+ return null;
+}
+function continueChapterInfo(bizId,chData){
+ if(!chData)return null;
+ var doneArr=progress[bizId]||[],offset=0;
+ for(var ci=0;ci<chData.chapters.length;ci++){
+  var ch=chData.chapters[ci],doneInCh=0;
+  for(var ii=0;ii<ch.checklist.length;ii++){if(doneArr.indexOf(offset+ii)>-1)doneInCh++;}
+  if(doneInCh<ch.checklist.length)return {chapter:ch,index:ci};
+  offset+=ch.checklist.length;
+ }
+ return null;
+}
+function todaysStep(){
+ var bizId=(lastActivity&&lastActivity.businessId)||DATA[0].id;
+ var cat=DATA.find(function(c){return c.id===bizId;});
+ if(!cat)return null;
+ var chData=chaptersCache[cat.id];if(!chData)return null;
+ var doneArr=progress[cat.id]||[],offset=0;
+ for(var ci=0;ci<chData.chapters.length;ci++){
+  var ch=chData.chapters[ci];
+  for(var ii=0;ii<ch.checklist.length;ii++){
+   if(doneArr.indexOf(offset+ii)===-1){
+    return {cat:cat,chapter:ch,chapterIndex:ci,itemText:ch.checklist[ii],minutes:ch.estimatedMinutes};
+   }
+  }
+  offset+=ch.checklist.length;
+ }
+ return null;
+}
 
 async function syncRemoteProgress(){
  try{
@@ -152,6 +203,19 @@ async function syncRemoteProgress(){
    progress=remote;
    try{localStorage.setItem('sg_progress',JSON.stringify(progress));}catch(e){}
   }
+ }catch(e){}
+}
+async function syncActivity(){
+ try{
+  var act=await firestoreModule.loadActivity();
+  if(act){lastActivity=act.lastActivity||null;streakCount=act.streakCount||0;}
+ }catch(e){}
+}
+async function trackActivity(businessId,chapterId,chapterTitle){
+ if(!firestoreModule)return;
+ try{
+  var res=await firestoreModule.recordActivity({businessId:businessId,chapterId:chapterId,chapterTitle:chapterTitle});
+  if(res){lastActivity=res.lastActivity;streakCount=res.streakCount;}
  }catch(e){}
 }
 
@@ -164,13 +228,13 @@ async function initAuth(){
  }
  authModule.watchAuthState(async function(user){
   currentUser=user;
-  if(!user){stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;renderGate();return;}
+  if(!user){stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;document.getElementById('profileCircle').hidden=true;renderGate();return;}
   var rec=null;
   try{
    await loadFirestore();
    rec=await firestoreModule.loadAgreement();
   }catch(e){}
-  if(rec){selectedCountry=rec.country||'';await syncRemoteProgress();enterApp();}
+  if(rec){selectedCountry=rec.country||'';await syncRemoteProgress();await syncActivity();enterApp();}
   else{renderGate();}
  });
 }
@@ -232,6 +296,7 @@ function renderGate(){
    await loadFirestore();
    await firestoreModule.saveAgreement({country:country,acceptedAt:Date.now(),email:currentUser.email||null});
    await syncRemoteProgress();
+   await syncActivity();
    enterApp();
   }catch(e){
    hint.textContent='Could not save — check your connection and try again.';
@@ -244,8 +309,17 @@ function enterApp(){
  document.getElementById('app').hidden=false;
  renderBottomNav();
  document.getElementById('bottomNav').hidden=false;
+ renderTopbarProfile();
  renderHome();
  updateBottomNavActive('home');
+}
+function renderTopbarProfile(){
+ var el=document.getElementById('profileCircle');
+ if(!currentUser){el.hidden=true;return;}
+ el.hidden=false;
+ if(currentUser.photoURL){el.innerHTML='<img src="'+esc(currentUser.photoURL)+'" alt="">';}
+ else{el.textContent=(currentUser.displayName||currentUser.email||'?').trim().charAt(0).toUpperCase();}
+ el.onclick=function(){renderProfile();showView('profile');};
 }
 
 /* ---------- home ---------- */
@@ -278,36 +352,92 @@ function bindFooterLinks(){
  document.getElementById('soLink').onclick=async function(){
   if(authModule){try{await authModule.logout();}catch(e){}}
   document.getElementById('bottomNav').hidden=true;
+  document.getElementById('profileCircle').hidden=true;
   document.getElementById('app').hidden=true;
   renderGate();
   document.getElementById('gate').hidden=false;
  };
 }
+const HOME_CATEGORIES=[['all','All'],['food','Food'],['services','Services'],['creative','Creative'],['online','Online']];
+function filteredData(){
+ var q=homeSearch.trim().toLowerCase();
+ return DATA.filter(function(cat){
+  if(homeCategoryFilter!=='all'&&cat.category!==homeCategoryFilter)return false;
+  if(q&&(cat.name+' '+cat.desc).toLowerCase().indexOf(q)===-1)return false;
+  return true;
+ });
+}
+function businessCardHtml(cat){
+ var chData=chaptersCache[cat.id];
+ var dc=doneCount(cat.id),t=totalStepsFor(cat),p=t?Math.round(dc/t*100):0;
+ var chaptersLabel=chData?(chaptersDoneCount(cat.id)+' of '+chData.chapters.length+' chapters done'):(dc+'/'+t+' steps');
+ var catLabel=CATEGORY_LABELS[cat.category]||'';
+ return '<button class="card" data-cat="'+cat.id+'"><span class="card-row"><span class="badge" style="background:'+cat.color+'">'+svg(cat.icon,19)+'</span><span class="age-tag">'+cat.age+'</span></span>'+
+ '<span>'+(catLabel?'<span class="cat-tag">'+catLabel+'</span>':'')+'<h3>'+cat.name+'</h3><p>'+cat.desc+'</p></span>'+
+ '<span class="w">'+(dc>0?'<span class="mini-progress"><i style="width:'+p+'%;background:'+cat.color+'"></i></span>':'')+
+ '<span class="mini-label">'+chaptersLabel+'</span></span></button>';
+}
+function renderBusinessGrid(){
+ var el=document.getElementById('bizGrid');if(!el)return;
+ var list=filteredData();
+ el.innerHTML=list.length?list.map(businessCardHtml).join(''):'<p class="hint">No business paths match your search.</p>';
+ el.querySelectorAll('.card[data-cat]').forEach(function(c){c.onclick=function(){activeTab='intro';openCategory(c.dataset.cat);};});
+}
+function renderHomeCatChips(){
+ var el=document.getElementById('homeCatChips');if(!el)return;
+ el.innerHTML=HOME_CATEGORIES.map(function(c){return '<button class="chip '+(homeCategoryFilter===c[0]?'active':'')+'" data-hf="'+c[0]+'">'+c[1]+'</button>';}).join('');
+ el.querySelectorAll('[data-hf]').forEach(function(b){b.onclick=function(){homeCategoryFilter=b.dataset.hf;renderHomeCatChips();renderBusinessGrid();};});
+}
 function renderHome(){
  var total=DATA.reduce(function(s,c){return s+totalStepsFor(c);},0);
  var d=DATA.reduce(function(s,c){return s+doneCount(c.id);},0);
  var pct=total?Math.round(d/total*100):0,C=2*Math.PI*19;
+
+ var continueCat=null,continueInfo=null;
+ if(lastActivity&&lastActivity.businessId){
+  continueCat=DATA.find(function(c){return c.id===lastActivity.businessId;});
+  if(continueCat){var chd=chaptersCache[continueCat.id];continueInfo=chd?continueChapterInfo(continueCat.id,chd):null;}
+ }
+ var continueCardHtml=(continueCat&&continueInfo)?
+  '<button class="dark-card" id="continueCard"><h4>Continue where you left off</h4>'+
+  '<p>'+esc(continueCat.name)+' — Chapter '+(continueInfo.index+1)+': '+esc(continueInfo.chapter.title)+'</p></button>':'';
+
+ var streakCardHtml=streakCount>0?
+  '<div class="panel highlight"><h4>'+streakCount+'-day streak</h4><p class="muted-sm">Keep it going today — check off one thing in any business.</p></div>':'';
+
+ var step=todaysStep();
+ var stepCardHtml=step?
+  '<button class="panel accent" id="todayStepCard" style="text-align:left;width:100%;cursor:pointer">'+
+  '<h4>Today\'s step'+(step.minutes?' · ~'+step.minutes+' min':'')+'</h4>'+
+  '<p class="muted-sm">'+esc(step.cat.name)+' — '+esc(step.itemText)+'</p></button>':'';
+
  document.getElementById('view-home').innerHTML=
- '<div class="hero"><svg class="hero-motif" width="120" height="70" viewBox="0 0 120 70" aria-hidden="true"><circle cx="18" cy="14" r="5" fill="#FF6B4A" opacity=".55"/><circle cx="46" cy="6" r="3.5" fill="#F4B740" opacity=".55"/><circle cx="78" cy="16" r="4.5" fill="#2FB6A6" opacity=".5"/><circle cx="102" cy="30" r="3" fill="#9B8AFB" opacity=".5"/><path d="M4 40 Q60 10 116 44" fill="none" stroke="var(--border)" stroke-width="1.4" stroke-dasharray="3 5"/></svg><h1>From idea to your first business</h1><p>Nine real paths, each with a full explanation before you start, clear steps, the platforms to sign up to, and an AI tool for every stage.</p></div>'+
+ '<div class="hero"><svg class="hero-motif" width="120" height="70" viewBox="0 0 120 70" aria-hidden="true"><circle cx="18" cy="14" r="5" fill="#FF6B4A" opacity=".55"/><circle cx="46" cy="6" r="3.5" fill="#F4B740" opacity=".55"/><circle cx="78" cy="16" r="4.5" fill="#2FB6A6" opacity=".5"/><circle cx="102" cy="30" r="3" fill="#9B8AFB" opacity=".5"/><path d="M4 40 Q60 10 116 44" fill="none" stroke="var(--border)" stroke-width="1.4" stroke-dasharray="3 5"/></svg><h1>From idea to your first business</h1><p>Ten real paths, each with a full explanation before you start, clear steps, the platforms to sign up to, and an AI tool for every stage.</p></div>'+
  '<div class="progress-strip"><svg width="46" height="46" viewBox="0 0 46 46" role="img" aria-label="'+pct+' percent of all steps complete"><circle cx="23" cy="23" r="19" fill="none" stroke="var(--progress-track)" stroke-width="5"/><circle cx="23" cy="23" r="19" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-pct/100))+'" stroke-linecap="round" transform="rotate(-90 23 23)"/></svg>'+
  '<div class="info"><b>'+pct+'% complete</b><span>'+d+' of '+total+' steps done</span></div></div>'+
+ continueCardHtml+streakCardHtml+stepCardHtml+
  '<div class="panel warn" id="legalCard" style="cursor:pointer"><h4>Read this before you start</h4><p class="muted-sm">Age limits, parental consent, tax, copyright and how not to get scammed. The legal groundwork for anyone starting a business under 18.</p></div>'+
+ '<button class="tile" data-go="quiz" style="width:100%;margin-bottom:6px"><span class="g" style="background:#FF6B4A">'+svg(I.compass,19)+'</span><span><b>Which business fits me?</b><span>Three quick questions, matched to you</span></span></button>'+
  '<h2 class="section-label">Tools</h2>'+
  '<div class="nav-tiles">'+toolTilesHTML()+'</div>'+
- '<h2 class="section-label">Nine business paths</h2>'+
- '<div class="grid">'+DATA.map(function(cat){
-  var dc=doneCount(cat.id),t=totalStepsFor(cat),p=Math.round(dc/t*100);
-  return '<button class="card" data-cat="'+cat.id+'"><span class="card-row"><span class="badge" style="background:'+cat.color+'">'+svg(cat.icon,19)+'</span><span class="age-tag">'+cat.age+'</span></span>'+
-  '<span><h3>'+cat.name+'</h3><p>'+cat.desc+'</p></span>'+
-  '<span class="w"><span class="mini-progress"><i style="width:'+p+'%;background:'+cat.color+'"></i></span><span class="mini-label">'+dc+'/'+t+' steps</span></span></button>';
- }).join('')+'</div>'+
+ '<h2 class="section-label">Business paths</h2>'+
+ '<label class="field-label" for="homeSearchInput">Search business paths</label>'+
+ '<input type="text" id="homeSearchInput" placeholder="Search by name or description..." value="'+esc(homeSearch)+'">'+
+ '<div class="chip-row" id="homeCatChips"></div>'+
+ '<div class="grid" id="bizGrid"></div>'+
  footerLinksHTML()+
  copyrightNotice();
 
  document.getElementById('legalCard').onclick=function(){renderLegal();showView('legal');};
  bindFooterLinks();
  bindToolTiles();
- document.querySelectorAll('.card[data-cat]').forEach(function(el){el.onclick=function(){activeTab='intro';openCategory(el.dataset.cat);};});
+ renderHomeCatChips();
+ renderBusinessGrid();
+ document.getElementById('homeSearchInput').oninput=function(e){homeSearch=e.target.value;renderBusinessGrid();};
+ var cc=document.getElementById('continueCard');
+ if(cc)cc.onclick=function(){activeTab='steps';openCategory(continueCat.id);};
+ var sc=document.getElementById('todayStepCard');
+ if(sc)sc.onclick=function(){activeTab='steps';openCategory(step.cat.id);};
 }
 function renderHelp(){
  document.getElementById('view-help').innerHTML=
@@ -336,7 +466,7 @@ function renderCategory(){
    body='<p class="hint">Loading...</p>';
    loadChapters(cat.id).then(function(){if(activeCat===cat&&activeTab==='steps')renderCategory();});
   }else if(chData){
-   body=chaptersHtml(cat,chData);
+   body=progressCardHtml(cat,chData)+chaptersHtml(cat,chData);
   }else{
    body=stepsHtml(cat);
   }
@@ -384,6 +514,15 @@ function stepsHtml(cat){
   '<div class="ai-tool"><span class="dot" style="background:'+cat.color+'"></span><span><b>AI tool for this step: '+s.tool+'</b><span>'+s.toolUse+'</span></span></div></div></div>';
  }).join('');
 }
+function progressCardHtml(cat,chData){
+ var info=continueChapterInfo(cat.id,chData);
+ if(!info){
+  return '<div class="panel highlight"><h4>All chapters complete</h4><p class="muted-sm">You have finished every chapter for '+esc(cat.name)+'. Nice work — check the leaderboard or start another path.</p></div>';
+ }
+ return '<div class="panel accent" id="continueChapterCard" style="cursor:pointer"><h4>Continue: Chapter '+(info.index+1)+' — '+esc(info.chapter.title)+'</h4>'+
+ '<p class="muted-sm">'+esc(info.chapter.goal)+'</p>'+
+ '<div class="row-links" style="margin-top:10px"><span class="pill" id="continueAskMentor" role="button" tabindex="0">'+svg(I.spark,14)+' Ask mentor about this chapter</span></div></div>';
+}
 function chaptersHtml(cat,chData){
  var doneArr=progress[cat.id]||[];
  var offset=0;
@@ -398,10 +537,12 @@ function chaptersHtml(cat,chData){
    return '<label class="agree" style="margin-bottom:8px"><input type="checkbox" data-check="'+flat+'" '+(checked?'checked':'')+'><span>'+esc(item)+'</span></label>';
   }).join('');
   var parentBanner=ch.parentNeeded?'<div class="panel warn"><h4>Here you need a parent</h4><p class="muted-sm">'+esc(ch.parentNote)+'</p></div>':'';
+  var badgeState=allDone?'done':(doneInCh>0?'progress':'');
+  var statusText=allDone?'Done':(doneInCh>0?'In progress':'Not started');
   return '<div class="step" data-idx="'+ci+'"><div class="step-head">'+
-  '<span class="step-check '+(allDone?'done':'')+'" data-check-chapter="'+ci+'" role="checkbox" aria-checked="'+allDone+'" tabindex="0" style="'+(allDone?'background:'+cat.color:'')+'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>'+
-  '<span class="step-num">'+(ci<9?'0':'')+(ci+1)+'</span><span class="step-title '+(allDone?'done':'')+'">'+esc(ch.title)+'</span>'+
-  '<span class="muted-xs" style="margin:0 8px">'+doneInCh+'/'+ch.checklist.length+'</span>'+
+  '<span class="ch-badge '+badgeState+'" data-check-chapter="'+ci+'" role="checkbox" aria-checked="'+allDone+'" tabindex="0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span class="ch-num">'+(ci+1)+'</span></span>'+
+  '<span class="step-title '+(allDone?'done':'')+'">'+esc(ch.title)+'</span>'+
+  '<span class="muted-xs" style="margin:0 8px">'+statusText+'</span>'+
   '<span class="chev">'+svg('<path d="M6 9l6 6 6-6"/>',16)+'</span></div>'+
   '<div class="step-body">'+
    '<div class="ai-tool"><span class="dot" style="background:'+cat.color+'"></span><span><b>Goal</b><span>'+esc(ch.goal)+'</span></span></div>'+
@@ -422,9 +563,31 @@ function bindCategory(){
  var chData=chaptersCache[cat.id];
  var b=document.getElementById('startSteps');if(b)b.onclick=function(){activeTab='steps';renderCategory();};
  var a=document.getElementById('askCat');if(a)a.onclick=function(){renderAssistant('I want to start '+cat.name+'. Where do I begin, and what is the most common mistake?');showView('assistant');};
+ var cc=document.getElementById('continueChapterCard');
+ if(cc)cc.onclick=function(e){
+  if(e.target.closest('#continueAskMentor'))return;
+  if(!chData)return;
+  var info=continueChapterInfo(cat.id,chData);if(!info)return;
+  var stepEl=document.querySelector('.step[data-idx="'+info.index+'"]');
+  if(stepEl){stepEl.classList.add('open');stepEl.scrollIntoView({behavior:'smooth',block:'start'});}
+ };
+ var am=document.getElementById('continueAskMentor');
+ if(am)am.onclick=function(e){
+  e.stopPropagation();
+  if(!chData)return;
+  var info=continueChapterInfo(cat.id,chData);if(!info)return;
+  renderAssistant('I am doing '+cat.name+', on the chapter "'+info.chapter.title+'". Walk me through exactly how to do it, and what a good example looks like.');
+  showView('assistant');
+ };
  document.querySelectorAll('.step-head').forEach(function(el){el.onclick=function(e){if(e.target.closest('[data-check],[data-check-chapter]'))return;el.closest('.step').classList.toggle('open');};});
  document.querySelectorAll('[data-check]').forEach(function(el){
-  var fn=function(e){e.stopPropagation();var i=parseInt(el.dataset.check,10);progress[cat.id]=progress[cat.id]||[];var k=progress[cat.id].indexOf(i);if(k>-1)progress[cat.id].splice(k,1);else progress[cat.id].push(i);saveProgress();renderCategory();};
+  var fn=function(e){
+   e.stopPropagation();var i=parseInt(el.dataset.check,10);progress[cat.id]=progress[cat.id]||[];var k=progress[cat.id].indexOf(i);var checking=k===-1;
+   if(k>-1)progress[cat.id].splice(k,1);else progress[cat.id].push(i);
+   saveProgress();
+   if(checking){var ch=findChapterForIndex(chData,i);trackActivity(cat.id,ch?ch.id:null,ch?ch.title:null);}
+   renderCategory();
+  };
   el.onclick=fn;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' ')fn(e);};
  });
  document.querySelectorAll('[data-check-chapter]').forEach(function(el){
@@ -440,7 +603,9 @@ function bindCategory(){
     if(allDone){if(idx>-1)progress[cat.id].splice(idx,1);}
     else if(idx===-1){progress[cat.id].push(start+k2);}
    }
-   saveProgress();renderCategory();
+   saveProgress();
+   if(!allDone){var ch=chData.chapters[ci];trackActivity(cat.id,ch.id,ch.title);}
+   renderCategory();
   };
   el.onclick=fn;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' ')fn(e);};
  });

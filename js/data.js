@@ -2,7 +2,6 @@ const I={box:'<path d="M3 8l9-5 9 5-9 5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/>',meg
 help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2 1.8-2.3 3.2"/><circle cx="12" cy="17" r=".3" fill="currentColor"/>'};
 
 const TOOL_TILES=[
-{k:'quiz',c:'#FF6B4A',i:I.compass,b:'Which business fits me?',s:'Five questions, three matches'},
 {k:'assistant',c:'#6C7BD1',i:I.spark,b:'AI mentor',s:'Ask anything about your business'},
 {k:'templates',c:'#2FB6A6',i:I.film,b:'Ad templates',s:'8 trending formats with scripts'},
 {k:'content',c:'#F4B740',i:I.chat,b:'AI content tool',s:'Captions, scripts, hashtags'},
@@ -13,7 +12,7 @@ const TOOL_TILES=[
 {k:'glossary',c:'#9B8AFB',i:I.bookmark,b:'Glossary',s:'Every term explained plainly'}];
 
 const DATA=[
-{id:'dropship',name:'Dropshipping',color:'#FF6B4A',icon:I.box,age:'16+',
+{id:'dropship',name:'Dropshipping',color:'#FF6B4A',icon:I.box,age:'16+',category:'online',
  desc:'Sell products online without holding inventory — your supplier ships directly to the customer.',
  intro:{what:'You build an online store, list a supplier\'s products, and advertise them. When someone orders, your supplier ships the package straight to the buyer. You never touch the product or buy stock upfront.',
  money:'The gap between what the customer pays you and what the supplier charges, minus ad spend. A product that costs you $15 and sells for $39 leaves $24 gross — roughly half of that usually goes back into ads.',
@@ -38,7 +37,7 @@ const DATA=[
   {title:'Run your first ad campaign',text:'Install your tracking pixel, then run a small campaign on a low daily budget. The goal here is to learn what works, not to make a profit.',tool:'AdCreative.ai',toolUse:'Generates dozens of ad variations and shows which one wins',video:'first facebook ad campaign for dropshipping'},
   {title:'Deliver service and keep customers',text:'Reply fast, send shipping updates before people ask, and request a review after every good order. Reviews are what make your future ads cheaper.',tool:'Tidio AI',toolUse:'Chatbot that answers customers automatically around the clock',video:'ecommerce customer service automation'}]},
 
-{id:'affiliate',name:'Affiliate Marketing',color:'#F4B740',icon:I.mega,age:'14+',
+{id:'affiliate',name:'Affiliate Marketing',color:'#F4B740',icon:I.mega,age:'14+',category:'online',
  desc:'Recommend other companies\' products and earn a commission on every sale through your link.',
  intro:{what:'You join a company\'s affiliate programme, get a personal tracking link, and recommend the product in your content. Anyone who buys through your link is credited to you and you earn a percentage. You never handle the product, shipping or support.',
  money:'Commission per sale — usually 3%–10% on physical products, and 20%–50% on digital products and courses.',
@@ -63,7 +62,7 @@ const DATA=[
   {title:'Make honest recommendation content',text:'Show real use and say what is not great about the product too. Honest reviews convert far better than ads — and keep you out of trouble.',tool:'CapCut AI',toolUse:'Edits review videos quickly with automatic captions',video:'how to film a product review video'},
   {title:'Track conversions and double down',text:'Check which links and posts actually produce sales, then make more of that instead of trying everything.',tool:'ChatGPT',toolUse:'Analyses click and conversion data and suggests what to change',video:'how to track affiliate marketing performance'}]},
 
-{id:'content',name:'Content Creation',color:'#2FB6A6',icon:I.cam,age:'13+ (with parent)',
+{id:'content',name:'Content Creation',color:'#2FB6A6',icon:I.cam,age:'13+ (with parent)',category:'creative',
  desc:'Build an audience around something you love, then earn from sponsorships, products or fan support.',
  intro:{what:'You pick a topic, publish consistently on one platform, and build an audience that comes back. The money does not come from the platform at first — it comes from the audience: sponsorships, your own product, affiliate links or memberships.',
  money:'Sponsored posts, affiliate commissions, your own digital product, and later platform ad revenue.',
@@ -88,7 +87,7 @@ const DATA=[
   {title:'Edit fast with AI tools',text:'Cut silences, add captions, keep the pace tight. Good editing holds viewers far better than an expensive camera.',tool:'Descript',toolUse:'Edits video like a text document, removing filler words automatically',video:'fast video editing for beginners'},
   {title:'Build community, then monetise',text:'Reply to comments, ask your audience what they want, and only then add one income stream — sponsorship, product or affiliate.',tool:'ManyChat',toolUse:'Handles comments and DMs automatically at scale',video:'how creators make money from followers'}]},
 
-{id:'apps',name:'App & Software Building',color:'#7C5CFF',icon:I.code,age:'14+ (16+ to publish)',
+{id:'apps',name:'App & Software Building',color:'#7C5CFF',icon:I.code,age:'14+ (16+ to publish)',category:'online',
  desc:'Build apps, tools or small SaaS products — with AI you no longer need years of coding first.',
  intro:{what:'You build a real product: a mobile app, a web tool, a browser extension or a small SaaS. AI tools now let you go from idea to working prototype in days, even with limited coding experience. You make money from subscriptions, one-time purchases, ads, or by building apps for clients.',
  money:'Subscriptions (the strongest model), one-time purchase, in-app purchases, ads, or client work at a fixed project price.',
@@ -119,7 +118,7 @@ const DATA=[
   {title:'Put it in front of 10 real users',text:'Give it to ten people who actually have the problem and watch them use it without helping. Everything you need to fix will show up in those ten sessions.',tool:'Google Forms',toolUse:'Collects structured feedback you can actually act on',video:'how to get your first app users feedback'},
   {title:'Launch and charge money',text:'Publish it — store, web link or both — and add a price or subscription. Free users tell you what they like; paying users tell you what matters.',tool:'RevenueCat',toolUse:'Sets up subscriptions and purchases without building billing yourself',video:'how to launch your first app and monetize'}]},
 
-{id:'ecommerce',name:'Your Own Product',color:'#4F9DDE',icon:I.bag,age:'16+',
+{id:'ecommerce',name:'Your Own Product',color:'#4F9DDE',icon:I.bag,age:'16+',category:'online',
  desc:'Design or make a product of your own and build a real brand around it.',
  intro:{what:'Unlike dropshipping, the product is yours: you design or make it, buy a small batch, and sell under your own name. Full control over quality, price and brand — and full responsibility too.',
  money:'Higher margins than dropshipping, typically 2.5–4× your production cost, because there is no middleman.',
@@ -143,7 +142,7 @@ const DATA=[
   {title:'Shoot content and sell socially',text:'Film the product in real use, not just on a white background. Real footage stops the scroll far more reliably.',tool:'CapCut AI',toolUse:'Edits short, punchy product content for social platforms',video:'how to shoot product content for social media'},
   {title:'Manage stock and shipping',text:'Track quantities and lead times, and never sell what you do not have. One late order creates a review that stays forever.',tool:'Claude',toolUse:'Builds a simple inventory and order tracking sheet',video:'inventory management for small business'}]},
 
-{id:'pod',name:'Print on Demand',color:'#9B8AFB',icon:I.shirt,age:'15+',
+{id:'pod',name:'Print on Demand',color:'#9B8AFB',icon:I.shirt,age:'15+',category:'creative',
  desc:'Design prints for shirts, mugs and posters — each item is made only after someone buys it.',
  intro:{what:'You upload a design, the platform puts it on products, and when someone orders, the platform prints and ships it. You handle design and marketing only.',
  money:'The gap between your selling price and the printing cost. A shirt costing $12 to print and selling for $28 leaves $16 before advertising.',
@@ -167,7 +166,7 @@ const DATA=[
   {title:'Market with real photos',text:'Photograph friends wearing it. Computer mockups look like mockups and convert worse.',tool:'CapCut',toolUse:'Creates short content showing the product being worn',video:'how to market print on demand products'},
   {title:'Keep what sells, expand it',text:'Drop the designs that do not move and make variations of the ones that do, instead of inventing something new every time.',tool:'ChatGPT',toolUse:'Analyses which designs sell and why',video:'scaling a print on demand business'}]},
 
-{id:'freelance',name:'Freelancing',color:'#EF6FA0',icon:I.case,age:'14+ (16+ on most platforms)',
+{id:'freelance',name:'Freelancing',color:'#EF6FA0',icon:I.case,age:'14+ (16+ on most platforms)',category:'services',
  desc:'Sell a skill — editing, design, writing, code — with zero money upfront.',
  intro:{what:'You sell your time and skill: video editing, graphic design, writing, web building, ad management. The client pays for a defined result.',
  money:'Per project or per hour. Per project is better — as you get faster, you earn more for the same time.',
@@ -191,7 +190,7 @@ const DATA=[
   {title:'Land the first client',text:'Message small businesses you already know and offer a starter price in exchange for an honest review. Direct outreach beats posting and waiting.',tool:'ChatGPT',toolUse:'Writes a short outreach message and a simple quote',video:'how to get your first freelance client'},
   {title:'Collect reviews and raise prices',text:'Ask for a written review after every good job. Three reviews let you raise your price without apologising.',tool:'Claude',toolUse:'Drafts a review request and a pricing ladder as you gain experience',video:'how to price freelance services'}]},
 
-{id:'social',name:'Social Media Management',color:'#A8C94A',icon:I.chat,age:'16+',
+{id:'social',name:'Social Media Management',color:'#A8C94A',icon:I.chat,age:'16+',category:'services',
  desc:'Run social accounts for small businesses on a fixed monthly fee.',
  intro:{what:'Small businesses know they need to post but have no time or skill. You handle it: filming, writing, designing and publishing consistently, for a monthly fee.',
  money:'A monthly retainer — typically $200–$700 per client depending on how much content you produce.',
@@ -215,7 +214,7 @@ const DATA=[
   {title:'Plan a month of content',text:'Build a monthly calendar the client approves in advance. It prevents arguments and shows there is a system.',tool:'Notion AI',toolUse:'Builds a content calendar and publishing schedule',video:'how to plan a monthly content calendar'},
   {title:'Report results and keep the client',text:'Send a short monthly summary: what was posted, what performed best, what is next. Consistent reporting is what keeps a retainer alive.',tool:'ChatGPT',toolUse:'Writes a short, clear monthly performance report',video:'social media client reporting'}]},
 
-{id:'courses',name:'Digital Products & Courses',color:'#6C7BD1',icon:I.book,age:'15+',
+{id:'courses',name:'Digital Products & Courses',color:'#6C7BD1',icon:I.book,age:'15+',category:'creative',
  desc:'Turn something you already know into a guide you can sell again and again.',
  intro:{what:'You take something you already know — guitar, editing, maths, gaming — and turn it into a structured guide or mini-course. You make it once and sell it indefinitely.',
  money:'Direct sales of a digital product. No production cost per sale, so almost the entire price stays with you.',
@@ -238,7 +237,7 @@ const DATA=[
   {title:'Build a short, focused version',text:'One to two hours of content solving one problem. A giant course intimidates both you and the buyer.',tool:'Notion AI',toolUse:'Organises your material into a clear course structure',video:'how to build a mini course'},
   {title:'Launch and sell it',text:'Put it on a sales platform and write a page that says exactly what the learner will be able to do at the end. That is what sells.',tool:'Gumroad',toolUse:'Hosts the product and handles payment for you',video:'how to sell a digital product online'},
   {title:'Collect feedback and improve',text:'Ask your first ten buyers what was clear and what was not, then update. Version two sells far better.',tool:'ChatGPT',toolUse:'Turns scattered feedback into an ordered improvement list',video:'how to improve an online course'}]},
-{id:'websites',name:'Website Building for Businesses',color:'#2FA88A',icon:I.code,age:'15+',
+{id:'websites',name:'Website Building for Businesses',color:'#2FA88A',icon:I.code,age:'15+',category:'services',
  desc:'Build simple websites for local businesses that don\'t have one yet, using AI website builders instead of coding by hand.',
  intro:{what:'Millions of small businesses — a barber, a tutor, a local bakery — still have no website or a badly outdated one. You use AI website builders to produce a clean, working site in hours instead of weeks, then sell the finished result (and often ongoing hosting/updates) to the business owner.',
  money:'A one-time build fee per site ($150–$800 depending on complexity), often plus a small monthly fee for hosting and updates ($20–$60/month) — which turns into recurring income across multiple clients.',

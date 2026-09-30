@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/idea.jpg"
+      "imagePath": "images/content/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/audience.jpg"
+      "imagePath": "images/content/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/pricing.jpg"
+      "imagePath": "images/content/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/equipmentCosts.jpg"
+      "imagePath": "images/content/equipmentCosts.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/branding.jpg"
+      "imagePath": "images/content/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/channels.jpg"
+      "imagePath": "images/content/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/firstCustomer.jpg"
+      "imagePath": "images/content/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/service.jpg"
+      "imagePath": "images/content/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Platform monetization payouts and most payment methods for sponsorships require an 18+ account holder. A parent needs to hold that account under this age.",
-      "imagePath": "images/content/payment.jpg"
+      "imagePath": "images/content/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Content income — including the value of free products received for sponsorships — is taxable in most places, including for minors. This needs a parent involved and, once meaningful, a real check with local tax rules.",
-      "imagePath": "images/content/accountingTax.jpg"
+      "imagePath": "images/content/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/content/growth.jpg"
+      "imagePath": "images/content/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }

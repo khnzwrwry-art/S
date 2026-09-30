@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/apps/idea.jpg"
+      "imagePath": "images/apps/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/apps/audience.jpg"
+      "imagePath": "images/apps/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/apps/pricing.jpg"
+      "imagePath": "images/apps/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Only needed if/when publishing to app stores: the Apple Developer Program and Google Play Console both require a payment method, and account holders are generally expected to be 18+ — a parent's account and card are the standard route under that age. Not needed for a free-tier web app.",
-      "imagePath": "images/apps/equipmentCosts.jpg"
+      "imagePath": "images/apps/equipmentCosts.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/apps/branding.jpg"
+      "imagePath": "images/apps/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/apps/channels.jpg"
+      "imagePath": "images/apps/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/apps/firstCustomer.jpg"
+      "imagePath": "images/apps/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/apps/service.jpg"
+      "imagePath": "images/apps/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "In-app payments and app store developer accounts require an 18+ account holder. A parent needs to hold this account and agree the payout arrangement before charging money.",
-      "imagePath": "images/apps/payment.jpg"
+      "imagePath": "images/apps/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "App/software income is taxable in most places, including for minors, and store platform fees complicate the real net number. This needs a parent involved and, once meaningful, a real check with local tax rules.",
-      "imagePath": "images/apps/accountingTax.jpg"
+      "imagePath": "images/apps/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/apps/growth.jpg"
+      "imagePath": "images/apps/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }

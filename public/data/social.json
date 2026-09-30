@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/idea.jpg"
+      "imagePath": "images/social/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/audience.jpg"
+      "imagePath": "images/social/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/pricing.jpg"
+      "imagePath": "images/social/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/equipmentCosts.jpg"
+      "imagePath": "images/social/equipmentCosts.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/branding.jpg"
+      "imagePath": "images/social/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/channels.jpg"
+      "imagePath": "images/social/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/firstCustomer.jpg"
+      "imagePath": "images/social/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/service.jpg"
+      "imagePath": "images/social/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Recurring payment collection generally requires an 18+ account holder for the bank/payment method involved. A parent needs to hold this under this age.",
-      "imagePath": "images/social/payment.jpg"
+      "imagePath": "images/social/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Retainer income from managing clients' social media is taxable business income in most places, including for minors. This needs a parent involved and a real check with local tax rules once income is meaningful.",
-      "imagePath": "images/social/accountingTax.jpg"
+      "imagePath": "images/social/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/social/growth.jpg"
+      "imagePath": "images/social/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }

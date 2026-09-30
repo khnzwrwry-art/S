@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/idea.jpg"
+      "imagePath": "images/courses/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/audience.jpg"
+      "imagePath": "images/courses/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/pricing.jpg"
+      "imagePath": "images/courses/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/equipmentCosts.jpg"
+      "imagePath": "images/courses/equipmentCosts.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/branding.jpg"
+      "imagePath": "images/courses/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/channels.jpg"
+      "imagePath": "images/courses/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/firstCustomer.jpg"
+      "imagePath": "images/courses/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/service.jpg"
+      "imagePath": "images/courses/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Digital product sales platforms generally require an 18+ payout account holder. A parent needs to hold this account under this age.",
-      "imagePath": "images/courses/payment.jpg"
+      "imagePath": "images/courses/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Digital product sales income is taxable in most places, including for minors. This needs a parent involved and a real check with local tax rules once income is meaningful.",
-      "imagePath": "images/courses/accountingTax.jpg"
+      "imagePath": "images/courses/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/courses/growth.jpg"
+      "imagePath": "images/courses/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }

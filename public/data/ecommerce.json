@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/ecommerce/idea.jpg"
+      "imagePath": "images/ecommerce/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/ecommerce/audience.jpg"
+      "imagePath": "images/ecommerce/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/ecommerce/pricing.jpg"
+      "imagePath": "images/ecommerce/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "A physical product batch is real upfront money at risk, and most suppliers/payment methods for bulk ordering need an adult. A parent should agree the spending cap in writing before any batch is ordered.",
-      "imagePath": "images/ecommerce/equipmentCosts.jpg"
+      "imagePath": "images/ecommerce/equipmentCosts.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/ecommerce/branding.jpg"
+      "imagePath": "images/ecommerce/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/ecommerce/channels.jpg"
+      "imagePath": "images/ecommerce/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/ecommerce/firstCustomer.jpg"
+      "imagePath": "images/ecommerce/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/ecommerce/service.jpg"
+      "imagePath": "images/ecommerce/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Payment processors and most marketplaces require an 18+ account holder almost everywhere. This chapter needs a parent to open and hold that account.",
-      "imagePath": "images/ecommerce/payment.jpg"
+      "imagePath": "images/ecommerce/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Physical-product business income and inventory tracking involve real legal and tax questions that depend on your country and product category. This needs a parent involved and, once income is real, a proper check with a tax authority or accountant.",
-      "imagePath": "images/ecommerce/accountingTax.jpg"
+      "imagePath": "images/ecommerce/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/ecommerce/growth.jpg"
+      "imagePath": "images/ecommerce/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }

@@ -49,6 +49,52 @@ export async function loadProgress() {
   return snap.data().progress || {};
 }
 
+/* ---------------- Last activity + streak ---------------- */
+
+// Record the most recently touched business/chapter, and update the daily streak.
+// A day "counts" once per calendar day (UTC date string), the first time this is called that day.
+export async function recordActivity({ businessId, chapterId, chapterTitle }) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  const existing = snap.exists() ? snap.data() : {};
+  const lastActiveDate = existing.lastActiveDate || null;
+  let streakCount = existing.streakCount || 0;
+  if (lastActiveDate !== today) {
+    if (lastActiveDate) {
+      const oneDayMs = 24 * 60 * 60 * 1000;
+      const gapDays = Math.round(
+        (new Date(today + "T00:00:00Z") - new Date(lastActiveDate + "T00:00:00Z")) / oneDayMs
+      );
+      streakCount = gapDays === 1 ? streakCount + 1 : 1;
+    } else {
+      streakCount = 1;
+    }
+  }
+  const lastActivity = { businessId, chapterId, chapterTitle, at: Date.now() };
+  await setDoc(
+    ref,
+    { lastActivity, lastActiveDate: today, streakCount },
+    { merge: true }
+  );
+  return { lastActivity, streakCount, lastActiveDate: today };
+}
+
+export async function loadActivity() {
+  const user = auth.currentUser;
+  if (!user) return null;
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return null;
+  const data = snap.data();
+  return {
+    lastActivity: data.lastActivity || null,
+    streakCount: data.streakCount || 0,
+    lastActiveDate: data.lastActiveDate || null,
+  };
+}
+
 /* ---------------- Terms agreement (replaces the old agreement doc) ---------------- */
 
 export async function saveAgreement(record) {

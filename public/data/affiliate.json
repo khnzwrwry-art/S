@@ -29,7 +29,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/idea.jpg"
+      "imagePath": "images/affiliate/idea.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "audience",
@@ -57,7 +58,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/audience.jpg"
+      "imagePath": "images/affiliate/audience.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "pricing",
@@ -85,7 +87,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/pricing.jpg"
+      "imagePath": "images/affiliate/pricing.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "equipmentCosts",
@@ -113,7 +116,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/equipmentCosts.jpg"
+      "imagePath": "images/affiliate/equipmentCosts.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "branding",
@@ -141,7 +145,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/branding.jpg"
+      "imagePath": "images/affiliate/branding.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "channels",
@@ -169,7 +174,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/channels.jpg"
+      "imagePath": "images/affiliate/channels.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "firstCustomer",
@@ -197,7 +203,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/firstCustomer.jpg"
+      "imagePath": "images/affiliate/firstCustomer.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "service",
@@ -225,7 +232,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/service.jpg"
+      "imagePath": "images/affiliate/service.jpg",
+      "estimatedMinutes": 15
     },
     {
       "id": "payment",
@@ -253,7 +261,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Most affiliate networks require an 18+ account holder. A parent applying and holding the account is the standard route under that age.",
-      "imagePath": "images/affiliate/payment.jpg"
+      "imagePath": "images/affiliate/payment.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "accountingTax",
@@ -281,7 +290,8 @@
       ],
       "parentNeeded": true,
       "parentNote": "Affiliate income is taxable in most places, including for minors, and the exact filing rules depend on your country. This needs a parent involved, and a real check with a tax authority once income is meaningful — see the Legal section in this app for country-specific starting notes.",
-      "imagePath": "images/affiliate/accountingTax.jpg"
+      "imagePath": "images/affiliate/accountingTax.jpg",
+      "estimatedMinutes": 20
     },
     {
       "id": "growth",
@@ -309,7 +319,8 @@
       ],
       "parentNeeded": false,
       "parentNote": "",
-      "imagePath": "images/affiliate/growth.jpg"
+      "imagePath": "images/affiliate/growth.jpg",
+      "estimatedMinutes": 15
     }
   ]
 }
