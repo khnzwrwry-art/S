@@ -11,6 +11,7 @@ import {
   getDoc,
   setDoc,
   updateDoc,
+  deleteDoc,
   deleteField,
   collection,
   addDoc,
@@ -147,6 +148,35 @@ export async function toggleCheer(postId, currentCheers) {
   } else {
     await updateDoc(ref, { [`cheers.${user.uid}`]: true });
   }
+}
+
+/* ---------------- Replies (posts/{postId}/replies) ---------------- */
+
+export async function postReply(postId, text) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Not signed in");
+  await addDoc(collection(db, "posts", postId, "replies"), {
+    authorId: user.uid,
+    authorName: user.displayName || "Someone in the community",
+    text,
+    createdAt: Date.now(),
+  });
+}
+
+// Live-subscribe to a post's replies, oldest first. Call the returned function to unsubscribe.
+export function watchReplies(postId, callback) {
+  const q = query(collection(db, "posts", postId, "replies"), orderBy("createdAt", "asc"));
+  return onSnapshot(q, (snap) => {
+    const replies = snap.docs.map((d) => ({ _id: d.id, ...d.data() }));
+    callback(replies);
+  });
+}
+
+// Only the reply's own author may delete it (also enforced by firestore.rules).
+export async function deleteReply(postId, replyId) {
+  const user = auth.currentUser;
+  if (!user) return;
+  await deleteDoc(doc(db, "posts", postId, "replies", replyId));
 }
 
 export { db };

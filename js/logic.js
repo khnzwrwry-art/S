@@ -964,7 +964,13 @@ async function sendChat(){
 
 /* ---------- feed ---------- */
 let feedPosts=[],feedFilter='all',feedSearch='',feedSort='new',feedLoaded=false,feedUnsub=null;
-function stopFeedWatch(){if(feedUnsub){try{feedUnsub();}catch(e){}feedUnsub=null;}feedLoaded=false;feedPosts=[];}
+let openReplies={},repliesCache={},replyUnsubs={};
+function stopFeedWatch(){
+ if(feedUnsub){try{feedUnsub();}catch(e){}feedUnsub=null;}
+ feedLoaded=false;feedPosts=[];
+ Object.keys(replyUnsubs).forEach(function(pid){try{replyUnsubs[pid]();}catch(e){}});
+ replyUnsubs={};repliesCache={};openReplies={};
+}
 async function startFeedWatch(){
  if(feedUnsub)return;
  try{
@@ -1039,15 +1045,26 @@ function renderFeedList(){
   var cat=DATA.find(function(c){return c.id===p.businessId;})||{name:'General',color:'#6C7BD1'};
   var nm=p.authorName||'Someone in the community';
   var mine=p.cheers&&currentUser&&p.cheers[currentUser.uid];
+  var rc=repliesCache[p._id];
+  var replyLabel=rc?('Replies ('+rc.length+')'):'Replies';
   return '<div class="panel"><div class="post-top">'+
   '<span class="post-tag" style="background:'+cat.color+'">'+cat.name+'</span>'+
   '<span class="muted-xs">'+esc(p.milestone||'')+'</span>'+
   '<span class="muted-xs ml">'+timeAgo(p.createdAt)+'</span></div>'+
   '<p style="font-size:14px;margin:0 0 10px">'+esc(p.text)+'</p>'+
   '<div class="post-foot"><span class="muted-xs">'+esc(nm)+'</span>'+
-  '<button class="pill cheer '+(mine?'on':'')+'" data-cheer="'+p._id+'">🔥 '+cheerCount(p)+'</button></div></div>';
+  '<button class="pill cheer '+(mine?'on':'')+'" data-cheer="'+p._id+'">🔥 '+cheerCount(p)+'</button></div>'+
+  '<button type="button" class="pill" style="margin-top:8px" data-toggle-replies="'+p._id+'">'+replyLabel+'</button>'+
+  '<div class="reply-thread" id="replyThread-'+p._id+'" '+(openReplies[p._id]?'':'hidden')+'>'+
+   '<div id="replyList-'+p._id+'"></div>'+
+   (currentUser?('<div class="reply-compose"><textarea id="replyInput-'+p._id+'" placeholder="Write a reply..."></textarea>'+
+   '<button type="button" class="btn-ghost" data-send-reply="'+p._id+'">Reply</button></div>'):'')+
+  '</div></div>';
  }).join('');
  el.querySelectorAll('[data-cheer]').forEach(function(b){b.onclick=function(){cheer(b.dataset.cheer);};});
+ el.querySelectorAll('[data-toggle-replies]').forEach(function(b){b.onclick=function(){toggleReplies(b.dataset.toggleReplies);};});
+ el.querySelectorAll('[data-send-reply]').forEach(function(b){b.onclick=function(){submitReply(b.dataset.sendReply);};});
+ Object.keys(openReplies).forEach(function(pid){if(openReplies[pid])renderReplyList(pid);});
 }
 async function cheer(id){
  if(!currentUser)return;
@@ -1056,6 +1073,50 @@ async function cheer(id){
   await loadFirestore();
   await firestoreModule.toggleCheer(id,p.cheers);
  }catch(e){}
+}
+function toggleReplies(postId){
+ openReplies[postId]=!openReplies[postId];
+ if(openReplies[postId]&&!replyUnsubs[postId]){
+  loadFirestore().then(function(){
+   replyUnsubs[postId]=firestoreModule.watchReplies(postId,function(replies){
+    repliesCache[postId]=replies;
+    renderReplyList(postId);
+    var pill=document.querySelector('[data-toggle-replies="'+postId+'"]');
+    if(pill)pill.textContent='Replies ('+replies.length+')';
+   });
+  }).catch(function(){
+   repliesCache[postId]=null;
+   renderReplyList(postId);
+  });
+ }
+ renderFeedList();
+}
+function renderReplyList(postId){
+ var el=document.getElementById('replyList-'+postId);if(!el)return;
+ var list=repliesCache[postId];
+ if(list===undefined){el.innerHTML='<p class="hint">Loading replies...</p>';return;}
+ if(list===null){el.innerHTML='<p class="hint">Replies are not available right now.</p>';return;}
+ if(!list.length){el.innerHTML='<p class="hint">No replies yet.</p>';return;}
+ el.innerHTML=list.map(function(r){
+  var mine=currentUser&&r.authorId===currentUser.uid;
+  return '<div class="reply-row"><b>'+esc(r.authorName||'Someone in the community')+'</b><span>'+esc(r.text)+'</span>'+
+  '<span class="muted-xs">'+timeAgo(r.createdAt)+'</span>'+
+  (mine?'<span class="link" data-delete-reply="'+postId+'|'+r._id+'" role="button" tabindex="0">Delete</span>':'')+
+  '</div>';
+ }).join('');
+ el.querySelectorAll('[data-delete-reply]').forEach(function(b){
+  b.onclick=async function(){
+   var parts=b.dataset.deleteReply.split('|');
+   try{await loadFirestore();await firestoreModule.deleteReply(parts[0],parts[1]);}catch(e){}
+  };
+ });
+}
+async function submitReply(postId){
+ var input=document.getElementById('replyInput-'+postId);if(!input)return;
+ var text=input.value.trim();
+ if(!text)return;
+ input.value='';
+ try{await loadFirestore();await firestoreModule.postReply(postId,text);}catch(e){}
 }
 function timeAgo(ts){
  if(!ts)return '';var m=Math.floor((Date.now()-ts)/60000);

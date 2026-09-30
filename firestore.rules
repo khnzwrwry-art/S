@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // One document per signed-in user: progress, agreement, lastActivity, streak.
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Community feed posts. Anyone signed in can read and create their own post.
+    // Updates are restricted to the cheers map so a post's own text/author can't
+    // be rewritten after the fact; only the author can delete their post.
+    match /posts/{postId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.authorId == request.auth.uid;
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cheers']);
+      allow delete: if request.auth != null
+        && resource.data.authorId == request.auth.uid;
+
+      // Replies to a post. Anyone signed in can read and add their own reply.
+      // Replies are immutable once posted; only the author can delete their own.
+      match /replies/{replyId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null
+          && request.resource.data.authorId == request.auth.uid;
+        allow update: if false;
+        allow delete: if request.auth != null
+          && resource.data.authorId == request.auth.uid;
+      }
+    }
+
+    // Leaderboard: one entry per user today, doc id == uid.
+    match /leaderboard/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
