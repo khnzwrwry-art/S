@@ -1163,11 +1163,17 @@ function timeAgo(ts){
 
 /* ---------- leaderboard ---------- */
 let leaderboardModule=null,leaderboardEntries=[],leaderboardLoaded=false,leaderboardUnsub=null,leaderboardSearch='';
+let myLeaderboardEntries=[],myEntriesLoaded=false,myEntriesUnsub=null;
 async function loadLeaderboard(){
  if(!leaderboardModule)leaderboardModule=await import('./leaderboard-integration.js');
  return leaderboardModule;
 }
-function stopLeaderboardWatch(){if(leaderboardUnsub){try{leaderboardUnsub();}catch(e){}leaderboardUnsub=null;}leaderboardLoaded=false;leaderboardEntries=[];}
+function stopLeaderboardWatch(){
+ if(leaderboardUnsub){try{leaderboardUnsub();}catch(e){}leaderboardUnsub=null;}
+ if(myEntriesUnsub){try{myEntriesUnsub();}catch(e){}myEntriesUnsub=null;}
+ leaderboardLoaded=false;leaderboardEntries=[];
+ myEntriesLoaded=false;myLeaderboardEntries=[];
+}
 function safeUrl(u){
  try{var p=new URL(u,window.location.href);if(p.protocol==='http:'||p.protocol==='https:')return p.href;}catch(e){}
  return null;
@@ -1184,6 +1190,43 @@ async function startLeaderboardWatch(){
   if(el)el.innerHTML='<p class="hint">The leaderboard is not available right now. Try again later.</p>';
  }
 }
+async function startMyEntriesWatch(){
+ if(myEntriesUnsub||!currentUser)return;
+ try{
+  await loadLeaderboard();
+  myEntriesUnsub=leaderboardModule.watchMyEntries(function(entries){
+   myLeaderboardEntries=entries;myEntriesLoaded=true;renderMyEntries();
+  });
+ }catch(e){
+  myEntriesLoaded=true;myLeaderboardEntries=[];renderMyEntries();
+ }
+}
+function renderMyEntries(){
+ var el=document.getElementById('lbMyEntries');if(!el)return;
+ if(!currentUser||!myEntriesLoaded||!myLeaderboardEntries.length){el.innerHTML='';return;}
+ el.innerHTML='<h2 class="section-label">Your entries</h2>'+myLeaderboardEntries.map(function(e){
+  return '<div class="panel"><div class="post-top"><span class="muted-xs"><b>'+esc(e.businessName||'')+'</b></span>'+
+  '<span class="muted-xs ml">'+esc(String(e.salesCount))+' sales</span></div>'+
+  '<div class="row-links"><span class="pill" data-edit-entry="'+esc(e.businessId)+'" role="button" tabindex="0">Edit</span>'+
+  '<span class="pill" data-delete-entry="'+esc(e.businessId)+'" role="button" tabindex="0">Delete</span></div></div>';
+ }).join('');
+ el.querySelectorAll('[data-edit-entry]').forEach(function(b){
+  b.onclick=function(){
+   var bizId=b.dataset.editEntry;
+   var entry=myLeaderboardEntries.find(function(x){return x.businessId===bizId;});
+   if(!entry)return;
+   document.getElementById('lbBiz').value=bizId;
+   document.getElementById('lbSales').value=entry.salesCount;
+   document.getElementById('lbProof').value=entry.proofUrl||'';
+   document.getElementById('lbBiz').scrollIntoView({behavior:'smooth',block:'center'});
+  };
+ });
+ el.querySelectorAll('[data-delete-entry]').forEach(function(b){
+  b.onclick=async function(){
+   try{await loadLeaderboard();await leaderboardModule.deleteLeaderboardEntry(b.dataset.deleteEntry);}catch(e){}
+  };
+ });
+}
 function renderLeaderboardList(){
  var el=document.getElementById('lbList');if(!el)return;
  if(!leaderboardLoaded){el.innerHTML='<p class="hint">Loading...</p>';return;}
@@ -1196,9 +1239,13 @@ function renderLeaderboardList(){
  el.innerHTML=list.map(function(e){
   var i=leaderboardEntries.indexOf(e);
   var proof=safeUrl(e.proofUrl);
-  return '<div class="panel"><div class="post-top">'+
+  var mine=currentUser&&e.ownerId===currentUser.uid;
+  var cls='panel'+(i<3?' highlight':'')+(mine?' accent':'');
+  return '<div class="'+cls+'"><div class="post-top">'+
   '<span class="post-tag" style="background:var(--accent)">#'+(i+1)+'</span>'+
   '<span class="muted-xs">'+esc(e.businessName||'')+'</span>'+
+  (mine?'<span class="chip" style="padding:2px 8px;font-size:10.5px">Your entry</span>':'')+
+  (proof?'<span class="chip" style="padding:2px 8px;font-size:10.5px">Proof linked</span>':'')+
   '<span class="muted-xs ml">self-reported</span></div>'+
   '<p style="font-size:14px;margin:0 0 6px"><b>'+esc(String(e.salesCount))+'</b> sales — '+esc(e.displayName||'Someone in the community')+'</p>'+
   (proof?'<a class="pill" target="_blank" rel="noopener" href="'+esc(proof)+'">View store</a>':'')+
@@ -1208,7 +1255,7 @@ function renderLeaderboardList(){
 function renderLeaderboard(){
  document.getElementById('view-leaderboard').innerHTML=
  '<div class="hero"><h1 class="sm">Leaderboard</h1><p>Active businesses and reported sales. Every number here is <b>self-reported</b> by the person who entered it, not independently verified — treat it as a rough signal, not a certified fact.</p></div>'+
- '<div class="panel"><h4>Add or update your entry</h4>'+
+ '<div class="panel"><h4>Add or update an entry</h4>'+
   '<p class="hint">'+esc(consentNotice('leaderboard','Your entry — including your name, business type, reported sales figure and any link you provide — will be visible to all signed-in users. Sales figures are self-reported and are not verified by us.'))+'</p>'+
   '<label class="field-label" for="lbBiz">Business type</label>'+
   '<select id="lbBiz">'+DATA.map(function(c){return '<option value="'+c.id+'">'+c.name+'</option>';}).join('')+'</select>'+
@@ -1216,8 +1263,9 @@ function renderLeaderboard(){
   '<input type="number" id="lbSales" placeholder="Sales so far" min="0">'+
   '<label class="field-label" for="lbProof">Link to your store (optional, adds credibility)</label>'+
   '<input type="text" id="lbProof" placeholder="https://...">'+
-  '<button class="btn-primary" id="lbSubmit">Update my entry</button>'+
+  '<button class="btn-primary" id="lbSubmit">Save entry</button>'+
   '<p class="hint" id="lbHint"></p></div>'+
+ '<div id="lbMyEntries"></div>'+
  '<label class="field-label" for="lbSearch">Search by business</label>'+
  '<input type="text" id="lbSearch" placeholder="Search the leaderboard..." value="'+esc(leaderboardSearch)+'">'+
  '<div id="lbList"><p class="hint">Loading...</p></div>';
@@ -1237,10 +1285,11 @@ function renderLeaderboard(){
     salesCount:sales,
     proofUrl:document.getElementById('lbProof').value.trim()
    });
-   hint.textContent='Updated.';
-  }catch(e){hint.textContent='Could not update — try again.';}
+   hint.textContent='Saved.';
+  }catch(e){hint.textContent='Could not save — try again.';}
  };
  startLeaderboardWatch();
+ startMyEntriesWatch();
 }
 
 /* ---------- init ---------- */
