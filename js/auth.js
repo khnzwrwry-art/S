@@ -12,6 +12,7 @@ import {
   onAuthStateChanged,
   browserLocalPersistence,
   setPersistence,
+  updateProfile,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
 // --- Your Launchpad Firebase project's public config ---
@@ -49,6 +50,12 @@ export async function signInWithApple() {
 
 export async function logout() {
   await signOut(auth);
+}
+
+// Change the signed-in user's display name (shown on the feed, leaderboard, profile circle, etc.)
+export async function updateDisplayName(name) {
+  if (!auth.currentUser) throw new Error("Not signed in");
+  await updateProfile(auth.currentUser, { displayName: name });
 }
 
 // Call this once on page load to react to auth state (persists across refreshes).

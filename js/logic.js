@@ -479,8 +479,44 @@ function renderHelp(){
 function renderProfile(){
  document.getElementById('view-profile').innerHTML=
  '<div class="hero"><h1 class="sm">Profile</h1></div>'+
+ '<div class="panel"><h4>Your name</h4>'+
+  '<label class="field-label" for="profileName">Display name</label>'+
+  '<input type="text" id="profileName" value="'+esc((currentUser&&currentUser.displayName)||'')+'">'+
+  '<button class="btn-primary" id="profileNameSave">Save name</button>'+
+  '<p class="hint" id="profileNameHint"></p></div>'+
+ '<div class="panel"><h4>Your country</h4>'+
+  '<label class="field-label" for="profileCountry">Country</label>'+
+  '<select id="profileCountry">'+countryOptions()+'</select>'+
+  '<p class="hint" id="profileCountryHint"></p></div>'+
  footerLinksHTML()+
  copyrightNotice();
+ document.getElementById('profileCountry').value=selectedCountry;
+ document.getElementById('profileCountry').onchange=async function(e){
+  selectedCountry=e.target.value||'other';
+  var hint=document.getElementById('profileCountryHint');
+  if(!currentUser)return;
+  hint.textContent='Saving...';
+  try{
+   await loadFirestore();
+   var rec=(await firestoreModule.loadAgreement())||{};
+   rec.country=selectedCountry;
+   await firestoreModule.saveAgreement(rec);
+   hint.textContent='Saved.';
+  }catch(err){hint.textContent='Could not save — try again.';}
+ };
+ document.getElementById('profileNameSave').onclick=async function(){
+  var hint=document.getElementById('profileNameHint');
+  var name=document.getElementById('profileName').value.trim();
+  if(!name){hint.textContent='Enter a name.';return;}
+  if(!authModule||!currentUser){hint.textContent='Not signed in.';return;}
+  hint.textContent='Saving...';
+  try{
+   await authModule.updateDisplayName(name);
+   currentUser.displayName=name;
+   hint.textContent='Saved.';
+   renderTopbarProfile();
+  }catch(e){hint.textContent='Could not save — try again.';}
+ };
  bindFooterLinks(document.getElementById('view-profile'));
 }
 
