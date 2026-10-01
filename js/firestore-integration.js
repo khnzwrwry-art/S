@@ -150,6 +150,19 @@ export async function toggleCheer(postId, currentCheers) {
   }
 }
 
+// Only the post's own author may edit or delete it (also enforced by firestore.rules).
+export async function editPost(postId, { text, milestone }) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Not signed in");
+  await updateDoc(doc(db, "posts", postId), { text, milestone });
+}
+
+export async function deletePost(postId) {
+  const user = auth.currentUser;
+  if (!user) return;
+  await deleteDoc(doc(db, "posts", postId));
+}
+
 /* ---------------- Replies (posts/{postId}/replies) ---------------- */
 
 export async function postReply(postId, text) {

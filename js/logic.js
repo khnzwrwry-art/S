@@ -999,13 +999,13 @@ async function sendChat(){
 }
 
 /* ---------- feed ---------- */
-let feedPosts=[],feedFilter='all',feedSearch='',feedSort='new',feedLoaded=false,feedUnsub=null;
+let feedPosts=[],feedFilter='all',feedSearch='',feedSort='new',feedLoaded=false,feedUnsub=null,editingPostId=null;
 let openReplies={},repliesCache={},replyUnsubs={};
 function stopFeedWatch(){
  if(feedUnsub){try{feedUnsub();}catch(e){}feedUnsub=null;}
  feedLoaded=false;feedPosts=[];
  Object.keys(replyUnsubs).forEach(function(pid){try{replyUnsubs[pid]();}catch(e){}});
- replyUnsubs={};repliesCache={};openReplies={};
+ replyUnsubs={};repliesCache={};openReplies={};editingPostId=null;
 }
 async function startFeedWatch(){
  if(feedUnsub)return;
@@ -1080,16 +1080,26 @@ function renderFeedList(){
  el.innerHTML=list.map(function(p){
   var cat=DATA.find(function(c){return c.id===p.businessId;})||{name:'General',color:'#6C7BD1'};
   var nm=p.authorName||'Someone in the community';
-  var mine=p.cheers&&currentUser&&p.cheers[currentUser.uid];
+  var cheered=p.cheers&&currentUser&&p.cheers[currentUser.uid];
+  var isAuthor=currentUser&&p.authorId===currentUser.uid;
+  var isEditing=editingPostId===p._id;
   var rc=repliesCache[p._id];
   var replyLabel=rc?('Replies ('+rc.length+')'):'Replies';
+  var bodyHtml=isEditing?
+   ('<textarea id="editPostInput-'+p._id+'">'+esc(p.text)+'</textarea>'+
+    '<div class="row-links"><button type="button" class="btn-ghost" data-save-post="'+p._id+'">Save</button>'+
+    '<button type="button" class="btn-ghost" data-cancel-edit-post="'+p._id+'">Cancel</button></div>')
+   :('<p style="font-size:14px;margin:0 0 10px">'+esc(p.text)+'</p>');
+  var authorLineHtml=esc(nm)+(isAuthor&&!isEditing?
+   ' · <span class="link" data-edit-post="'+p._id+'" role="button" tabindex="0">Edit</span>'+
+   ' · <span class="link" data-delete-post="'+p._id+'" role="button" tabindex="0">Delete</span>':'');
   return '<div class="panel"><div class="post-top">'+
   '<span class="post-tag" style="background:'+cat.color+'">'+cat.name+'</span>'+
   '<span class="muted-xs">'+esc(p.milestone||'')+'</span>'+
   '<span class="muted-xs ml">'+timeAgo(p.createdAt)+'</span></div>'+
-  '<p style="font-size:14px;margin:0 0 10px">'+esc(p.text)+'</p>'+
-  '<div class="post-foot"><span class="muted-xs">'+esc(nm)+'</span>'+
-  '<button class="pill cheer '+(mine?'on':'')+'" data-cheer="'+p._id+'">🔥 '+cheerCount(p)+'</button></div>'+
+  bodyHtml+
+  '<div class="post-foot"><span class="muted-xs">'+authorLineHtml+'</span>'+
+  '<button class="pill cheer '+(cheered?'on':'')+'" data-cheer="'+p._id+'">🔥 '+cheerCount(p)+'</button></div>'+
   '<button type="button" class="pill" style="margin-top:8px" data-toggle-replies="'+p._id+'">'+replyLabel+'</button>'+
   '<div class="reply-thread" id="replyThread-'+p._id+'" '+(openReplies[p._id]?'':'hidden')+'>'+
    '<div id="replyList-'+p._id+'"></div>'+
@@ -1100,7 +1110,22 @@ function renderFeedList(){
  el.querySelectorAll('[data-cheer]').forEach(function(b){b.onclick=function(){cheer(b.dataset.cheer);};});
  el.querySelectorAll('[data-toggle-replies]').forEach(function(b){b.onclick=function(){toggleReplies(b.dataset.toggleReplies);};});
  el.querySelectorAll('[data-send-reply]').forEach(function(b){b.onclick=function(){submitReply(b.dataset.sendReply);};});
+ el.querySelectorAll('[data-edit-post]').forEach(function(b){b.onclick=function(){editingPostId=b.dataset.editPost;renderFeedList();};});
+ el.querySelectorAll('[data-cancel-edit-post]').forEach(function(b){b.onclick=function(){editingPostId=null;renderFeedList();};});
+ el.querySelectorAll('[data-save-post]').forEach(function(b){b.onclick=function(){savePostEdit(b.dataset.savePost);};});
+ el.querySelectorAll('[data-delete-post]').forEach(function(b){b.onclick=function(){deletePostRow(b.dataset.deletePost);};});
  Object.keys(openReplies).forEach(function(pid){if(openReplies[pid])renderReplyList(pid);});
+}
+async function savePostEdit(postId){
+ var input=document.getElementById('editPostInput-'+postId);if(!input)return;
+ var text=input.value.trim();
+ if(!text)return;
+ var p=feedPosts.find(function(x){return x._id===postId;});
+ try{await loadFirestore();await firestoreModule.editPost(postId,{text:text,milestone:p?p.milestone:''});}catch(e){}
+ editingPostId=null;renderFeedList();
+}
+async function deletePostRow(postId){
+ try{await loadFirestore();await firestoreModule.deletePost(postId);}catch(e){}
 }
 async function cheer(id){
  if(!currentUser)return;
