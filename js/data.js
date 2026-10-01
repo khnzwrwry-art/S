@@ -378,23 +378,15 @@ const TERMS=[
 // ACCESSIBILITY_STATEMENT now lives in js/legal-pages.js (superseded this draft).
 
 const QUIZ=[
-{q:'How much can you invest right now?',opts:[
- {t:'Nothing — only time',s:{freelance:3,affiliate:3,content:2,social:3,courses:2,apps:2}},
- {t:'Up to $80',s:{pod:3,dropship:2,content:2,courses:2,apps:2}},
- {t:'More than $150',s:{dropship:3,ecommerce:3,pod:1,apps:1}}]},
 {q:'Which describes you best?',opts:[
  {t:'I create — filming, designing, editing',s:{content:3,pod:3,freelance:2}},
  {t:'I sell — I like persuading and talking',s:{dropship:3,social:3,affiliate:2}},
  {t:'I explain — people ask me things',s:{courses:3,affiliate:2,content:2}},
  {t:'I build — I like making things work',s:{apps:3,ecommerce:2,freelance:2}}]},
-{q:'How soon do you want your first dollar?',opts:[
- {t:'As fast as possible',s:{freelance:3,social:3,pod:1}},
- {t:'A few months is fine',s:{dropship:2,ecommerce:2,courses:2,pod:2,apps:2}},
- {t:'No rush, building long term',s:{content:3,affiliate:3,apps:2}}]},
-{q:'How much free time do you have weekly?',opts:[
- {t:'Under 5 hours',s:{affiliate:2,pod:2,courses:1}},
- {t:'5–10 hours',s:{freelance:3,social:3,content:2,apps:1}},
- {t:'More than 10 hours',s:{dropship:3,ecommerce:3,apps:3,content:2}}]},
+{q:'How much can you invest right now?',opts:[
+ {t:'Nothing — only time',s:{freelance:3,affiliate:3,content:2,social:3,courses:2,apps:2}},
+ {t:'Up to $80',s:{pod:3,dropship:2,content:2,courses:2,apps:2}},
+ {t:'More than $150',s:{dropship:3,ecommerce:3,pod:1,apps:1}}]},
 {q:'How old are you?',opts:[
  {t:'13–15',s:{content:3,affiliate:2,apps:3}},
  {t:'16–17',s:{freelance:3,social:3,pod:2,courses:2,dropship:2,apps:2}},

@@ -941,23 +941,36 @@ function renderTemplates(){
   renderContentTool('Write a full version of the "'+t.name+'" format for my business, following this structure: '+t.beats.map(function(b){return b[0]+' — '+b[1];}).join(' | '));
   showView('content');};});
 }
+const QUIZ_MATCH_LABELS=['Best match','Good match','Also fits'];
 function renderQuiz(){
- var html='<div class="hero"><h1 class="sm">Which business fits you?</h1><p>Five questions. No right answers — just a match to where you actually are.</p></div>';
+ var html='<div class="hero"><h1 class="sm">Which business fits you?</h1><p>Three questions. No right answers — just a match to where you actually are.</p></div>';
  QUIZ.forEach(function(q,qi){
   html+='<fieldset class="quiz-q"><legend><b>'+(qi+1)+'. '+q.q+'</b></legend>'+q.opts.map(function(o,oi){
-   return '<div class="quiz-opt '+(quizAnswers[qi]===oi?'sel':'')+'" data-q="'+qi+'" data-o="'+oi+'" role="button" tabindex="0">'+o.t+'</div>';}).join('')+'</fieldset>';
+   var sel=quizAnswers[qi]===oi;
+   return '<div class="quiz-opt '+(sel?'sel':'')+'" data-q="'+qi+'" data-o="'+oi+'" role="button" aria-pressed="'+sel+'" tabindex="0">'+o.t+'</div>';}).join('')+'</fieldset>';
  });
  html+='<button class="btn-primary" id="quizGo">Find my match</button><div id="quizResult"></div>';
  document.getElementById('view-quiz').innerHTML=html;
- document.querySelectorAll('.quiz-opt').forEach(function(el){el.onclick=function(){quizAnswers[parseInt(el.dataset.q,10)]=parseInt(el.dataset.o,10);renderQuiz();};});
+ document.querySelectorAll('.quiz-opt').forEach(function(el){
+  var fn=function(){quizAnswers[parseInt(el.dataset.q,10)]=parseInt(el.dataset.o,10);renderQuiz();};
+  el.onclick=fn;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fn();}};
+ });
  document.getElementById('quizGo').onclick=function(){
-  if(Object.keys(quizAnswers).length<QUIZ.length){document.getElementById('quizResult').innerHTML='<p class="hint">Answer all five questions to get a match.</p>';return;}
-  var scores={};
-  QUIZ.forEach(function(q,qi){var s=q.opts[quizAnswers[qi]].s;Object.keys(s).forEach(function(k){scores[k]=(scores[k]||0)+s[k];});});
+  if(Object.keys(quizAnswers).length<QUIZ.length){document.getElementById('quizResult').innerHTML='<p class="hint">Answer all three questions to get a match.</p>';return;}
+  var scores={},why={};
+  QUIZ.forEach(function(q,qi){
+   var opt=q.opts[quizAnswers[qi]],s=opt.s;
+   Object.keys(s).forEach(function(k){
+    scores[k]=(scores[k]||0)+s[k];
+    if(!why[k]||s[k]>why[k].value)why[k]={value:s[k],text:opt.t};
+   });
+  });
   var ranked=Object.keys(scores).sort(function(a,b){return scores[b]-scores[a];}).slice(0,3);
-  document.getElementById('quizResult').innerHTML='<h2 class="section-label">Your three best matches</h2>'+ranked.map(function(id,i){
+  document.getElementById('quizResult').innerHTML='<h2 class="section-label">Your matches</h2>'+ranked.map(function(id,i){
    var c=DATA.find(function(x){return x.id===id;});
-   return '<button class="card" data-cat="'+id+'" style="margin-bottom:9px"><span class="card-row"><span class="badge" style="background:'+c.color+'">'+svg(c.icon,19)+'</span><span class="age-tag">'+c.age+'</span></span><span><h3>'+(i+1)+'. '+c.name+'</h3><p>'+c.desc+'</p></span></button>';}).join('');
+   var reason=why[id]?why[id].text:'';
+   return '<button class="card" data-cat="'+id+'" style="margin-bottom:9px"><span class="card-row"><span class="badge" style="background:'+c.color+'">'+svg(c.icon,19)+'</span><span class="age-tag">'+QUIZ_MATCH_LABELS[i]+'</span></span>'+
+   '<span><h3>'+c.name+'</h3><p>'+c.desc+'</p>'+(reason?'<p class="muted-xs" style="margin-top:4px">Because you said: "'+esc(reason)+'"</p>':'')+'</span></button>';}).join('');
   document.querySelectorAll('#quizResult .card').forEach(function(el){el.onclick=function(){activeTab='intro';openCategory(el.dataset.cat);};});
  };
 }
