@@ -96,6 +96,22 @@ export async function loadActivity() {
   };
 }
 
+/* ---------------- Daily reminder preference (no sending logic yet — storage only) ---------------- */
+
+export async function saveReminderPref(enabled) {
+  const user = auth.currentUser;
+  if (!user) return;
+  await setDoc(doc(db, "users", user.uid), { dailyReminder: !!enabled }, { merge: true });
+}
+
+export async function loadReminderPref() {
+  const user = auth.currentUser;
+  if (!user) return false;
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return false;
+  return !!snap.data().dailyReminder;
+}
+
 /* ---------------- Terms agreement (replaces the old agreement doc) ---------------- */
 
 export async function saveAgreement(record) {

@@ -76,7 +76,7 @@ function saveProgress(){
 }
 function doneCount(id){return (progress[id]||[]).length;}
 let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
-let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all',openChapterIdx={};
+let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all',openChapterIdx={},dailyReminderPref=false;
 const CATEGORY_LABELS={online:'Online',services:'Services',creative:'Creative',food:'Food'};
 
 const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual','help','profile'];
@@ -211,6 +211,9 @@ async function syncActivity(){
   if(act){lastActivity=act.lastActivity||null;streakCount=act.streakCount||0;}
  }catch(e){}
 }
+async function syncReminderPref(){
+ try{dailyReminderPref=await firestoreModule.loadReminderPref();}catch(e){}
+}
 async function trackActivity(businessId,chapterId,chapterTitle){
  if(!firestoreModule)return;
  try{
@@ -234,7 +237,7 @@ async function initAuth(){
    await loadFirestore();
    rec=await firestoreModule.loadAgreement();
   }catch(e){}
-  if(rec){selectedCountry=rec.country||'';await syncRemoteProgress();await syncActivity();enterApp();}
+  if(rec){selectedCountry=rec.country||'';await syncRemoteProgress();await syncActivity();await syncReminderPref();enterApp();}
   else{renderGate();}
  });
 }
@@ -297,6 +300,7 @@ function renderGate(){
    await firestoreModule.saveAgreement({country:country,acceptedAt:Date.now(),email:currentUser.email||null});
    await syncRemoteProgress();
    await syncActivity();
+   await syncReminderPref();
    enterApp();
   }catch(e){
    hint.textContent='Could not save — check your connection and try again.';
@@ -476,6 +480,18 @@ function renderHelp(){
  var lg=document.querySelector('[data-go="legal"]');
  if(lg)lg.onclick=function(){renderLegal();showView('legal');};
 }
+function computeBadges(){
+ var anyStep=DATA.some(function(c){return doneCount(c.id)>0;});
+ var anyChapter=DATA.some(function(c){return chaptersDoneCount(c.id)>0;});
+ var anyBusinessDone=DATA.some(function(c){var ch=chaptersCache[c.id];return ch&&ch.chapters.length>0&&chaptersDoneCount(c.id)===ch.chapters.length;});
+ return [
+  {label:'First step',unlocked:anyStep},
+  {label:'First chapter',unlocked:anyChapter},
+  {label:'3-day streak',unlocked:streakCount>=3},
+  {label:'7-day streak',unlocked:streakCount>=7},
+  {label:'Business complete',unlocked:anyBusinessDone}
+ ];
+}
 function renderProfile(){
  document.getElementById('view-profile').innerHTML=
  '<div class="hero"><h1 class="sm">Profile</h1></div>'+
@@ -488,6 +504,16 @@ function renderProfile(){
   '<label class="field-label" for="profileCountry">Country</label>'+
   '<select id="profileCountry">'+countryOptions()+'</select>'+
   '<p class="hint" id="profileCountryHint"></p></div>'+
+ '<div class="panel"><h4>Your streak</h4>'+
+  '<p class="muted-sm">'+(streakCount>0?streakCount+'-day streak. Keep checking things off to grow it.':'No streak yet — check off one step in any business to start one.')+'</p></div>'+
+ '<div class="panel"><h4>Badges</h4>'+
+  '<div class="chip-row">'+computeBadges().map(function(b){
+   return '<span class="chip'+(b.unlocked?' active':'')+'" style="'+(b.unlocked?'':'opacity:.5')+'">'+esc(b.label)+(b.unlocked?'':' (locked)')+'</span>';
+  }).join('')+'</div></div>'+
+ '<div class="panel"><h4>Daily reminder</h4>'+
+  '<label class="agree"><input type="checkbox" id="reminderToggle" '+(dailyReminderPref?'checked':'')+'>'+
+  '<span>Remind me once a day to check in. This only saves your preference for now — Launchpad does not send notifications yet.</span></label>'+
+  '<p class="hint" id="reminderHint"></p></div>'+
  footerLinksHTML()+
  copyrightNotice();
  document.getElementById('profileCountry').value=selectedCountry;
@@ -516,6 +542,13 @@ function renderProfile(){
    hint.textContent='Saved.';
    renderTopbarProfile();
   }catch(e){hint.textContent='Could not save — try again.';}
+ };
+ document.getElementById('reminderToggle').onchange=async function(e){
+  var hint=document.getElementById('reminderHint');
+  dailyReminderPref=e.target.checked;
+  if(!currentUser)return;
+  try{await loadFirestore();await firestoreModule.saveReminderPref(dailyReminderPref);hint.textContent='Saved.';}
+  catch(err){hint.textContent='Could not save — try again.';}
  };
  bindFooterLinks(document.getElementById('view-profile'));
 }
