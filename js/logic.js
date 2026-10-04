@@ -1056,7 +1056,7 @@ function resizeImageFile(file){
   var img=new Image();
   img.onload=function(){
    URL.revokeObjectURL(objectUrl);
-   var maxSide=1024;
+   var maxSide=768;
    var w=img.naturalWidth,h=img.naturalHeight;
    if(!w||!h){reject(new Error('Could not read that image. Try a different file.'));return;}
    var scale=Math.min(1,maxSide/Math.max(w,h));
