@@ -10,7 +10,7 @@
 // EVERY [BRACKETED] PLACEHOLDER MUST BE FILLED IN BEFORE GOING LIVE.
 // Publishing with placeholders left in is itself a compliance failure.
 
-export const LAST_UPDATED = "September 2026";
+export const LAST_UPDATED = "October 2026";
 
 /* ============================================================
    PRIVACY POLICY
@@ -35,6 +35,8 @@ export const PRIVACY_POLICY = [
        "Usage data you create: which business-path steps you mark complete, your selected country, the fact and time " +
        "of your acceptance of these terms, posts you publish to the community feed, and any leaderboard entry you submit. " +
        "Content you type into the AI mentor or AI content tool, which is sent to Google's Gemini API to generate a response. " +
+       "Photos you attach to a message to the AI mentor: sent to an AI provider (Google Gemini, or Cloudflare Workers AI " +
+       "as an automatic fallback) so it can respond to what's in the photo. We do not store these photos ourselves. " +
        "Technical data: standard server logs (IP address, browser type, timestamps) kept by our hosting and infrastructure " +
        "providers for security and reliability. We do not run advertising trackers or third-party analytics." },
 
@@ -211,6 +213,7 @@ export const CONSENT_TEXT = {
 
   // Shown above the AI mentor and AI content tool inputs.
   aiTools:
-    "What you type here is sent to Google's Gemini API to generate a reply. Do not enter personal, financial, or " +
-    "confidential information. AI responses can be wrong — check anything important before acting on it.",
+    "What you type here is sent to Google's Gemini API to generate a reply. This includes any photos you attach. " +
+    "Do not enter personal, financial, or confidential information. AI responses can be wrong — check anything " +
+    "important before acting on it.",
 };

@@ -75,7 +75,7 @@ function saveProgress(){
  if(firestoreModule){firestoreModule.saveProgress(progress).catch(function(){});}
 }
 function doneCount(id){return (progress[id]||[]).length;}
-let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={};
+let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistory=[],quizAnswers={},chatAttachedImage=null;
 let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all',openChapterIdx={},dailyReminderPref=false;
 const CATEGORY_LABELS={online:'Online',services:'Services',creative:'Creative',food:'Food'};
 
@@ -1036,36 +1036,128 @@ async function generate(biz,task,box,btn){
  btn.disabled=false;
 }
 
+/* ---------- AI mentor: photo attach helpers ---------- */
+function photoNoticeSeen(){try{return localStorage.getItem('sg_photo_notice_seen')==='1';}catch(e){return true;}}
+function markPhotoNoticeSeen(){try{localStorage.setItem('sg_photo_notice_seen','1');}catch(e){}}
+function encodeAtQuality(canvas,qualities,resolve,reject){
+ var q=qualities.shift();
+ canvas.toBlob(function(blob){
+  if(!blob){reject(new Error('Could not process that image. Try a different file.'));return;}
+  var maxBytes=1.5*1024*1024;
+  if(blob.size<=maxBytes){resolve(blob);return;}
+  if(qualities.length===0){reject(new Error('This photo is too large even after compressing. Try a smaller or simpler photo.'));return;}
+  encodeAtQuality(canvas,qualities,resolve,reject);
+ },'image/jpeg',q);
+}
+function resizeImageFile(file){
+ return new Promise(function(resolve,reject){
+  if(!file||!file.type||file.type.indexOf('image/')!==0){reject(new Error('Please choose an image file.'));return;}
+  var objectUrl=URL.createObjectURL(file);
+  var img=new Image();
+  img.onload=function(){
+   URL.revokeObjectURL(objectUrl);
+   var maxSide=1024;
+   var w=img.naturalWidth,h=img.naturalHeight;
+   if(!w||!h){reject(new Error('Could not read that image. Try a different file.'));return;}
+   var scale=Math.min(1,maxSide/Math.max(w,h));
+   var tw=Math.max(1,Math.round(w*scale)),th=Math.max(1,Math.round(h*scale));
+   var canvas=document.createElement('canvas');
+   canvas.width=tw;canvas.height=th;
+   canvas.getContext('2d').drawImage(img,0,0,tw,th);
+   encodeAtQuality(canvas,[0.8,0.6,0.4],resolve,reject);
+  };
+  img.onerror=function(){URL.revokeObjectURL(objectUrl);reject(new Error('Could not read that image. Try a different file.'));};
+  img.src=objectUrl;
+ });
+}
+function blobToBase64(blob){
+ return new Promise(function(resolve,reject){
+  var reader=new FileReader();
+  reader.onload=function(){resolve(String(reader.result).split(',')[1]||'');};
+  reader.onerror=function(){reject(new Error('Could not process that image. Try a different file.'));};
+  reader.readAsDataURL(blob);
+ });
+}
+function clearAttachedPhoto(){
+ if(chatAttachedImage&&chatAttachedImage.previewUrl){try{URL.revokeObjectURL(chatAttachedImage.previewUrl);}catch(e){}}
+ chatAttachedImage=null;
+}
+function renderPhotoPreview(){
+ var el=document.getElementById('photoPreviewRow');if(!el)return;
+ if(!chatAttachedImage){el.innerHTML='';return;}
+ el.innerHTML='<div class="photo-preview"><img src="'+esc(chatAttachedImage.previewUrl)+'" alt="Attached photo">'+
+ '<button type="button" id="removePhotoBtn" aria-label="Remove photo">'+svg('<path d="M6 6l12 12M18 6L6 18"/>',14)+'</button></div>';
+ document.getElementById('removePhotoBtn').onclick=function(){clearAttachedPhoto();renderPhotoPreview();};
+}
+
 /* ---------- AI mentor ---------- */
 function renderAssistant(prefill){
  var sug=['How do I find my first client?','How much money do I need to start?','How do I market with no budget?','Nobody is buying — what now?'];
+ clearAttachedPhoto();
+ var noticeHtml='';
+ if(!photoNoticeSeen()){
+  noticeHtml='<p class="hint" id="photoNotice">Photos you attach are sent to an AI provider to get feedback. Don\'t send photos of faces, your school, your home, documents, or anything private.</p>';
+  markPhotoNoticeSeen();
+ }
  document.getElementById('view-assistant').innerHTML=
  '<div class="hero"><h1 class="sm">AI mentor</h1><p>Ask anything about your business — from the first step to the first customer. Direct answers, no promises.</p></div>'+
- '<p class="hint">'+esc(consentNotice('aiTools','What you type here is sent to an AI provider to generate a reply. Do not enter personal, financial, or confidential information. AI responses can be wrong — check anything important before acting on it.'))+'</p>'+
+ '<p class="hint">'+esc(consentNotice('aiTools','What you type here is sent to an AI provider to generate a reply. This includes any photos you attach. Do not enter personal, financial, or confidential information. AI responses can be wrong — check anything important before acting on it.'))+'</p>'+
  '<div class="chip-row" id="sugChips">'+sug.map(function(s){return '<button class="chip">'+s+'</button>';}).join('')+'</div>'+
  '<div class="chat-log" id="chatLog" aria-live="polite"></div>'+
- '<div class="chat-input-row"><textarea id="chatInput" aria-label="Message the mentor" placeholder="Ask anything...">'+esc(prefill||'')+'</textarea>'+
- '<button class="send-btn" id="sendBtn" aria-label="Send">'+svg('<path d="M4 20l16-8-16-8 3 8-3 8z"/>',18)+'</button></div>';
+ '<p class="hint" id="photoErrorHint"></p>'+
+ noticeHtml+
+ '<div id="photoPreviewRow"></div>'+
+ '<div class="chat-input-row">'+
+  '<button type="button" class="attach-btn" id="attachBtn" aria-label="Attach a photo">'+svg(I.cam,19)+'</button>'+
+  '<input type="file" accept="image/*" id="photoInput" hidden>'+
+  '<textarea id="chatInput" aria-label="Message the mentor" placeholder="Ask anything...">'+esc(prefill||'')+'</textarea>'+
+  '<button class="send-btn" id="sendBtn" aria-label="Send">'+svg('<path d="M4 20l16-8-16-8 3 8-3 8z"/>',18)+'</button>'+
+ '</div>';
  renderChatLog();
+ renderPhotoPreview();
  document.querySelectorAll('#sugChips .chip').forEach(function(c){c.onclick=function(){document.getElementById('chatInput').value=c.textContent;sendChat();};});
  document.getElementById('sendBtn').onclick=sendChat;
  document.getElementById('chatInput').onkeydown=function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}};
+ document.getElementById('attachBtn').onclick=function(){document.getElementById('photoInput').click();};
+ document.getElementById('photoInput').onchange=async function(e){
+  var file=e.target.files&&e.target.files[0];
+  e.target.value='';
+  if(!file)return;
+  var errEl=document.getElementById('photoErrorHint');errEl.textContent='';
+  try{
+   var blob=await resizeImageFile(file);
+   var base64=await blobToBase64(blob);
+   clearAttachedPhoto();
+   chatAttachedImage={mimeType:'image/jpeg',data:base64,previewUrl:URL.createObjectURL(blob)};
+   renderPhotoPreview();
+  }catch(err){errEl.textContent=(err&&err.message)||'Could not use that photo. Try a different one.';}
+ };
 }
 function renderChatLog(){
  var log=document.getElementById('chatLog');if(!log)return;
- log.innerHTML=chatHistory.map(function(m){return '<div class="msg '+(m.role==='user'?'user':'bot')+'">'+esc(m.content)+'</div>';}).join('');
+ log.innerHTML=chatHistory.map(function(m){
+  var photoHtml=m.photoPreview?('<img src="'+esc(m.photoPreview)+'" alt="Attached photo" class="msg-photo">'):'';
+  return '<div class="msg '+(m.role==='user'?'user':'bot')+'">'+photoHtml+(m.content?esc(m.content):'')+'</div>';
+ }).join('');
 }
 async function sendChat(){
  var input=document.getElementById('chatInput'),text=input.value.trim();
- if(!text)return;input.value='';
- chatHistory.push({role:'user',content:text});chatHistory.push({role:'assistant',content:'Thinking...'});renderChatLog();
+ if(!text&&!chatAttachedImage)return;
+ var sentImage=chatAttachedImage;
+ input.value='';
+ chatAttachedImage=null; // ownership of previewUrl transfers to the chat-history entry below; don't revoke it
+ renderPhotoPreview();
+ chatHistory.push({role:'user',content:text,photoPreview:sentImage?sentImage.previewUrl:null});
+ chatHistory.push({role:'assistant',content:sentImage?'Looking at your photo...':'Thinking...'});
+ renderChatLog();
  var btn=document.getElementById('sendBtn');btn.disabled=true;
  try{
   await loadWorker();
   var turns=chatHistory.slice(0,-1).map(function(m){return {role:m.role,content:m.content};});
+  if(sentImage&&turns.length){turns[turns.length-1].image={mimeType:sentImage.mimeType,data:sentImage.data};}
   var reply=await workerModule.mentorChat(turns);
   chatHistory[chatHistory.length-1].content=reply;
- }catch(e){chatHistory[chatHistory.length-1].content='Could not answer right now. Try again in a moment.';}
+ }catch(e){chatHistory[chatHistory.length-1].content=(e&&e.message)||'Could not answer right now. Try again in a moment.';}
  renderChatLog();btn.disabled=false;
 }
 
