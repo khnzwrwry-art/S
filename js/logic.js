@@ -80,8 +80,27 @@ let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all',openC
 const CATEGORY_LABELS={online:'Online',services:'Services',creative:'Creative',food:'Food'};
 
 const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual','help','profile'];
-function showView(n){VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});document.getElementById('backBtn').hidden=(n==='home');updateBottomNavActive(n);window.scrollTo(0,0);}
-function go(n){showView(n);if(n==='home')renderHome();}
+// Views reachable without being signed in and agreed — the legal/policy pages only,
+// so they can be read before signing up. Every other view requires appUnlocked.
+const PUBLIC_VIEWS=['terms','privacy','cookies','refunds','access'];
+let appUnlocked=false;
+function showView(n){
+ if(!appUnlocked&&PUBLIC_VIEWS.indexOf(n)===-1){exitToGate();return false;}
+ VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});
+ document.getElementById('backBtn').hidden=(n==='home');
+ updateBottomNavActive(n);
+ window.scrollTo(0,0);
+ return true;
+}
+function go(n){if(showView(n)&&n==='home')renderHome();}
+function exitToGate(){
+ appUnlocked=false;
+ document.getElementById('bottomNav').hidden=true;
+ document.getElementById('profileCircle').hidden=true;
+ document.getElementById('app').hidden=true;
+ renderGate();
+ document.getElementById('gate').hidden=false;
+}
 
 /* ---------- bottom nav (redesign stage 1) ---------- */
 const BOTTOM_NAV=[
@@ -223,6 +242,7 @@ async function trackActivity(businessId,chapterId,chapterTitle){
 }
 
 async function initAuth(){
+ document.getElementById('gate').innerHTML='<p class="hint" style="text-align:center;margin-top:40vh">Loading...</p>';
  try{
   authModule=await import('./auth.js');
  }catch(e){
@@ -231,17 +251,18 @@ async function initAuth(){
  }
  authModule.watchAuthState(async function(user){
   currentUser=user;
-  if(!user){stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;document.getElementById('profileCircle').hidden=true;renderGate();return;}
+  if(!user){appUnlocked=false;gateAgreeChecked=false;stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;document.getElementById('profileCircle').hidden=true;document.getElementById('app').hidden=true;renderGate();document.getElementById('gate').hidden=false;return;}
   var rec=null;
   try{
    await loadFirestore();
    rec=await firestoreModule.loadAgreement();
   }catch(e){}
   if(rec){selectedCountry=rec.country||'';await syncRemoteProgress();await syncActivity();await syncReminderPref();enterApp();}
-  else{renderGate();}
+  else{appUnlocked=false;document.getElementById('app').hidden=true;renderGate();document.getElementById('gate').hidden=false;}
  });
 }
 
+let gateAgreeChecked=false;
 function countryOptions(){
  return '<option value="">Select your country...</option>'+
   Object.keys(COUNTRY_LEGAL).filter(function(k){return k!=='other';}).map(function(k){
@@ -265,7 +286,7 @@ function renderGate(){
    '<label class="field-label">Sign in with</label>'+
    '<button class="auth-btn" id="googleBtn"><span class="ai">G</span> Continue with Google</button>'
   )+
-  '<label class="agree"><input type="checkbox" id="agreeBox">'+
+  '<label class="agree"><input type="checkbox" id="agreeBox" '+(gateAgreeChecked?'checked':'')+'>'+
    '<span>I confirm I am 13 or older (and, if under 18, that my parent or guardian agrees to my use of this service). '+
    'I have read and accept the <span class="link" id="gateTerms">Terms of Use</span> and the <span class="link" id="gatePrivacy">Privacy Policy</span>, '+
    'including that the guides, templates and content in this app are copyright protected and <b>may not be copied, republished, resold or used to build a competing product</b>.</span></label>'+
@@ -285,8 +306,11 @@ function renderGate(){
    try{await authModule.logout();}catch(e){}
   };
  }
- document.getElementById('gateTerms').onclick=function(){renderTerms();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('terms');};
- document.getElementById('gatePrivacy').onclick=function(){renderPrivacy();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('privacy');};
+ document.getElementById('gateTerms').onclick=function(e){e.preventDefault();e.stopPropagation();renderTerms();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('terms');};
+ document.getElementById('gatePrivacy').onclick=function(e){e.preventDefault();e.stopPropagation();renderPrivacy();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('privacy');};
+ document.getElementById('agreeBox').onchange=function(e){gateAgreeChecked=e.target.checked;};
+ document.getElementById('gateCountry').value=selectedCountry;
+ document.getElementById('gateCountry').onchange=function(e){selectedCountry=e.target.value;};
  document.getElementById('gateGo').onclick=async function(){
   var hint=document.getElementById('gateHint');
   var country=document.getElementById('gateCountry').value;
@@ -309,6 +333,7 @@ function renderGate(){
  };
 }
 function enterApp(){
+ appUnlocked=true;
  document.getElementById('gate').hidden=true;
  document.getElementById('app').hidden=false;
  renderBottomNav();
@@ -1366,6 +1391,10 @@ function renderLeaderboard(){
 /* ---------- init ---------- */
 document.getElementById('backBtn').onclick=function(){go('home');};
 document.getElementById('brandHome').onclick=function(){go('home');};
+// If this page is restored from the browser's back/forward cache (e.g. the
+// back button after signing out), force a full reload so the auth check
+// re-runs instead of showing a stale DOM snapshot from before sign-out.
+window.addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 initAuth();
 loadLegal().catch(function(){});
 // Businesses with a real chapters JSON at public/data/<id>.json.
@@ -1374,4 +1403,3 @@ DATA.map(function(c){return c.id;}).forEach(function(id){
   if(ch&&!document.getElementById('view-home').hidden)renderHome();
  });
 });
-showView('home');
