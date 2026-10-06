@@ -3,6 +3,9 @@
 // Requires: secret GEMINI_API_KEY, and a Workers AI binding named "AI".
 
 const ALLOWED_ORIGIN = "https://launchpad-e6280.web.app";
+const MAX_MESSAGE_LENGTH = 2000;
+const MAX_HISTORY_MESSAGES = 20;
+const MAX_FIELD_LENGTH = 2000; // for /content's biz/task fields
 
 const MENTOR_SYSTEM =
   "You are a business mentor for teenagers starting their first business. " +
@@ -93,6 +96,15 @@ async function generate(env, systemPrompt, messages) {
 
 export default {
   async fetch(request, env) {
+    // Reject anything whose Origin isn't our own site. This doesn't stop a determined
+    // attacker spoofing the header with curl, but it blocks casual direct hits to this URL
+    // and any other website's browser-side JS from using it — real browsers can't lie about
+    // Origin on a cross-origin request, so this holds for every normal (non-curl) caller.
+    const origin = request.headers.get("Origin");
+    if (origin !== ALLOWED_ORIGIN) {
+      return new Response("Forbidden", { status: 403, headers: corsHeaders() });
+    }
+
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: corsHeaders() });
     }
@@ -112,6 +124,20 @@ export default {
     try {
       if (url.pathname === "/mentor") {
         const raw = Array.isArray(body.messages) ? body.messages : [];
+        if (raw.length > MAX_HISTORY_MESSAGES) {
+          return Response.json(
+            { error: `Too many messages in one request (max ${MAX_HISTORY_MESSAGES}).` },
+            { status: 400, headers: corsHeaders() }
+          );
+        }
+        for (const m of raw) {
+          if (typeof m.content === "string" && m.content.length > MAX_MESSAGE_LENGTH) {
+            return Response.json(
+              { error: `A message is too long (max ${MAX_MESSAGE_LENGTH} characters).` },
+              { status: 400, headers: corsHeaders() }
+            );
+          }
+        }
         const messages = raw.map((m) => ({
           role: m.role === "assistant" ? "assistant" : "user",
           content: String(m.content || ""),
@@ -121,9 +147,17 @@ export default {
       }
 
       if (url.pathname === "/content") {
+        const biz = String(body.biz || "");
+        const task = String(body.task || "");
+        if (biz.length > MAX_FIELD_LENGTH || task.length > MAX_FIELD_LENGTH) {
+          return Response.json(
+            { error: `That's too long (max ${MAX_FIELD_LENGTH} characters).` },
+            { status: 400, headers: corsHeaders() }
+          );
+        }
         const prompt =
           `You write marketing content for teenagers running a small business.\n` +
-          `Business: "${body.biz || ""}".\nTask: ${body.task || ""}\n` +
+          `Business: "${biz}".\nTask: ${task}\n` +
           `Write in a direct, young tone. No hype, no preamble — go straight to the content.`;
         const text = await generate(
           env,

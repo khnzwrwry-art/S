@@ -2,50 +2,122 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // One document per signed-in user: progress, agreement, lastActivity, streak.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // One document per signed-in user: progress, agreement, lastActivity, streak, reminder pref.
+    // Written via several different partial (merge) updates from the app, so the key allow-list
+    // below covers every field any of those updates can introduce, and each is still type-checked
+    // when present.
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow write: if isSignedIn() && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(
+             ['progress', 'agreement', 'lastActivity', 'lastActiveDate', 'streakCount', 'dailyReminder', 'updatedAt']
+           )
+        && (!('progress' in request.resource.data) || request.resource.data.progress is map)
+        && (!('agreement' in request.resource.data) || request.resource.data.agreement is map)
+        && (!('lastActivity' in request.resource.data) || request.resource.data.lastActivity is map)
+        && (!('lastActiveDate' in request.resource.data) || request.resource.data.lastActiveDate is string)
+        && (!('streakCount' in request.resource.data)
+             || (request.resource.data.streakCount is int
+                 && request.resource.data.streakCount >= 0
+                 && request.resource.data.streakCount <= 100000))
+        && (!('dailyReminder' in request.resource.data) || request.resource.data.dailyReminder is bool);
     }
 
     // Community feed posts. Anyone signed in can read and create their own post.
-    // The author may edit any field of their own post (authorId must stay theirs);
-    // anyone else may only toggle the cheers map. Only the author can delete it.
+    // The author may edit their own post's content; anyone else may only toggle the cheers map.
+    // Only the author can delete it. createdAt must be the server's own clock (request.time) —
+    // a client can never set or change it, on create or on edit.
     match /posts/{postId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null
-        && request.resource.data.authorId == request.auth.uid;
-      allow update: if request.auth != null
+      allow read: if isSignedIn();
+
+      allow create: if isSignedIn()
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.keys().hasOnly(
+             ['authorId', 'authorName', 'businessId', 'milestone', 'text', 'cheers', 'createdAt']
+           )
+        && request.resource.data.authorName is string && request.resource.data.authorName.size() <= 50
+        && request.resource.data.businessId is string
+        && request.resource.data.milestone is string
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 1000
+        && request.resource.data.cheers is map
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if isSignedIn()
         && (
+          // the author editing their own post's own content — createdAt/authorId can't move
           (resource.data.authorId == request.auth.uid
-            && request.resource.data.authorId == resource.data.authorId)
-          || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cheers'])
+            && request.resource.data.authorId == resource.data.authorId
+            && request.resource.data.createdAt == resource.data.createdAt
+            && request.resource.data.keys().hasOnly(
+                 ['authorId', 'authorName', 'businessId', 'milestone', 'text', 'cheers', 'createdAt']
+               )
+            && request.resource.data.text is string
+            && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 1000)
+          ||
+          // anyone else may only toggle their own cheer flag
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cheers'])
         );
-      allow delete: if request.auth != null
-        && resource.data.authorId == request.auth.uid;
+
+      allow delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
 
       // Replies to a post. Anyone signed in can read and add their own reply.
-      // Replies are immutable once posted; only the author can delete their own.
+      // Replies are immutable once posted (no edits); only the author can delete their own.
       match /replies/{replyId} {
-        allow read: if request.auth != null;
-        allow create: if request.auth != null
-          && request.resource.data.authorId == request.auth.uid;
+        allow read: if isSignedIn();
+        allow create: if isSignedIn()
+          && request.resource.data.authorId == request.auth.uid
+          && request.resource.data.keys().hasOnly(['authorId', 'authorName', 'text', 'createdAt'])
+          && request.resource.data.authorName is string && request.resource.data.authorName.size() <= 50
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 500
+          && request.resource.data.createdAt == request.time;
         allow update: if false;
-        allow delete: if request.auth != null
-          && resource.data.authorId == request.auth.uid;
+        allow delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
       }
     }
 
     // Leaderboard: one entry per user PER BUSINESS, doc id == `${uid}_${businessId}`.
     match /leaderboard/{entryId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null
+      allow read: if isSignedIn();
+
+      allow create: if isSignedIn()
         && request.resource.data.ownerId == request.auth.uid
-        && entryId == request.auth.uid + '_' + request.resource.data.businessId;
-      allow update: if request.auth != null
+        && entryId == request.auth.uid + '_' + request.resource.data.businessId
+        && request.resource.data.keys().hasOnly(
+             ['ownerId', 'displayName', 'businessId', 'businessName', 'salesCount', 'proofUrl', 'selfReported', 'updatedAt']
+           )
+        && request.resource.data.displayName is string && request.resource.data.displayName.size() <= 50
+        && request.resource.data.businessId is string
+        && request.resource.data.businessName is string
+        && request.resource.data.salesCount is number
+        && request.resource.data.salesCount >= 0 && request.resource.data.salesCount <= 1000000
+        && (request.resource.data.proofUrl == null
+             || (request.resource.data.proofUrl is string
+                 && request.resource.data.proofUrl.size() <= 300
+                 && request.resource.data.proofUrl.matches('^https://.*')))
+        && request.resource.data.selfReported is bool;
+
+      allow update: if isSignedIn()
         && request.resource.data.ownerId == request.auth.uid
-        && resource.data.ownerId == request.auth.uid;
-      allow delete: if request.auth != null
-        && resource.data.ownerId == request.auth.uid;
+        && resource.data.ownerId == request.auth.uid
+        && entryId == request.auth.uid + '_' + request.resource.data.businessId
+        && request.resource.data.keys().hasOnly(
+             ['ownerId', 'displayName', 'businessId', 'businessName', 'salesCount', 'proofUrl', 'selfReported', 'updatedAt']
+           )
+        && request.resource.data.displayName is string && request.resource.data.displayName.size() <= 50
+        && request.resource.data.salesCount is number
+        && request.resource.data.salesCount >= 0 && request.resource.data.salesCount <= 1000000
+        && (request.resource.data.proofUrl == null
+             || (request.resource.data.proofUrl is string
+                 && request.resource.data.proofUrl.size() <= 300
+                 && request.resource.data.proofUrl.matches('^https://.*')));
+
+      allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
     }
 
     match /{document=**} {

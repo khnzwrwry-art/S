@@ -1,5 +1,5 @@
 function svg(p,s){s=s||20;return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';}
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function yt(q){return 'https://www.youtube.com/results?search_query='+encodeURIComponent(q);}
 
 /* ---------- flow diagrams ---------- */
@@ -559,6 +559,7 @@ function renderProfile(){
   var hint=document.getElementById('profileNameHint');
   var name=document.getElementById('profileName').value.trim();
   if(!name){hint.textContent='Enter a name.';return;}
+  if(name.length>50){hint.textContent='Keep your name under 50 characters.';return;}
   if(!authModule||!currentUser){hint.textContent='Not signed in.';return;}
   hint.textContent='Saving...';
   try{
@@ -675,7 +676,7 @@ function chaptersHtml(cat,chData){
    '<div class="mini-progress" style="margin:8px 0 14px"><i style="width:'+pct+'%;background:'+cat.color+'"></i></div>'+
    '<div class="dark-card" style="cursor:default"><h4>Your goal</h4><p>'+esc(ch.goal)+'</p></div>'+
    '<p class="muted-sm" style="margin:12px 0"><b>Why this matters:</b> each chapter builds on the one before it — skipping ahead usually means redoing the work later.</p>'+
-   '<div class="chapter-image"><img src="'+esc(ch.imagePath)+'" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'+
+   '<div class="chapter-image"><img class="chapter-image-img" src="'+esc(ch.imagePath)+'" alt="" loading="lazy">'+
    '<div class="chapter-image-fallback" style="display:none;background:'+cat.color+'">'+svg(cat.icon,26)+'</div></div>'+
    '<h4 style="margin:14px 0 4px">Step by step</h4>'+explanationHtml+
    '<div class="panel" style="margin-top:12px"><h4>Example</h4><p>'+esc(ch.example)+'</p></div>'+
@@ -693,6 +694,9 @@ function chaptersHtml(cat,chData){
 function bindCategory(){
  var cat=activeCat;
  var chData=chaptersCache[cat.id];
+ document.querySelectorAll('.chapter-image-img').forEach(function(img){
+  img.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='flex';};
+ });
  var b=document.getElementById('startSteps');if(b)b.onclick=function(){activeTab='steps';renderCategory();};
  var a=document.getElementById('askCat');if(a)a.onclick=function(){renderAssistant('I want to start '+cat.name+'. Where do I begin, and what is the most common mistake?');showView('assistant');};
  var cc=document.getElementById('continueChapterCard');
@@ -1216,7 +1220,7 @@ function renderComposer(){
 async function submitPost(){
  var hint=document.getElementById('postHint'),text=document.getElementById('postText').value.trim();
  if(text.length<5){hint.textContent='Write at least a sentence.';return;}
- if(text.length>600){hint.textContent='Keep it under 600 characters.';return;}
+ if(text.length>1000){hint.textContent='Keep it under 1000 characters.';return;}
  var btn=document.getElementById('postBtn');btn.disabled=true;hint.textContent='Posting...';
  try{
   await loadFirestore();
@@ -1250,6 +1254,7 @@ function renderFeedList(){
   var replyLabel=rc?('Replies ('+rc.length+')'):'Replies';
   var bodyHtml=isEditing?
    ('<textarea id="editPostInput-'+p._id+'">'+esc(p.text)+'</textarea>'+
+    '<p class="hint" id="editPostHint-'+p._id+'"></p>'+
     '<div class="row-links"><button type="button" class="btn-ghost" data-save-post="'+p._id+'">Save</button>'+
     '<button type="button" class="btn-ghost" data-cancel-edit-post="'+p._id+'">Cancel</button></div>')
    :('<p style="font-size:14px;margin:0 0 10px">'+esc(p.text)+'</p>');
@@ -1267,7 +1272,8 @@ function renderFeedList(){
   '<div class="reply-thread" id="replyThread-'+p._id+'" '+(openReplies[p._id]?'':'hidden')+'>'+
    '<div id="replyList-'+p._id+'"></div>'+
    (currentUser?('<div class="reply-compose"><textarea id="replyInput-'+p._id+'" placeholder="Write a reply..."></textarea>'+
-   '<button type="button" class="btn-ghost" data-send-reply="'+p._id+'">Reply</button></div>'):'')+
+   '<button type="button" class="btn-ghost" data-send-reply="'+p._id+'">Reply</button></div>'+
+   '<p class="hint" id="replyHint-'+p._id+'"></p>'):'')+
   '</div></div>';
  }).join('');
  el.querySelectorAll('[data-cheer]').forEach(function(b){b.onclick=function(){cheer(b.dataset.cheer);};});
@@ -1281,10 +1287,12 @@ function renderFeedList(){
 }
 async function savePostEdit(postId){
  var input=document.getElementById('editPostInput-'+postId);if(!input)return;
+ var hint=document.getElementById('editPostHint-'+postId);
  var text=input.value.trim();
- if(!text)return;
+ if(!text){if(hint)hint.textContent='Write something first.';return;}
+ if(text.length>1000){if(hint)hint.textContent='Keep it under 1000 characters.';return;}
  var p=feedPosts.find(function(x){return x._id===postId;});
- try{await loadFirestore();await firestoreModule.editPost(postId,{text:text,milestone:p?p.milestone:''});}catch(e){}
+ try{await loadFirestore();await firestoreModule.editPost(postId,{text:text,milestone:p?p.milestone:''});}catch(e){if(hint)hint.textContent='Could not save — try again.';return;}
  editingPostId=null;renderFeedList();
 }
 async function deletePostRow(postId){
@@ -1337,10 +1345,12 @@ function renderReplyList(postId){
 }
 async function submitReply(postId){
  var input=document.getElementById('replyInput-'+postId);if(!input)return;
+ var hint=document.getElementById('replyHint-'+postId);
  var text=input.value.trim();
  if(!text)return;
- input.value='';
- try{await loadFirestore();await firestoreModule.postReply(postId,text);}catch(e){}
+ if(text.length>500){if(hint)hint.textContent='Keep it under 500 characters.';return;}
+ input.value='';if(hint)hint.textContent='';
+ try{await loadFirestore();await firestoreModule.postReply(postId,text);}catch(e){if(hint)hint.textContent='Could not post — try again.';}
 }
 function timeAgo(ts){
  if(!ts)return '';var m=Math.floor((Date.now()-ts)/60000);
@@ -1363,7 +1373,7 @@ function stopLeaderboardWatch(){
  myEntriesLoaded=false;myLeaderboardEntries=[];
 }
 function safeUrl(u){
- try{var p=new URL(u,window.location.href);if(p.protocol==='http:'||p.protocol==='https:')return p.href;}catch(e){}
+ try{var p=new URL(u,window.location.href);if(p.protocol==='https:')return p.href;}catch(e){}
  return null;
 }
 async function startLeaderboardWatch(){
@@ -1436,7 +1446,7 @@ function renderLeaderboardList(){
   (proof?'<span class="chip" style="padding:2px 8px;font-size:10.5px">Proof linked</span>':'')+
   '<span class="muted-xs ml">self-reported</span></div>'+
   '<p style="font-size:14px;margin:0 0 6px"><b>'+esc(String(e.salesCount))+'</b> sales — '+esc(e.displayName||'Someone in the community')+'</p>'+
-  (proof?'<a class="pill" target="_blank" rel="noopener" href="'+esc(proof)+'">View store</a>':'')+
+  (proof?'<a class="pill" target="_blank" rel="noopener noreferrer" href="'+esc(proof)+'">View store</a>':'')+
   '</div>';
  }).join('');
 }
@@ -1461,7 +1471,12 @@ function renderLeaderboard(){
  document.getElementById('lbSubmit').onclick=async function(){
   var hint=document.getElementById('lbHint');
   var sales=parseInt(document.getElementById('lbSales').value,10);
-  if(!Number.isFinite(sales)||sales<0){hint.textContent='Enter a sales count of 0 or more.';return;}
+  if(!Number.isFinite(sales)||sales<0||sales>1000000){hint.textContent='Enter a sales count between 0 and 1,000,000.';return;}
+  var proofUrl=document.getElementById('lbProof').value.trim();
+  if(proofUrl){
+   if(proofUrl.length>300){hint.textContent='That link is too long (max 300 characters).';return;}
+   if(!safeUrl(proofUrl)){hint.textContent='The store link must start with https://';return;}
+  }
   var bizId=document.getElementById('lbBiz').value;
   var biz=DATA.find(function(c){return c.id===bizId;});
   hint.textContent='Saving...';
@@ -1471,7 +1486,7 @@ function renderLeaderboard(){
     businessId:bizId,
     businessName:biz?biz.name:bizId,
     salesCount:sales,
-    proofUrl:document.getElementById('lbProof').value.trim()
+    proofUrl:proofUrl
    });
    hint.textContent='Saved.';
   }catch(e){hint.textContent='Could not save — try again.';}

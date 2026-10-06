@@ -19,6 +19,7 @@ import {
   query,
   orderBy,
   limit,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import { auth } from "./auth.js"; // reuse the initialized app's auth instance
 
@@ -130,6 +131,18 @@ export async function loadAgreement() {
 
 /* ---------------- Community feed ---------------- */
 
+// Timestamps are written with serverTimestamp() (required by firestore.rules: createdAt must
+// equal request.time) so a client can never spoof a post or reply's creation time. That means
+// reading them back needs converting to plain milliseconds for display (timeAgo() etc.) — and,
+// for an instant after posting, Firestore's local cache may briefly report the pending server
+// timestamp as null before the round trip resolves, which toMillis() below passes through as null.
+function toMillis(v) {
+  if (v == null) return null;
+  if (typeof v === "number") return v; // older documents written before this change
+  if (typeof v.toMillis === "function") return v.toMillis();
+  return null;
+}
+
 // Post a new update to the feed
 export async function postToFeed({ businessId, milestone, text }) {
   const user = auth.currentUser;
@@ -141,7 +154,7 @@ export async function postToFeed({ businessId, milestone, text }) {
     milestone,
     text,
     cheers: {},
-    createdAt: Date.now(),
+    createdAt: serverTimestamp(),
   });
 }
 
@@ -149,7 +162,7 @@ export async function postToFeed({ businessId, milestone, text }) {
 export function watchFeed(callback) {
   const q = query(collection(db, "posts"), orderBy("createdAt", "desc"), limit(100));
   return onSnapshot(q, (snap) => {
-    const posts = snap.docs.map((d) => ({ _id: d.id, ...d.data() }));
+    const posts = snap.docs.map((d) => ({ _id: d.id, ...d.data(), createdAt: toMillis(d.data().createdAt) }));
     callback(posts);
   });
 }
@@ -188,7 +201,7 @@ export async function postReply(postId, text) {
     authorId: user.uid,
     authorName: user.displayName || "Someone in the community",
     text,
-    createdAt: Date.now(),
+    createdAt: serverTimestamp(),
   });
 }
 
@@ -196,7 +209,7 @@ export async function postReply(postId, text) {
 export function watchReplies(postId, callback) {
   const q = query(collection(db, "posts", postId, "replies"), orderBy("createdAt", "asc"));
   return onSnapshot(q, (snap) => {
-    const replies = snap.docs.map((d) => ({ _id: d.id, ...d.data() }));
+    const replies = snap.docs.map((d) => ({ _id: d.id, ...d.data(), createdAt: toMillis(d.data().createdAt) }));
     callback(replies);
   });
 }
