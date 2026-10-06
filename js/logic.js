@@ -643,24 +643,29 @@ async function runAccountDeletion(){
  confirmBtn.disabled=true;confirmBtn.textContent='Deleting...';
  if(cancelBtn)cancelBtn.hidden=true;
  if(input)input.disabled=true;
+ var step='confirming with Google';
  try{
   hint.textContent='Confirming with Google...';
   await authModule.reauthenticateWithGoogle();
+  step='deleting your leaderboard entries';
   hint.textContent='Deleting your leaderboard entries...';
   await loadLeaderboard();
   await leaderboardModule.deleteAllMyLeaderboardEntries();
+  step='deleting your posts and replies';
   hint.textContent='Deleting your posts and replies...';
   await loadFirestore();
   await firestoreModule.deleteMyFeedContent();
+  step='deleting your profile';
   hint.textContent='Deleting your profile...';
   await firestoreModule.deleteMyUserDoc();
+  step='deleting your account';
   hint.textContent='Deleting your account...';
   accountDeletedMessage=true;
   await authModule.deleteAccount();
   // authModule's watchAuthState listener fires with user=null from here and
   // shows the gate with the "account deleted" message — nothing else to do.
  }catch(e){
-  hint.textContent='Something went wrong and the deletion did not finish ('+(e&&e.message?e.message:'please try again')+'). Nothing left is guaranteed to still be intact — try again.';
+  hint.textContent='Failed while '+step+': '+(e&&e.message?e.message:'unknown error')+'. Nothing left is guaranteed to still be intact — try again.';
   confirmBtn.disabled=false;confirmBtn.textContent='Try again';
   if(cancelBtn)cancelBtn.hidden=false;
   if(input)input.disabled=false;
