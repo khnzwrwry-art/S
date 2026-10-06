@@ -75,6 +75,14 @@ async function test(name, fn) {
     await assertFails(setDoc(doc(alice.firestore(), 'users/alice'), { streakCount: 999999 }, { merge: true }));
   });
 
+  await test('bob cannot delete alice\'s user doc', async () => {
+    await assertFails(deleteDoc(doc(bob.firestore(), 'users/alice')));
+  });
+
+  await test('alice CAN delete her own user doc (account deletion)', async () => {
+    await assertSucceeds(deleteDoc(doc(alice.firestore(), 'users/alice')));
+  });
+
   console.log('\n--- posts/{postId} ---');
 
   await test('signed-out cannot create a post', async () => {

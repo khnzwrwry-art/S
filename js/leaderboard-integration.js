@@ -18,6 +18,7 @@ import {
   orderBy,
   limit,
   onSnapshot,
+  getDocs,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import { app, auth } from "./auth.js";
 
@@ -54,6 +55,25 @@ export async function deleteLeaderboardEntry(businessId) {
   const user = auth.currentUser;
   if (!user) return;
   await deleteDoc(doc(db, "leaderboard", entryId(user.uid, businessId)));
+}
+
+// Deletes every leaderboard entry this user owns (one per business they
+// reported sales for). Used by account deletion. Safe to call more than
+// once — finds and deletes whatever still matches.
+export async function deleteAllMyLeaderboardEntries() {
+  const user = auth.currentUser;
+  if (!user) return;
+  const snap = await getDocs(query(collection(db, "leaderboard"), where("ownerId", "==", user.uid)));
+  for (const d of snap.docs) await deleteDoc(d.ref);
+}
+
+// One-off read of all of this user's leaderboard entries, for the
+// "Download my data" export (watchMyEntries() above is live-subscribe only).
+export async function getMyLeaderboardEntries() {
+  const user = auth.currentUser;
+  if (!user) return [];
+  const snap = await getDocs(query(collection(db, "leaderboard"), where("ownerId", "==", user.uid)));
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
 // Live-subscribe to all of the current user's entries (one per business).

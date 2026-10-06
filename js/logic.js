@@ -79,7 +79,7 @@ let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistor
 let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all',openChapterIdx={},dailyReminderPref=false;
 const CATEGORY_LABELS={online:'Online',services:'Services',creative:'Creative',food:'Food'};
 
-const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual','help','profile'];
+const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual','help','profile','deleteAccount'];
 // Views reachable without being signed in and agreed — the legal/policy pages only,
 // so they can be read before signing up. Every other view requires appUnlocked.
 const PUBLIC_VIEWS=['terms','privacy','cookies','refunds','access'];
@@ -131,6 +131,7 @@ function updateBottomNavActive(viewName){
 
 /* ---------- auth gate (Firebase Authentication) ---------- */
 let authModule=null, firestoreModule=null, workerModule=null, legalModule=null, currentUser=null, selectedCountry='';
+let accountDeletedMessage=false;
 
 async function loadFirestore(){
  if(!firestoreModule)firestoreModule=await import('./firestore-integration.js');
@@ -272,6 +273,9 @@ function countryOptions(){
 
 function renderGate(){
  var g=document.getElementById('gate');
+ var deletedLine = accountDeletedMessage ?
+  '<p class="hint" style="margin-bottom:14px;text-align:center;color:var(--danger)">Your account has been deleted.</p>' : '';
+ accountDeletedMessage=false;
  var signedInLine = currentUser ?
   '<p class="hint" style="margin-bottom:14px">Signed in as <b>'+esc(currentUser.displayName||currentUser.email||'your Google account')+'</b> · <span class="link" id="gateSwitch">Not you?</span></p>' : '';
  g.innerHTML=
@@ -279,6 +283,7 @@ function renderGate(){
   '<div class="brand-mark" style="width:64px;height:64px;margin:0 auto 16px"><img src="icons/icon-192.png" alt=""></div>'+
   '<h1 style="font-size:24px;text-align:center;margin-bottom:8px">Startlet</h1>'+
   '<p style="text-align:center;color:var(--text-muted);font-size:14px;margin:0 0 22px">Start a real business, one step at a time.</p>'+
+  deletedLine+
   signedInLine+
   '<label class="field-label" for="gateCountry">Your country <span style="color:#E0A020">*</span></label>'+
   '<select id="gateCountry">'+countryOptions()+'</select>'+
@@ -539,6 +544,13 @@ function renderProfile(){
   '<label class="agree"><input type="checkbox" id="reminderToggle" '+(dailyReminderPref?'checked':'')+'>'+
   '<span>Remind me once a day to check in. This only saves your preference for now — Startlet does not send notifications yet.</span></label>'+
   '<p class="hint" id="reminderHint"></p></div>'+
+ '<div class="panel"><h4>Your data</h4>'+
+  '<p class="muted-sm">Download a copy of everything Startlet stores about you — your profile, progress, feed posts, replies and leaderboard entries — as a single file.</p>'+
+  '<button class="btn-ghost full" id="profileDownloadData">Download my data</button>'+
+  '<p class="hint" id="profileDownloadHint"></p></div>'+
+ '<div class="panel danger"><h4>Delete your account</h4>'+
+  '<p class="muted-sm">Permanently delete your account and everything in it. This cannot be undone.</p>'+
+  '<button class="btn-danger" id="profileDeleteAccount">Delete my account</button></div>'+
  footerLinksHTML()+
  copyrightNotice();
  document.getElementById('profileCountry').value=selectedCountry;
@@ -576,7 +588,82 @@ function renderProfile(){
   try{await loadFirestore();await firestoreModule.saveReminderPref(dailyReminderPref);hint.textContent='Saved.';}
   catch(err){hint.textContent='Could not save — try again.';}
  };
+ document.getElementById('profileDownloadData').onclick=async function(){
+  var hint=document.getElementById('profileDownloadHint');
+  if(!currentUser){hint.textContent='Not signed in.';return;}
+  hint.textContent='Preparing your download...';
+  try{
+   await loadFirestore();await loadLeaderboard();
+   var data=await firestoreModule.exportMyData();
+   data.leaderboardEntries=await leaderboardModule.getMyLeaderboardEntries();
+   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+   var url=URL.createObjectURL(blob);
+   var a=document.createElement('a');
+   a.href=url;a.download='startlet-my-data.json';
+   document.body.appendChild(a);a.click();document.body.removeChild(a);
+   setTimeout(function(){URL.revokeObjectURL(url);},1000);
+   hint.textContent='Download started.';
+  }catch(e){hint.textContent='Could not prepare your download — try again.';}
+ };
+ document.getElementById('profileDeleteAccount').onclick=function(){renderDeleteAccount();showView('deleteAccount');};
  bindFooterLinks(document.getElementById('view-profile'));
+}
+
+/* ---------- account deletion ---------- */
+function renderDeleteAccount(){
+ document.getElementById('view-deleteAccount').innerHTML=
+ '<div class="hero"><h1 class="sm">Delete your account</h1></div>'+
+ '<div class="panel danger"><h4>This cannot be undone</h4>'+
+  '<p class="muted-sm">Deleting your account permanently removes:</p>'+
+  '<ul class="muted-sm" style="margin:8px 0 0 18px;padding:0">'+
+   '<li>Your profile, saved progress, streak and badges</li>'+
+   '<li>All your leaderboard entries</li>'+
+   '<li>All your feed posts and replies</li>'+
+   '<li>Your sign-in itself — you will need to create a new account to use Startlet again</li>'+
+  '</ul></div>'+
+ '<div class="panel"><h4>Confirm with Google</h4>'+
+  '<p class="muted-sm">You will be asked to sign in with Google again first, to confirm this is really you.</p></div>'+
+ '<label class="field-label" for="deleteConfirmInput">Type DELETE to confirm</label>'+
+ '<input type="text" id="deleteConfirmInput" autocomplete="off" autocapitalize="off" spellcheck="false">'+
+ '<button class="btn-danger" id="deleteConfirmBtn" disabled>Permanently delete my account</button>'+
+ '<button class="btn-ghost full" id="deleteCancelBtn">Cancel</button>'+
+ '<p class="hint" id="deleteHint"></p>';
+ var input=document.getElementById('deleteConfirmInput');
+ var confirmBtn=document.getElementById('deleteConfirmBtn');
+ input.oninput=function(){confirmBtn.disabled=(input.value!=='DELETE');};
+ document.getElementById('deleteCancelBtn').onclick=function(){renderProfile();showView('profile');};
+ confirmBtn.onclick=function(){runAccountDeletion();};
+}
+async function runAccountDeletion(){
+ var hint=document.getElementById('deleteHint');
+ var confirmBtn=document.getElementById('deleteConfirmBtn');
+ var cancelBtn=document.getElementById('deleteCancelBtn');
+ var input=document.getElementById('deleteConfirmInput');
+ confirmBtn.disabled=true;confirmBtn.textContent='Deleting...';
+ if(cancelBtn)cancelBtn.hidden=true;
+ if(input)input.disabled=true;
+ try{
+  hint.textContent='Confirming with Google...';
+  await authModule.reauthenticateWithGoogle();
+  hint.textContent='Deleting your leaderboard entries...';
+  await loadLeaderboard();
+  await leaderboardModule.deleteAllMyLeaderboardEntries();
+  hint.textContent='Deleting your posts and replies...';
+  await loadFirestore();
+  await firestoreModule.deleteMyFeedContent();
+  hint.textContent='Deleting your profile...';
+  await firestoreModule.deleteMyUserDoc();
+  hint.textContent='Deleting your account...';
+  accountDeletedMessage=true;
+  await authModule.deleteAccount();
+  // authModule's watchAuthState listener fires with user=null from here and
+  // shows the gate with the "account deleted" message — nothing else to do.
+ }catch(e){
+  hint.textContent='Something went wrong and the deletion did not finish ('+(e&&e.message?e.message:'please try again')+'). Nothing left is guaranteed to still be intact — try again.';
+  confirmBtn.disabled=false;confirmBtn.textContent='Try again';
+  if(cancelBtn)cancelBtn.hidden=false;
+  if(input)input.disabled=false;
+ }
 }
 
 /* ---------- category ---------- */

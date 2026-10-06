@@ -14,9 +14,12 @@ import {
   deleteDoc,
   deleteField,
   collection,
+  collectionGroup,
   addDoc,
+  getDocs,
   onSnapshot,
   query,
+  where,
   orderBy,
   limit,
   serverTimestamp,
@@ -219,6 +222,58 @@ export async function deleteReply(postId, replyId) {
   const user = auth.currentUser;
   if (!user) return;
   await deleteDoc(doc(db, "posts", postId, "replies", replyId));
+}
+
+/* ---------------- Account deletion + data export ---------------- */
+// Client-side only (no Cloud Functions). Deletes every document this user
+// owns directly: their own feed posts, their own replies (wherever posted —
+// found via a collection-group query, since replies live in subcollections
+// under each post), and their users/{uid} doc. Leaderboard entries are
+// deleted separately, by deleteAllMyLeaderboardEntries() in
+// leaderboard-integration.js, which owns that collection.
+//
+// Scope note: this only removes documents the deleted user themselves
+// authored. A reply someone else left on this user's now-deleted post is
+// left in place (the rules only ever let a user delete their own reply) —
+// a Cloud Function would be needed to cascade further, which this app
+// deliberately doesn't use.
+//
+// Safe to call more than once (e.g. after a retry) — each step just finds
+// and deletes whatever still matches, so an already-empty step is a no-op.
+export async function deleteMyFeedContent() {
+  const user = auth.currentUser;
+  if (!user) return;
+  const postsSnap = await getDocs(query(collection(db, "posts"), where("authorId", "==", user.uid)));
+  for (const d of postsSnap.docs) await deleteDoc(d.ref);
+  const repliesSnap = await getDocs(query(collectionGroup(db, "replies"), where("authorId", "==", user.uid)));
+  for (const d of repliesSnap.docs) await deleteDoc(d.ref);
+}
+
+export async function deleteMyUserDoc() {
+  const user = auth.currentUser;
+  if (!user) return;
+  await deleteDoc(doc(db, "users", user.uid));
+}
+
+// Gathers everything Firestore holds for this user into one plain object,
+// for the "Download my data" button. Read-only — never deletes anything.
+export async function exportMyData() {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Not signed in");
+  const userSnap = await getDoc(doc(db, "users", user.uid));
+  const postsSnap = await getDocs(query(collection(db, "posts"), where("authorId", "==", user.uid)));
+  const repliesSnap = await getDocs(query(collectionGroup(db, "replies"), where("authorId", "==", user.uid)));
+  return {
+    exportedAt: new Date().toISOString(),
+    account: {
+      uid: user.uid,
+      displayName: user.displayName || null,
+      email: user.email || null,
+    },
+    profile: userSnap.exists() ? userSnap.data() : null,
+    posts: postsSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
+    replies: repliesSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
+  };
 }
 
 export { db };

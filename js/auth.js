@@ -8,6 +8,8 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
+  reauthenticateWithPopup,
+  deleteUser,
   signOut,
   onAuthStateChanged,
   browserLocalPersistence,
@@ -50,6 +52,23 @@ export async function signInWithApple() {
 
 export async function logout() {
   await signOut(auth);
+}
+
+// Firebase requires a fresh sign-in before a sensitive operation like deleting
+// the account itself (it throws auth/requires-recent-login otherwise), so the
+// delete-account flow calls this first.
+export async function reauthenticateWithGoogle() {
+  if (!auth.currentUser) throw new Error("Not signed in");
+  await reauthenticateWithPopup(auth.currentUser, googleProvider);
+}
+
+// Deletes the Firebase Auth user itself. Call this LAST in the delete-account
+// flow, after all of this user's Firestore data has already been removed —
+// once this resolves, auth.currentUser becomes null and they can no longer
+// write anything as this user.
+export async function deleteAccount() {
+  if (!auth.currentUser) throw new Error("Not signed in");
+  await deleteUser(auth.currentUser);
 }
 
 // Change the signed-in user's display name (shown on the feed, leaderboard, profile circle, etc.)

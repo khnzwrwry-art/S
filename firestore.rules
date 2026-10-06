@@ -12,7 +12,7 @@ service cloud.firestore {
     // when present.
     match /users/{userId} {
       allow read: if isSignedIn() && request.auth.uid == userId;
-      allow write: if isSignedIn() && request.auth.uid == userId
+      allow create, update: if isSignedIn() && request.auth.uid == userId
         && request.resource.data.keys().hasOnly(
              ['progress', 'agreement', 'lastActivity', 'lastActiveDate', 'streakCount', 'dailyReminder', 'updatedAt']
            )
@@ -25,6 +25,8 @@ service cloud.firestore {
                  && request.resource.data.streakCount >= 0
                  && request.resource.data.streakCount <= 100000))
         && (!('dailyReminder' in request.resource.data) || request.resource.data.dailyReminder is bool);
+      // Account deletion: a user may always delete their own profile doc.
+      allow delete: if isSignedIn() && request.auth.uid == userId;
     }
 
     // Community feed posts. Anyone signed in can read and create their own post.

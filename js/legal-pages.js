@@ -69,12 +69,15 @@ export const PRIVACY_POLICY = [
        "AI conversations: not stored by us after the reply is returned; your provider (Google) may retain them " +
        "according to their own API terms. " +
        "Server logs: retained by our providers for a limited period for security purposes. " +
-       "You can ask us to delete your account and associated data at any time at [CONTACT EMAIL]." },
+       "You can delete your account and all associated data yourself at any time from Profile > Delete my account, " +
+       "or ask us to do it for you at [CONTACT EMAIL]." },
 
   { t: "Your rights",
     d: "Depending on where you live, you may have the right to access the personal data we hold about you, to correct it, " +
        "to delete it, to restrict or object to how we use it, to receive a copy in a portable format, and to withdraw consent " +
-       "where we rely on it. " +
+       "where we rely on it. You can exercise the access and deletion rights directly in the app, at any time, from " +
+       "Profile: \"Download my data\" gives you a copy of everything we hold about you, and \"Delete my account\" " +
+       "permanently deletes your account and all of its data. " +
        "If you are in the EEA or UK (GDPR): you also have the right to lodge a complaint with your local supervisory authority. " +
        "If you are in California (CCPA/CPRA): you have the right to know what personal information we collect and to request " +
        "its deletion, and the right not to be discriminated against for exercising those rights. We do not sell or share " +
