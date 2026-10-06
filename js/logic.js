@@ -651,10 +651,13 @@ async function runAccountDeletion(){
   hint.textContent='Deleting your leaderboard entries...';
   await loadLeaderboard();
   await leaderboardModule.deleteAllMyLeaderboardEntries();
-  step='deleting your posts and replies';
-  hint.textContent='Deleting your posts and replies...';
+  step='deleting your posts';
+  hint.textContent='Deleting your posts...';
   await loadFirestore();
-  await firestoreModule.deleteMyFeedContent();
+  await firestoreModule.deleteMyPosts();
+  step='deleting your replies';
+  hint.textContent='Deleting your replies...';
+  await firestoreModule.deleteMyReplies();
   step='deleting your profile';
   hint.textContent='Deleting your profile...';
   await firestoreModule.deleteMyUserDoc();

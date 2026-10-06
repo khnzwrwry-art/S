@@ -240,13 +240,34 @@ export async function deleteReply(postId, replyId) {
 //
 // Safe to call more than once (e.g. after a retry) — each step just finds
 // and deletes whatever still matches, so an already-empty step is a no-op.
-export async function deleteMyFeedContent() {
+// Split into two functions (posts / replies) so a failure in the delete-account
+// flow can report exactly which one was rejected, instead of lumping both
+// under one generic step.
+// Tags a delete failure with which exact document and authorId it was
+// looking at, so a permission denial here is diagnosable from the UI alone
+// instead of needing a browser console.
+async function deleteDocTagged(ref, authorId) {
+  try {
+    await deleteDoc(ref);
+  } catch (e) {
+    throw new Error(
+      (e && e.message ? e.message : String(e)) + " [doc=" + ref.path + ", authorId=" + authorId + "]"
+    );
+  }
+}
+
+export async function deleteMyPosts() {
   const user = auth.currentUser;
   if (!user) return;
   const postsSnap = await getDocs(query(collection(db, "posts"), where("authorId", "==", user.uid)));
-  for (const d of postsSnap.docs) await deleteDoc(d.ref);
+  for (const d of postsSnap.docs) await deleteDocTagged(d.ref, d.data().authorId);
+}
+
+export async function deleteMyReplies() {
+  const user = auth.currentUser;
+  if (!user) return;
   const repliesSnap = await getDocs(query(collectionGroup(db, "replies"), where("authorId", "==", user.uid)));
-  for (const d of repliesSnap.docs) await deleteDoc(d.ref);
+  for (const d of repliesSnap.docs) await deleteDocTagged(d.ref, d.data().authorId);
 }
 
 export async function deleteMyUserDoc() {
