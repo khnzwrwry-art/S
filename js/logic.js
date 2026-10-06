@@ -379,6 +379,7 @@ function footerLinksHTML(){
  return '<p class="hint" style="margin-top:24px;text-align:center">'+
  '<span class="link" data-legal="terms">Terms of Use</span> · '+
  '<span class="link" data-legal="privacy">Privacy Policy</span> · '+
+ '<a class="link" href="mailto:khnzwrwry@gmail.com">Contact</a> · '+
  '<span class="link" data-legal="cookies">Cookie Policy</span> · '+
  '<span class="link" data-legal="refunds">Refund Policy</span> · '+
  '<span class="link" data-legal="access">Accessibility statement</span> · '+

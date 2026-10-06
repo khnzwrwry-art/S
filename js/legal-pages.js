@@ -18,8 +18,7 @@ export const LAST_UPDATED = "October 2026";
 export const PRIVACY_POLICY = [
   { t: "Who we are",
     d: "Startlet ('we', 'us') provides educational content and tools about entrepreneurship for teenagers. " +
-       "The data controller responsible for your personal data is [FULL LEGAL NAME OF OPERATOR / REGISTERED BUSINESS], " +
-       "[REGISTERED ADDRESS], contactable at khnzwrwry@gmail.com." },
+       "The data controller responsible for your personal data is Startlet, contactable at khnzwrwry@gmail.com." },
 
   { t: "Age requirements — please read first",
     d: "This service is intended for users aged 13 and over. We do not knowingly collect personal data from " +
@@ -97,7 +96,7 @@ export const PRIVACY_POLICY = [
        "appropriate, notify you in the app. Continued use after an update means you accept the updated policy." },
 
   { t: "Contact",
-    d: "Questions, requests, or complaints about privacy: khnzwrwry@gmail.com. Postal address: [REGISTERED ADDRESS]." },
+    d: "Questions, requests, or complaints about privacy: khnzwrwry@gmail.com." },
 ];
 
 /* ============================================================
@@ -146,8 +145,8 @@ export const REFUND_POLICY = [
        "Subscriptions can be cancelled at any time and will remain active until the end of the paid period." },
 
   { t: "How to request a refund",
-    d: "Email khnzwrwry@gmail.com with your account email and the reason for the request. We will respond within " +
-       "[NUMBER] business days and, where a refund is due, issue it to the original payment method." },
+    d: "Email khnzwrwry@gmail.com with your account email and the reason for the request. We will respond promptly " +
+       "and, where a refund is due, issue it to the original payment method." },
 
   { t: "Users under 18",
     d: "If a purchase was made by a minor without their parent or guardian's permission, contact us at khnzwrwry@gmail.com " +
@@ -187,11 +186,10 @@ export const ACCESSIBILITY_STATEMENT = [
   { t: "Feedback and reporting a problem",
     d: "If you hit an accessibility barrier, tell us the page you were on, what you were trying to do, and what " +
        "assistive technology you use, and we will work to fix it: khnzwrwry@gmail.com. " +
-       "We aim to respond within [NUMBER] business days." },
+       "We aim to respond promptly." },
 
   { t: "Accessibility coordinator",
-    d: "[NAME OF ACCESSIBILITY COORDINATOR — required in Israel for businesses above certain thresholds; " +
-       "fill in or remove after checking whether it applies to you], khnzwrwry@gmail.com, [PHONE]." },
+    d: "Contact: khnzwrwry@gmail.com." },
 ];
 
 /* ============================================================
