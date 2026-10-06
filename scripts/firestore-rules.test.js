@@ -8,7 +8,9 @@
 //
 // ---- ONE-TIME SETUP (in Cloud Shell) ----
 //   cd ~/S
-//   npm install --no-save @firebase/rules-unit-testing
+//   npm install --no-save @firebase/rules-unit-testing firebase
+// (both packages are required — the test helpers come from the first, the
+// doc/setDoc/... query functions this file calls come from the second)
 //
 // ---- RUN ----
 //   firebase emulators:exec --only firestore "node scripts/firestore-rules.test.js"
