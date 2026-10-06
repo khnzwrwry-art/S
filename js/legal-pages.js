@@ -1,5 +1,5 @@
 // legal-pages.js
-// Legal page content for Launchpad.
+// Legal page content for Startlet.
 //
 // ⚠️ IMPORTANT — READ BEFORE PUBLISHING
 // I am not a lawyer and this is not legal advice. This is a well-researched
@@ -17,7 +17,7 @@ export const LAST_UPDATED = "October 2026";
    ============================================================ */
 export const PRIVACY_POLICY = [
   { t: "Who we are",
-    d: "Launchpad ('we', 'us') provides educational content and tools about entrepreneurship for teenagers. " +
+    d: "Startlet ('we', 'us') provides educational content and tools about entrepreneurship for teenagers. " +
        "The data controller responsible for your personal data is [FULL LEGAL NAME OF OPERATOR / REGISTERED BUSINESS], " +
        "[REGISTERED ADDRESS], contactable at [CONTACT EMAIL]." },
 
@@ -126,7 +126,7 @@ export const COOKIE_POLICY = [
    ============================================================ */
 export const REFUND_POLICY = [
   { t: "Current status: the service is free",
-    d: "Launchpad does not currently charge users. No payments are collected, so there is nothing to refund. " +
+    d: "Startlet does not currently charge users. No payments are collected, so there is nothing to refund. " +
        "This policy is published in advance and will apply if and when paid features are introduced." },
 
   { t: "If we introduce paid features",
@@ -156,7 +156,7 @@ export const REFUND_POLICY = [
    ============================================================ */
 export const ACCESSIBILITY_STATEMENT = [
   { t: "Our commitment",
-    d: "We want Launchpad to be usable by as many people as possible, including people using screen readers, " +
+    d: "We want Startlet to be usable by as many people as possible, including people using screen readers, " +
        "keyboard-only navigation, screen magnification, or reduced-motion settings. We treat accessibility as " +
        "ongoing work, not a one-time task." },
 
@@ -203,7 +203,7 @@ export const CONSENT_TEXT = {
 
   // Shown above the community feed composer.
   feedPost:
-    "Anything you post here is visible to every signed-in user of Launchpad. Do not post your full name, phone number, " +
+    "Anything you post here is visible to every signed-in user of Startlet. Do not post your full name, phone number, " +
     "address, school, payment details, or anyone else's personal information.",
 
   // Shown above the leaderboard submission form.

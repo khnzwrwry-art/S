@@ -1,5 +1,5 @@
 // worker-client.js
-// Connects the Launchpad site to the Cloudflare Worker backend (free, no credit card).
+// Connects the Startlet site to the Cloudflare Worker backend (free, no credit card).
 // Replaces every claude.use('sample') call in logic.js.
 // Worker: launchpad-mentor (uses Google Gemini free tier, key stored as a Worker secret)
 

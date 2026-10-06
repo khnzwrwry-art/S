@@ -1,5 +1,5 @@
 // auth.js — real Google + Apple sign-in via Firebase Authentication
-// Deploy this alongside Launchpad on real hosting (Vercel, Firebase Hosting, etc).
+// Deploy this alongside Startlet on real hosting (Vercel, Firebase Hosting, etc).
 // This file only ever holds PUBLIC identifiers. No secrets belong here.
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -15,7 +15,7 @@ import {
   updateProfile,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-// --- Your Launchpad Firebase project's public config ---
+// --- Your Startlet Firebase project's public config (project id stays launchpad-e6280) ---
 // These are public identifiers, safe to ship in frontend code.
 const firebaseConfig = {
   apiKey: "AIzaSyBvaS2OZUCJpfr4gDuot1xP6tAEeqaK3jI",
@@ -66,7 +66,7 @@ export function watchAuthState(callback) {
 
 export { app, auth };
 
-/* ---------------- Example wiring into Launchpad's gate screen ----------------
+/* ---------------- Example wiring into Startlet's gate screen ----------------
 
 import { signInWithGoogle, signInWithApple, logout, watchAuthState } from "./auth.js";
 

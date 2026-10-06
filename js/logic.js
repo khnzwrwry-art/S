@@ -276,8 +276,8 @@ function renderGate(){
   '<p class="hint" style="margin-bottom:14px">Signed in as <b>'+esc(currentUser.displayName||currentUser.email||'your Google account')+'</b> · <span class="link" id="gateSwitch">Not you?</span></p>' : '';
  g.innerHTML=
  '<div class="gate-card">'+
-  '<div class="brand-mark" style="margin:0 auto 16px">L</div>'+
-  '<h1 style="font-size:24px;text-align:center;margin-bottom:8px">Launchpad</h1>'+
+  '<div class="brand-mark" style="width:64px;height:64px;margin:0 auto 16px"><img src="icons/icon-192.png" alt=""></div>'+
+  '<h1 style="font-size:24px;text-align:center;margin-bottom:8px">Startlet</h1>'+
   '<p style="text-align:center;color:var(--text-muted);font-size:14px;margin:0 0 22px">Start a real business, one step at a time.</p>'+
   signedInLine+
   '<label class="field-label" for="gateCountry">Your country <span style="color:#E0A020">*</span></label>'+
@@ -290,7 +290,7 @@ function renderGate(){
    '<span>I confirm I am 13 or older (and, if under 18, that my parent or guardian agrees to my use of this service). '+
    'I have read and accept the <span class="link" id="gateTerms">Terms of Use</span> and the <span class="link" id="gatePrivacy">Privacy Policy</span>, '+
    'including that the guides, templates and content in this app are copyright protected and <b>may not be copied, republished, resold or used to build a competing product</b>.</span></label>'+
-  '<button class="btn-primary" id="gateGo" style="margin-top:14px">'+(currentUser?'Enter Launchpad':'Sign in with Google to continue')+'</button>'+
+  '<button class="btn-primary" id="gateGo" style="margin-top:14px">'+(currentUser?'Enter Startlet':'Sign in with Google to continue')+'</button>'+
   '<p class="hint" id="gateHint"></p>'+
  '</div>';
 
@@ -537,7 +537,7 @@ function renderProfile(){
   }).join('')+'</div></div>'+
  '<div class="panel"><h4>Daily reminder</h4>'+
   '<label class="agree"><input type="checkbox" id="reminderToggle" '+(dailyReminderPref?'checked':'')+'>'+
-  '<span>Remind me once a day to check in. This only saves your preference for now — Launchpad does not send notifications yet.</span></label>'+
+  '<span>Remind me once a day to check in. This only saves your preference for now — Startlet does not send notifications yet.</span></label>'+
   '<p class="hint" id="reminderHint"></p></div>'+
  footerLinksHTML()+
  copyrightNotice();
@@ -808,7 +808,7 @@ function renderAges(){
 
 /* ---------- static views ---------- */
 function panelList(items){return items.map(function(x){return '<div class="panel"><h4>'+x.t+'</h4><p>'+x.d+'</p></div>';}).join('');}
-function copyrightNotice(){return '<p class="hint" style="text-align:center;margin-top:18px">© 2026 Launchpad. All rights reserved.</p>';}
+function copyrightNotice(){return '<p class="hint" style="text-align:center;margin-top:18px">© 2026 Startlet. All rights reserved.</p>';}
 function accItem(key,title,desc){
  return '<div class="acc" data-acc="'+key+'"><button type="button" class="acc-head" aria-expanded="false" aria-controls="'+key+'-body"><h4>'+title+'</h4><span class="chev">'+svg('<path d="M6 9l6 6 6-6"/>',16)+'</span></button>'+
  '<div class="acc-body" id="'+key+'-body"><p>'+desc+'</p></div></div>';

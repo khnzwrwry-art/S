@@ -1,4 +1,4 @@
-// worker.js — Cloudflare Worker backend for Launchpad
+// worker.js — Cloudflare Worker backend for Startlet
 // Order: Gemini 3.5 Flash -> Gemini 3.1 Flash-Lite -> Cloudflare Workers AI (Llama 3.3 70B)
 // Requires: secret GEMINI_API_KEY, and a Workers AI binding named "AI".
 
