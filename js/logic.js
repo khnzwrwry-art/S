@@ -668,7 +668,15 @@ async function runAccountDeletion(){
   // authModule's watchAuthState listener fires with user=null from here and
   // shows the gate with the "account deleted" message — nothing else to do.
  }catch(e){
-  hint.textContent='Failed while '+step+': '+(e&&e.message?e.message:'unknown error')+'. Nothing left is guaranteed to still be intact — try again.';
+  var msg=(e&&e.message?e.message:'unknown error');
+  var urlMatch=msg.match(/https:\/\/\S+/);
+  var urlText=urlMatch?urlMatch[0].replace(/[.,)]+$/,''):null;
+  var safeLink=urlText?safeUrl(urlText):null;
+  var prefix='Failed while '+step+': '+(urlMatch?msg.slice(0,urlMatch.index):msg);
+  var suffix=urlMatch?msg.slice(urlMatch.index+urlText.length):'';
+  hint.innerHTML=esc(prefix)+
+   (safeLink?' <a class="link" href="'+esc(safeLink)+'" target="_blank" rel="noopener noreferrer">Open this link</a>':(urlMatch?esc(urlText):''))+
+   esc(suffix)+esc('. Nothing left is guaranteed to still be intact — try again.');
   confirmBtn.disabled=false;confirmBtn.textContent='Try again';
   if(cancelBtn)cancelBtn.hidden=false;
   if(input)input.disabled=false;
