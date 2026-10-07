@@ -24,7 +24,7 @@ const {
   assertSucceeds,
   assertFails,
 } = require('@firebase/rules-unit-testing');
-const { doc, setDoc, getDoc, updateDoc, deleteDoc, collection, addDoc } = require('firebase/firestore');
+const { doc, setDoc, getDoc, updateDoc, deleteDoc, collection, collectionGroup, addDoc, getDocs, query, where } = require('firebase/firestore');
 
 const RULES_PATH = path.join(__dirname, '..', 'firestore.rules');
 
@@ -199,6 +199,28 @@ async function test(name, fn) {
 
   await test('bob CAN delete his own reply', async () => {
     await assertSucceeds(deleteDoc(doc(bob.firestore(), 'posts/' + replyHostPostId + '/replies/' + bobReplyId)));
+  });
+
+  // This is exactly what account deletion needs: finding every reply a user has
+  // ever left, across any post, in one query — not just the replies under one
+  // known post. A plain nested `match /posts/{postId} { match /replies/{r} {...} } }`
+  // does NOT cover this query shape (only direct subcollection access does), so
+  // this is the regression test for that exact bug.
+  await testEnv.withSecurityRulesDisabled(async (ctx) => {
+    const { serverTimestamp } = require('firebase/firestore');
+    await addDoc(collection(ctx.firestore(), 'posts/' + replyHostPostId + '/replies'), {
+      authorId: 'bob', authorName: 'Bob', text: 'another reply', createdAt: serverTimestamp(),
+    });
+  });
+
+  await test('bob can find and delete his own reply via a collection-group query', async () => {
+    const snap = await assertSucceeds(
+      getDocs(query(collectionGroup(bob.firestore(), 'replies'), where('authorId', '==', 'bob')))
+    );
+    assert.ok(snap.docs.length > 0, 'expected the collection-group query to find at least one reply');
+    for (const d of snap.docs) {
+      await assertSucceeds(deleteDoc(d.ref));
+    }
   });
 
   console.log('\n--- leaderboard/{uid}_{businessId} ---');

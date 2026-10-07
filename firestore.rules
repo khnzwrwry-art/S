@@ -66,21 +66,26 @@ service cloud.firestore {
         );
 
       allow delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
+    }
 
-      // Replies to a post. Anyone signed in can read and add their own reply.
-      // Replies are immutable once posted (no edits); only the author can delete their own.
-      match /replies/{replyId} {
-        allow read: if isSignedIn();
-        allow create: if isSignedIn()
-          && request.resource.data.authorId == request.auth.uid
-          && request.resource.data.keys().hasOnly(['authorId', 'authorName', 'text', 'createdAt'])
-          && request.resource.data.authorName is string && request.resource.data.authorName.size() <= 50
-          && request.resource.data.text is string
-          && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 500
-          && request.resource.data.createdAt == request.time;
-        allow update: if false;
-        allow delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
-      }
+    // Replies live under posts/{postId}/replies/{replyId}. Declared with a
+    // recursive wildcard at the top level (NOT nested inside /posts/{postId})
+    // because that's the only form Firestore applies to a `collectionGroup('replies')`
+    // query — a plain nested match only covers direct subcollection access through a
+    // known parent post (viewing/posting/deleting a single post's replies, which still
+    // works exactly the same under this rule). Account deletion needs the collection-group
+    // form to find every reply a user has ever left, across any post, in one query.
+    match /{path=**}/replies/{replyId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['authorId', 'authorName', 'text', 'createdAt'])
+        && request.resource.data.authorName is string && request.resource.data.authorName.size() <= 50
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 500
+        && request.resource.data.createdAt == request.time;
+      allow update: if false;
+      allow delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
     }
 
     // Leaderboard: one entry per user PER BUSINESS, doc id == `${uid}_${businessId}`.
