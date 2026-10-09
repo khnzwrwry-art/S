@@ -1,14 +1,6 @@
 // legal-pages.js
-// Legal page content for Startlet.
-//
-// ⚠️ IMPORTANT — READ BEFORE PUBLISHING
-// I am not a lawyer and this is not legal advice. This is a well-researched
-// starting draft that covers the obligations that clearly apply to this app.
-// Before taking payments or promoting this publicly, have a lawyer review it —
-// especially the children's-data sections, which carry the highest risk here.
-//
-// EVERY [BRACKETED] PLACEHOLDER MUST BE FILLED IN BEFORE GOING LIVE.
-// Publishing with placeholders left in is itself a compliance failure.
+// Legal page content for Startlet: privacy, cookies, refunds, accessibility
+// and the consent texts shown in the app.
 
 export const LAST_UPDATED = "October 2026";
 
@@ -53,6 +45,8 @@ export const PRIVACY_POLICY = [
        "Cloudflare, Inc. — runs the server-side function that passes your AI requests to Google and returns the reply. " +
        "Cloudflare Workers AI — if Google's Gemini API is unavailable, your request may instead be processed by " +
        "Cloudflare's own AI model (Llama 3.3) running on Cloudflare's infrastructure, as an automatic fallback. " +
+       "Creem (our payment provider and Merchant of Record) — if you buy a paid plan, Creem processes the payment, " +
+       "your billing details and the sales tax. We never see or store your full card details. " +
        "These providers process data on our behalf under their own data processing terms. " +
        "We do not share your data with anyone else except where required by law." },
 
@@ -124,15 +118,24 @@ export const COOKIE_POLICY = [
 ];
 
 /* ============================================================
-   REFUND POLICY  (currently free — see note)
+   REFUND POLICY
    ============================================================ */
 export const REFUND_POLICY = [
-  { t: "Current status: the service is free",
-    d: "Startlet does not currently charge users. No payments are collected, so there is nothing to refund. " +
-       "This policy is published in advance and will apply if and when paid features are introduced." },
+  { t: "Plans and prices",
+    d: "Startlet has a free plan. Startlet Pro, a paid subscription, is priced at $4.99 per month or $29.99 per year " +
+       "(US dollars). The exact price, billing frequency and anything included are always shown on the checkout screen " +
+       "before you pay." },
 
-  { t: "If we introduce paid features",
-    d: "Before any purchase or subscription is confirmed, we will clearly display, on the payment screen itself: " +
+  { t: "Who processes payments",
+    d: "Payments are processed by Creem, our online reseller and Merchant of Record. Creem handles billing, payment " +
+       "security and sales tax, and your receipt will come from Creem. We never see or store your full card details." },
+
+  { t: "Cancelling a subscription",
+    d: "You can cancel at any time from your profile or from the customer portal link in your receipt. When you cancel, " +
+       "you keep access until the end of the period you already paid for, and you will not be charged again." },
+
+  { t: "What you see before paying",
+    d: "Before any purchase or subscription is confirmed, we clearly display, on the payment screen itself: " +
        "the total price including tax; the billing frequency for a subscription; and — where payment is split into " +
        "instalments — the number of instalments, the exact amount of each instalment, and the total amount payable " +
        "across all instalments. You will not be charged until you have seen those figures and confirmed." },
@@ -145,7 +148,7 @@ export const REFUND_POLICY = [
        "Subscriptions can be cancelled at any time and will remain active until the end of the paid period." },
 
   { t: "How to request a refund",
-    d: "Email khnzwrwry@gmail.com with your account email and the reason for the request. We will respond promptly " +
+    d: "Email khnzwrwry@gmail.com with your account email and the reason for the request. We will respond within 3 business days " +
        "and, where a refund is due, issue it to the original payment method." },
 
   { t: "Users under 18",
@@ -154,7 +157,7 @@ export const REFUND_POLICY = [
 ];
 
 /* ============================================================
-   ACCESSIBILITY STATEMENT  (replaces the earlier draft)
+   ACCESSIBILITY STATEMENT
    ============================================================ */
 export const ACCESSIBILITY_STATEMENT = [
   { t: "Our commitment",

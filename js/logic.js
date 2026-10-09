@@ -271,6 +271,51 @@ function countryOptions(){
   }).join('')+'<option value="other">Other / not listed</option>';
 }
 
+// Public, signed-out landing content under the sign-in card: what Startlet is,
+// what it costs, and the policy links. Visible without an account so visitors
+// (and payment-provider reviewers) can see the product, pricing and policies.
+function publicLanding(){
+ return '<section class="landing" aria-labelledby="landingTitle">'+
+  '<h2 id="landingTitle">What you get</h2>'+
+  '<ul class="landing-list">'+
+   '<li>10 business paths, including freelancing, content creation, print on demand, social media management and building websites for local businesses</li>'+
+   '<li>11 step-by-step chapters per path, with templates and checklists</li>'+
+   '<li>An AI business mentor you can ask anything</li>'+
+   '<li>A moderated community feed and a sales leaderboard</li>'+
+  '</ul>'+
+  '<h2>Pricing</h2>'+
+  '<div class="plans">'+
+   '<div class="plan"><h3>Free</h3><p class="plan-price">$0</p>'+
+    '<p class="muted-sm">Sign in with Google and start learning: business paths, step-by-step guides, the community feed, the leaderboard and the AI mentor.</p></div>'+
+   '<div class="plan plan-pro"><h3>Startlet Pro <span class="plan-tag">Coming soon</span></h3>'+
+    '<p class="plan-price">$4.99<span>/month</span></p><p class="muted-sm plan-alt">or $29.99/year (about $2.50 a month)</p>'+
+    '<p class="muted-sm">Every chapter of every path, unlimited AI mentor questions and photo feedback from the mentor. Cancel anytime.</p></div>'+
+  '</div>'+
+  '<p class="muted-xs landing-note">Prices in US dollars. Payments will be processed securely by our payment partner; see the Refund Policy for details.</p>'+
+  '<nav class="landing-links" aria-label="Policies">'+
+   '<button type="button" class="link" data-public="terms">Terms of Use</button>'+
+   '<button type="button" class="link" data-public="privacy">Privacy Policy</button>'+
+   '<button type="button" class="link" data-public="refunds">Refund Policy</button>'+
+   '<button type="button" class="link" data-public="cookies">Cookie Policy</button>'+
+   '<button type="button" class="link" data-public="access">Accessibility</button>'+
+  '</nav>'+
+  '<p class="muted-xs landing-contact">Support: <a href="mailto:'+SUPPORT_EMAIL+'">'+SUPPORT_EMAIL+'</a></p>'+
+  copyrightNotice()+
+ '</section>';
+}
+function bindPublicLanding(){
+ var renderers={terms:renderTerms,privacy:renderPrivacy,refunds:renderRefunds,cookies:renderCookies,access:renderAccess};
+ document.querySelectorAll('#gate [data-public]').forEach(function(el){
+  el.onclick=function(e){
+   e.preventDefault();
+   var k=el.dataset.public;
+   renderers[k]();
+   document.getElementById('app').hidden=false;
+   document.getElementById('gate').hidden=true;
+   showView(k);
+  };
+ });
+}
 function renderGate(){
  var g=document.getElementById('gate');
  var deletedLine = accountDeletedMessage ?
@@ -297,7 +342,8 @@ function renderGate(){
    'including that the guides, templates and content in this app are copyright protected and <b>may not be copied, republished, resold or used to build a competing product</b>.</span></label>'+
   '<button class="btn-primary" id="gateGo" style="margin-top:14px">'+(currentUser?'Enter Startlet':'Sign in with Google to continue')+'</button>'+
   '<p class="hint" id="gateHint"></p>'+
- '</div>';
+ '</div>'+
+ publicLanding();
 
  if(!currentUser){
   document.getElementById('googleBtn').onclick=async function(){
@@ -311,6 +357,7 @@ function renderGate(){
    try{await authModule.logout();}catch(e){}
   };
  }
+ bindPublicLanding();
  document.getElementById('gateTerms').onclick=function(e){e.preventDefault();e.stopPropagation();renderTerms();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('terms');};
  document.getElementById('gatePrivacy').onclick=function(e){e.preventDefault();e.stopPropagation();renderPrivacy();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('privacy');};
  document.getElementById('agreeBox').onchange=function(e){gateAgreeChecked=e.target.checked;};
@@ -969,8 +1016,7 @@ function renderLegal(){
 }
 function renderTerms(){
  document.getElementById('view-terms').innerHTML=
- '<div class="hero"><h1 class="sm">Terms of Use</h1><p>Last updated: September 2026</p></div>'+
- '<div class="panel warn"><p class="muted-sm">This is a working draft. Have a lawyer review and adapt it before the app goes live to the public.</p></div>'+
+ '<div class="hero"><h1 class="sm">Terms of Use</h1><p>Last updated: October 2026</p></div>'+
  panelList(TERMS)+
  copyrightNotice();
 }
@@ -997,7 +1043,6 @@ async function renderPrivacy(){
   await loadLegal();
   document.getElementById('view-privacy').innerHTML=
   '<div class="hero"><h1 class="sm">Privacy Policy</h1><p>Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
-  '<div class="panel warn"><p class="muted-sm">This is a well-researched starting draft, not legal advice. Have a lawyer review it before this app is publicly promoted or takes payments.</p></div>'+
   panelList(legalModule.PRIVACY_POLICY)+
   copyrightNotice();
  }catch(e){

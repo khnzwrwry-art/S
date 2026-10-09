@@ -1,3 +1,5 @@
+// Support contact shown on the site, in the Terms and on the sign-in page.
+const SUPPORT_EMAIL='khnzwrwry@gmail.com';
 const I={box:'<path d="M3 8l9-5 9 5-9 5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/>',mega:'<path d="M3 11v2a2 2 0 002 2h1l3 5V4L6 9H5a2 2 0 00-2 2z"/><path d="M13 8a4 4 0 010 8"/>',cam:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.5"/>',bag:'<path d="M6 8h12l1 12H5L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/>',shirt:'<path d="M8 4L3 7l2 3 2-1v11h10V9l2 1 2-3-5-3-1 2H9L8 4z"/>',case:'<rect x="3" y="8" width="18" height="11" rx="2"/><path d="M9 8V6a2 2 0 012-2h2a2 2 0 012 2v2"/><path d="M3 13h18"/>',chat:'<path d="M4 5h16v11H9l-5 4V5z"/><path d="M8 9h8M8 12h5"/>',book:'<path d="M4 5c3-1.5 6-1.5 8 0v14c-2-1.5-5-1.5-8 0V5z"/><path d="M20 5c-3-1.5-6-1.5-8 0v14c2-1.5 5-1.5 8 0V5z"/>',code:'<path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><path d="M13 5l-2 14"/>',spark:'<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z"/>',play:'<circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/>',film:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M8 5v14M16 5v14"/>',scissors:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.5 15.5M20 20L8.5 8.5"/>',bookmark:'<path d="M6 4h12v16l-6-4-6 4V4z"/>',shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/>',compass:'<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-5 2 2-5 5-2z"/>',access:'<circle cx="12" cy="4.5" r="2"/><path d="M5 8h14M12 8v6M12 14l-3 6M12 14l3 6"/>',
 help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2 1.8-2.3 3.2"/><circle cx="12" cy="17" r=".3" fill="currentColor"/>'};
 
@@ -371,11 +373,12 @@ const TERMS=[
 {t:'7. No warranty and limitation of liability',d:'The app is provided "as is". The operators are not liable for any direct or indirect damage, financial loss, lost income or any outcome resulting from reliance on information in the app or from business activity undertaken after using it.'},
 {t:'8. Third-party links and services',d:'The app links to external sites, videos and tools that it does not control. Their appearance is not an endorsement or a warranty as to their content, terms, pricing or availability. Your use of them is governed by their own terms.'},
 {t:'9. Accounts and security',d:'You are responsible for keeping your sign-in credentials secure and for activity under your account. Do not share an account or impersonate another person.'},
-{t:'10. Privacy',d:'Personal progress data is stored on your device. Content you publish in the feed is visible to other users of the app. Do not enter sensitive personal information anywhere in the app.'},
-{t:'11. Changes and termination',d:'The operators may update these Terms, modify the service or discontinue it at any time. Continued use after an update constitutes acceptance of the updated version.'},
-{t:'12. Contact',d:'For questions, content removal or copyright notices: [add operator email address].'}];
+{t:'10. Privacy',d:'Your account and progress are stored securely so they sync across your devices, as described in the Privacy Policy. Content you publish in the feed or leaderboard is visible to other signed-in users. Do not enter sensitive personal information anywhere in the app.'},
+{t:'11. Paid plans and payments',d:'Startlet offers a free plan and may offer a paid subscription, Startlet Pro. Prices, billing frequency and what is included are shown before you buy. Payments are processed by our online reseller and Merchant of Record, which handles billing, payment security and sales tax. Subscriptions renew automatically until cancelled; you can cancel at any time from your profile or the customer portal, and access continues until the end of the paid period. Refunds are handled under our Refund Policy. Users under 18 need a parent or guardian\'s permission before buying.'},
+{t:'12. Changes and termination',d:'The operators may update these Terms, modify the service or discontinue it at any time. Continued use after an update constitutes acceptance of the updated version.'},
+{t:'13. Contact',d:'For questions, content removal or copyright notices: '+SUPPORT_EMAIL+'.'}];
 
-// ACCESSIBILITY_STATEMENT now lives in js/legal-pages.js (superseded this draft).
+// ACCESSIBILITY_STATEMENT lives in js/legal-pages.js.
 
 const QUIZ=[
 {q:'Which describes you best?',opts:[
