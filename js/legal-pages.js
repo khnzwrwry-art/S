@@ -10,7 +10,7 @@ export const LAST_UPDATED = "October 2026";
 export const PRIVACY_POLICY = [
   { t: "Who we are",
     d: "Startlet ('we', 'us') provides educational content and tools about entrepreneurship for teenagers. " +
-       "The data controller responsible for your personal data is Startlet, contactable at khnzwrwry@gmail.com." },
+       "The data controller responsible for your personal data is Startlet, contactable at support@startlet.app." },
 
   { t: "Age requirements — please read first",
     d: "This service is intended for users aged 13 and over. We do not knowingly collect personal data from " +
@@ -18,7 +18,7 @@ export const PRIVACY_POLICY = [
        "If we learn we have collected data from a child under 13 without verified parental consent, we will delete it promptly. " +
        "In some countries the minimum age for consenting to data processing is higher (up to 16 in parts of the EU/EEA); " +
        "if you are under that age in your country, you need your parent or guardian's permission to use this service. " +
-       "A parent or guardian can contact us at khnzwrwry@gmail.com to review, correct, or delete their child's data." },
+       "A parent or guardian can contact us at support@startlet.app to review, correct, or delete their child's data." },
 
   { t: "What data we collect",
     d: "Account data: your name, email address and profile photo, received from Google when you sign in with Google. " +
@@ -63,7 +63,7 @@ export const PRIVACY_POLICY = [
        "according to their own API terms. " +
        "Server logs: retained by our providers for a limited period for security purposes. " +
        "You can delete your account and all associated data yourself at any time from Profile > Delete my account, " +
-       "or ask us to do it for you at khnzwrwry@gmail.com." },
+       "or ask us to do it for you at support@startlet.app." },
 
   { t: "Your rights",
     d: "Depending on where you live, you may have the right to access the personal data we hold about you, to correct it, " +
@@ -77,7 +77,7 @@ export const PRIVACY_POLICY = [
        "personal information as those terms are defined under the CCPA. " +
        "If you are in Israel (Protection of Privacy Law, as amended by Amendment 13): you have the right to review data held " +
        "about you and to request its correction or deletion. " +
-       "To exercise any of these rights, email khnzwrwry@gmail.com. We will respond within the time required by the applicable law." },
+       "To exercise any of these rights, email support@startlet.app. We will respond within the time required by the applicable law." },
 
   { t: "Security",
     d: "We use HTTPS throughout, rely on Google's authentication rather than storing passwords ourselves, and restrict " +
@@ -90,7 +90,7 @@ export const PRIVACY_POLICY = [
        "appropriate, notify you in the app. Continued use after an update means you accept the updated policy." },
 
   { t: "Contact",
-    d: "Questions, requests, or complaints about privacy: khnzwrwry@gmail.com." },
+    d: "Questions, requests, or complaints about privacy: support@startlet.app." },
 ];
 
 /* ============================================================
@@ -148,11 +148,11 @@ export const REFUND_POLICY = [
        "Subscriptions can be cancelled at any time and will remain active until the end of the paid period." },
 
   { t: "How to request a refund",
-    d: "Email khnzwrwry@gmail.com with your account email and the reason for the request. We will respond within 3 business days " +
+    d: "Email support@startlet.app with your account email and the reason for the request. We will respond within 3 business days " +
        "and, where a refund is due, issue it to the original payment method." },
 
   { t: "Users under 18",
-    d: "If a purchase was made by a minor without their parent or guardian's permission, contact us at khnzwrwry@gmail.com " +
+    d: "If a purchase was made by a minor without their parent or guardian's permission, contact us at support@startlet.app " +
        "and we will refund it." },
 ];
 
@@ -188,11 +188,11 @@ export const ACCESSIBILITY_STATEMENT = [
 
   { t: "Feedback and reporting a problem",
     d: "If you hit an accessibility barrier, tell us the page you were on, what you were trying to do, and what " +
-       "assistive technology you use, and we will work to fix it: khnzwrwry@gmail.com. " +
+       "assistive technology you use, and we will work to fix it: support@startlet.app. " +
        "We aim to respond promptly." },
 
   { t: "Accessibility coordinator",
-    d: "Contact: khnzwrwry@gmail.com." },
+    d: "Contact: support@startlet.app." },
 ];
 
 /* ============================================================
