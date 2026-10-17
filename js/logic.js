@@ -79,10 +79,14 @@ let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistor
 let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all',openChapterIdx={},dailyReminderPref=false;
 const CATEGORY_LABELS={online:'Online',services:'Services',creative:'Creative',food:'Food'};
 
-const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','access','privacy','cookies','refunds','ages','visual','help','profile','deleteAccount'];
+const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','aup','access','privacy','cookies','refunds','ages','visual','help','profile','deleteAccount'];
 // Views reachable without being signed in and agreed — the legal/policy pages only,
 // so they can be read before signing up. Every other view requires appUnlocked.
-const PUBLIC_VIEWS=['terms','privacy','cookies','refunds','access'];
+const PUBLIC_VIEWS=['terms','aup','privacy','cookies','refunds','access'];
+// Direct links to the public policy pages, e.g. https://startlet.app/#acceptable-use
+const HASH_VIEWS={'terms':'terms','acceptable-use':'aup','privacy':'privacy','cookies':'cookies','refunds':'refunds','accessibility':'access'};
+function hashView(){var h=(location.hash||'').replace(/^#\/?/,'').toLowerCase();return HASH_VIEWS.hasOwnProperty(h)?HASH_VIEWS[h]:null;}
+let pendingHashView=hashView();
 let appUnlocked=false;
 function showView(n){
  if(!appUnlocked&&PUBLIC_VIEWS.indexOf(n)===-1){exitToGate();return false;}
@@ -105,7 +109,7 @@ function exitToGate(){
 /* ---------- bottom nav (redesign stage 1) ---------- */
 const BOTTOM_NAV=[
  {id:'businesses',label:'Businesses',icon:I.box,views:['home','category','quiz','ages'],go:function(){go('home');}},
- {id:'help',label:'Help',icon:I.help,views:['help','assistant','templates','content','editing','glossary','legal','terms','access','privacy','cookies','refunds','visual'],go:function(){renderHelp();showView('help');}},
+ {id:'help',label:'Help',icon:I.help,views:['help','assistant','templates','content','editing','glossary','legal','terms','aup','access','privacy','cookies','refunds','visual'],go:function(){renderHelp();showView('help');}},
  {id:'feed',label:'Feed',icon:I.chat,views:['feed'],go:function(){renderFeed();showView('feed');}},
  {id:'leaderboard',label:'Leaderboard',icon:I.mega,views:['leaderboard'],go:function(){renderLeaderboard();showView('leaderboard');}},
  {id:'profile',label:'Profile',icon:I.access,views:['profile'],go:function(){renderProfile();showView('profile');}}
@@ -252,7 +256,7 @@ async function initAuth(){
  }
  authModule.watchAuthState(async function(user){
   currentUser=user;
-  if(!user){appUnlocked=false;gateAgreeChecked=false;stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;document.getElementById('profileCircle').hidden=true;document.getElementById('app').hidden=true;renderGate();document.getElementById('gate').hidden=false;return;}
+  if(!user){appUnlocked=false;gateAgreeChecked=false;stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;document.getElementById('profileCircle').hidden=true;document.getElementById('app').hidden=true;renderGate();document.getElementById('gate').hidden=false;openPendingHashView();return;}
   var rec=null;
   try{
    await loadFirestore();
@@ -260,6 +264,7 @@ async function initAuth(){
   }catch(e){}
   if(rec){selectedCountry=rec.country||'';await syncRemoteProgress();await syncActivity();await syncReminderPref();enterApp();}
   else{appUnlocked=false;document.getElementById('app').hidden=true;renderGate();document.getElementById('gate').hidden=false;}
+  openPendingHashView();
  });
 }
 
@@ -294,6 +299,7 @@ function publicLanding(){
   '<p class="muted-xs landing-note">Prices in US dollars. Payments will be processed securely by our payment partner; see the Refund Policy for details.</p>'+
   '<nav class="landing-links" aria-label="Policies">'+
    '<button type="button" class="link" data-public="terms">Terms of Use</button>'+
+   '<button type="button" class="link" data-public="aup">Acceptable Use Policy</button>'+
    '<button type="button" class="link" data-public="privacy">Privacy Policy</button>'+
    '<button type="button" class="link" data-public="refunds">Refund Policy</button>'+
    '<button type="button" class="link" data-public="cookies">Cookie Policy</button>'+
@@ -303,16 +309,25 @@ function publicLanding(){
   copyrightNotice()+
  '</section>';
 }
+// Renders and shows one of the public policy pages (works signed in or out).
+function openPublicView(k){
+ var renderers={terms:renderTerms,aup:renderAup,privacy:renderPrivacy,refunds:renderRefunds,cookies:renderCookies,access:renderAccess};
+ if(!renderers[k])return false;
+ renderers[k]();
+ document.getElementById('app').hidden=false;
+ document.getElementById('gate').hidden=true;
+ return showView(k);
+}
+// Opens the policy page named in the URL hash (once, on first load), if any.
+function openPendingHashView(){
+ var k=pendingHashView;pendingHashView=null;
+ if(k)openPublicView(k);
+}
 function bindPublicLanding(){
- var renderers={terms:renderTerms,privacy:renderPrivacy,refunds:renderRefunds,cookies:renderCookies,access:renderAccess};
  document.querySelectorAll('#gate [data-public]').forEach(function(el){
   el.onclick=function(e){
    e.preventDefault();
-   var k=el.dataset.public;
-   renderers[k]();
-   document.getElementById('app').hidden=false;
-   document.getElementById('gate').hidden=true;
-   showView(k);
+   openPublicView(el.dataset.public);
   };
  });
 }
@@ -338,7 +353,7 @@ function renderGate(){
   )+
   '<label class="agree"><input type="checkbox" id="agreeBox" '+(gateAgreeChecked?'checked':'')+'>'+
    '<span>I confirm I am 13 or older (and, if under 18, that my parent or guardian agrees to my use of this service). '+
-   'I have read and accept the <span class="link" id="gateTerms">Terms of Use</span> and the <span class="link" id="gatePrivacy">Privacy Policy</span>, '+
+   'I have read and accept the <span class="link" id="gateTerms">Terms of Use</span>, the <span class="link" id="gateAup">Acceptable Use Policy</span> and the <span class="link" id="gatePrivacy">Privacy Policy</span>, '+
    'including that the guides, templates and content in this app are copyright protected and <b>may not be copied, republished, resold or used to build a competing product</b>.</span></label>'+
   '<button class="btn-primary" id="gateGo" style="margin-top:14px">'+(currentUser?'Enter Startlet':'Sign in with Google to continue')+'</button>'+
   '<p class="hint" id="gateHint"></p>'+
@@ -360,6 +375,7 @@ function renderGate(){
  bindPublicLanding();
  document.getElementById('gateTerms').onclick=function(e){e.preventDefault();e.stopPropagation();renderTerms();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('terms');};
  document.getElementById('gatePrivacy').onclick=function(e){e.preventDefault();e.stopPropagation();renderPrivacy();document.getElementById('app').hidden=false;document.getElementById('gate').hidden=true;showView('privacy');};
+ document.getElementById('gateAup').onclick=function(e){e.preventDefault();e.stopPropagation();openPublicView('aup');};
  document.getElementById('agreeBox').onchange=function(e){gateAgreeChecked=e.target.checked;};
  document.getElementById('gateCountry').value=selectedCountry;
  document.getElementById('gateCountry').onchange=function(e){selectedCountry=e.target.value;};
@@ -425,6 +441,7 @@ function bindToolTiles(){
 function footerLinksHTML(){
  return '<p class="hint" style="margin-top:24px;text-align:center">'+
  '<span class="link" data-legal="terms">Terms of Use</span> · '+
+ '<span class="link" data-legal="aup">Acceptable Use Policy</span> · '+
  '<span class="link" data-legal="privacy">Privacy Policy</span> · '+
  '<a class="link" href="mailto:support@startlet.app">Contact</a> · '+
  '<span class="link" data-legal="cookies">Cookie Policy</span> · '+
@@ -437,6 +454,7 @@ function bindFooterLinks(root){
   el.onclick=async function(){
    var k=el.dataset.legal;
    if(k==='terms'){renderTerms();showView('terms');}
+   else if(k==='aup'){renderAup();showView('aup');}
    else if(k==='privacy'){renderPrivacy();showView('privacy');}
    else if(k==='cookies'){renderCookies();showView('cookies');}
    else if(k==='refunds'){renderRefunds();showView('refunds');}
@@ -989,6 +1007,7 @@ function renderLegal(){
  LEGAL.map(function(x,i){return accItem('gp'+i,x.t,x.d);}).join('')+
  '<h2 class="section-label">Read the full policies</h2>'+
  '<button class="btn-ghost full" id="toTerms">Terms of Use</button>'+
+ '<button class="btn-ghost full" id="toAup">Acceptable Use Policy (AI tools)</button>'+
  '<button class="btn-ghost full" id="toPrivacy">Privacy Policy</button>'+
  '<button class="btn-ghost full" id="toCookies">Cookie Policy</button>'+
  '<button class="btn-ghost full" id="toRefunds">Refund Policy</button>'+
@@ -1008,6 +1027,7 @@ function renderLegal(){
   renderLegal();
  };
  document.getElementById('toTerms').onclick=function(){renderTerms();showView('terms');};
+ document.getElementById('toAup').onclick=function(){renderAup();showView('aup');};
  document.getElementById('toPrivacy').onclick=function(){renderPrivacy();showView('privacy');};
  document.getElementById('toCookies').onclick=function(){renderCookies();showView('cookies');};
  document.getElementById('toRefunds').onclick=function(){renderRefunds();showView('refunds');};
@@ -1019,6 +1039,21 @@ function renderTerms(){
  '<div class="hero"><h1 class="sm">Terms of Use</h1><p>Last updated: October 2026</p></div>'+
  panelList(TERMS)+
  copyrightNotice();
+}
+async function renderAup(){
+ document.getElementById('view-aup').innerHTML=
+ '<div class="hero"><h1 class="sm">Acceptable Use Policy</h1><p>AI mentor and AI content tool</p></div><p class="hint">Loading...</p>';
+ try{
+  await loadLegal();
+  document.getElementById('view-aup').innerHTML=
+  '<div class="hero"><h1 class="sm">Acceptable Use Policy</h1><p>AI mentor and AI content tool · Last updated: '+esc(legalModule.LAST_UPDATED)+'</p></div>'+
+  panelList(legalModule.ACCEPTABLE_USE_POLICY)+
+  copyrightNotice();
+ }catch(e){
+  document.getElementById('view-aup').innerHTML=
+  '<div class="hero"><h1 class="sm">Acceptable Use Policy</h1></div><p class="hint">Could not load this page. Try again later.</p>'+
+  copyrightNotice();
+ }
 }
 async function renderAccess(){
  document.getElementById('view-access').innerHTML=
@@ -1154,11 +1189,12 @@ function renderQuiz(){
 }
 
 /* ---------- AI content tool ---------- */
+function aupLinkHTML(){return '<span class="link" data-legal="aup">Read the Acceptable Use Policy</span>.';}
 function renderContentTool(preset){
  var biz='';try{biz=localStorage.getItem('sg_biz')||'';}catch(e){}
  document.getElementById('view-content').innerHTML=
  '<div class="hero"><h1 class="sm">AI content tool</h1><p>Describe your business, pick what you need, and get a draft written for you.</p></div>'+
- '<p class="hint">'+esc(consentNotice('aiTools','What you type here is sent to an AI provider to generate a reply. Do not enter personal, financial, or confidential information. AI responses can be wrong — check anything important before acting on it.'))+'</p>'+
+ '<p class="hint">'+esc(consentNotice('aiTools','What you type here is sent to an AI provider to generate a reply. Do not enter personal, financial, or confidential information. Sexually explicit or NSFW content is not allowed, in what you send or in what you ask for. AI responses can be wrong — check anything important before acting on it.'))+' '+aupLinkHTML()+'</p>'+
  '<label class="field-label" for="bizInput">What is your business?</label>'+
  '<textarea id="bizInput" placeholder="e.g. an online store selling phone accessories with original designs, aimed at 14-18 year olds">'+esc(biz)+'</textarea>'+
  (preset?'<label class="field-label" for="customTask">What to write</label><textarea id="customTask">'+esc(preset)+'</textarea>':'<span class="field-label">Content type</span><div class="chip-row" id="typeChips"></div>')+
@@ -1166,6 +1202,7 @@ function renderContentTool(preset){
  '<p class="hint">Edit the draft into your own voice before posting — content that sounds like you performs better.</p>'+
  '<div class="result-box" id="resultBox" hidden></div>';
  if(!preset)renderTypeChips();
+ bindFooterLinks(document.getElementById('view-content'));
  document.getElementById('genBtn').onclick=function(){
   var b=document.getElementById('bizInput').value.trim(),box=document.getElementById('resultBox');
   if(!b){box.hidden=false;box.textContent='Tell me about your business first.';return;}
@@ -1249,12 +1286,12 @@ function renderAssistant(prefill){
  clearAttachedPhoto();
  var noticeHtml='';
  if(!photoNoticeSeen()){
-  noticeHtml='<p class="hint" id="photoNotice">Photos you attach are sent to an AI provider to get feedback. Don\'t send photos of faces, your school, your home, documents, or anything private.</p>';
+  noticeHtml='<p class="hint" id="photoNotice">Photos you attach are sent to an AI provider to get feedback. Don\'t send photos of faces, your school, your home, documents, or anything private, and never send nude, sexual or other NSFW photos.</p>';
   markPhotoNoticeSeen();
  }
  document.getElementById('view-assistant').innerHTML=
  '<div class="hero"><h1 class="sm">AI mentor</h1><p>Ask anything about your business — from the first step to the first customer. Direct answers, no promises.</p></div>'+
- '<p class="hint">'+esc(consentNotice('aiTools','What you type here is sent to an AI provider to generate a reply. This includes any photos you attach. Do not enter personal, financial, or confidential information. AI responses can be wrong — check anything important before acting on it.'))+'</p>'+
+ '<p class="hint">'+esc(consentNotice('aiTools','What you type here is sent to an AI provider to generate a reply. This includes any photos you attach. Do not enter personal, financial, or confidential information. Sexually explicit or NSFW content is not allowed, in what you send or in what you ask for. AI responses can be wrong — check anything important before acting on it.'))+' '+aupLinkHTML()+'</p>'+
  '<div class="chip-row" id="sugChips">'+sug.map(function(s){return '<button class="chip">'+s+'</button>';}).join('')+'</div>'+
  '<div class="chat-log" id="chatLog" aria-live="polite"></div>'+
  '<p class="hint" id="photoErrorHint"></p>'+
@@ -1268,6 +1305,7 @@ function renderAssistant(prefill){
  '</div>';
  renderChatLog();
  renderPhotoPreview();
+ bindFooterLinks(document.getElementById('view-assistant'));
  document.querySelectorAll('#sugChips .chip').forEach(function(c){c.onclick=function(){document.getElementById('chatInput').value=c.textContent;sendChat();};});
  document.getElementById('sendBtn').onclick=sendChat;
  document.getElementById('chatInput').onkeydown=function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}};
@@ -1651,6 +1689,10 @@ document.getElementById('brandHome').onclick=function(){go('home');};
 // back button after signing out), force a full reload so the auth check
 // re-runs instead of showing a stale DOM snapshot from before sign-out.
 window.addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
+// A direct policy link (e.g. #acceptable-use) opens that page straight away, before
+// sign-in finishes loading; openPendingHashView() re-opens it once the gate renders.
+if(pendingHashView)openPublicView(pendingHashView);
+window.addEventListener('hashchange',function(){var k=hashView();if(k)openPublicView(k);});
 initAuth();
 loadLegal().catch(function(){});
 // Businesses with a real chapters JSON at public/data/<id>.json.

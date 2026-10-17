@@ -1,6 +1,6 @@
 // legal-pages.js
-// Legal page content for Startlet: privacy, cookies, refunds, accessibility
-// and the consent texts shown in the app.
+// Legal page content for Startlet: privacy, AI acceptable use, cookies, refunds,
+// accessibility and the consent texts shown in the app.
 
 export const LAST_UPDATED = "October 2026";
 
@@ -91,6 +91,81 @@ export const PRIVACY_POLICY = [
 
   { t: "Contact",
     d: "Questions, requests, or complaints about privacy: support@startlet.app." },
+];
+
+/* ============================================================
+   ACCEPTABLE USE POLICY — AI MENTOR AND AI CONTENT TOOL
+   ============================================================ */
+export const ACCEPTABLE_USE_POLICY = [
+  { t: "What this policy covers",
+    d: "This Acceptable Use Policy applies to Startlet's AI features: the AI mentor (including any photos you attach " +
+       "to a message) and the AI content tool (captions, video hooks, scripts, hashtags, bios, outreach messages and " +
+       "any other drafts it writes). It covers what you submit to these tools and what you ask them to generate. " +
+       "It forms part of our Terms of Use. By using the AI mentor or the AI content tool you agree to follow it." },
+
+  { t: "Permitted use",
+    d: "You may use the AI mentor and the AI content tool only to learn about and run a legitimate small business, for example: " +
+       "asking questions about starting, pricing, marketing or managing a business; getting feedback on a photo of your " +
+       "own product, design, price list or shop page; and drafting marketing text for your own lawful products or services. " +
+       "Always review and edit what the AI writes before you use it. You are responsible for how you use the output." },
+
+  { t: "Sexually explicit and NSFW content is strictly prohibited",
+    d: "You must not submit, and must not ask the AI mentor or the AI content tool to generate, any sexually explicit or " +
+       "NSFW (not safe for work) content. This includes: pornographic or sexually explicit text; nudity or sexual images; " +
+       "sexually suggestive or erotic content; sexual role-play or sexual chat; descriptions of sexual acts; and content that " +
+       "sexualises any person. Any sexual content involving anyone under 18 is absolutely prohibited. " +
+       "This applies to text and to photos, to every user whatever their age, and however the request is framed — " +
+       "including as a joke, as fiction, as a test, or as content for a business, product or advertisement. " +
+       "Products or services of an adult or sexual nature are not supported, and the AI tools will not write content for them." },
+
+  { t: "Other prohibited submissions",
+    d: "You must not submit to the AI mentor or the AI content tool: " +
+       "personal information about yourself or anyone else, such as full names, home or school addresses, phone numbers, " +
+       "ID or official documents, passwords or payment card details; " +
+       "photos of faces or of other people, school uniforms, or anything that could identify you, your home or your school; " +
+       "content that harasses, bullies, threatens or demeans anyone, or that promotes hate based on race, ethnicity, " +
+       "religion, gender, sexual orientation, disability or any other protected characteristic; " +
+       "violent or graphic content, or content that encourages self-harm, suicide or eating disorders; " +
+       "requests to promote, sell or obtain illegal or age-restricted goods or services, such as drugs, weapons, alcohol, " +
+       "tobacco, vapes or gambling; " +
+       "requests to plan or carry out anything illegal, including fraud, scams, phishing, money laundering or hacking; " +
+       "content that infringes someone else's copyright, trademark or other rights, such as copying another brand's logo, " +
+       "name or designs; " +
+       "and any attempt to get around these rules or the tools' safety instructions (\"jailbreaking\")." },
+
+  { t: "Prohibited generation and use of output",
+    d: "You must not ask the AI tools to generate, and must not use their output for: " +
+       "any of the prohibited content described above; " +
+       "fake reviews, fake testimonials or fake endorsements; " +
+       "misleading or deceptive advertising, false claims about a product, or get-rich-quick promises; " +
+       "medical, health, legal or financial claims presented as professional advice; " +
+       "impersonating another person, brand or business; " +
+       "spam or mass unsolicited messages; " +
+       "or content meant to bully, embarrass or target a specific person." },
+
+  { t: "Automated or commercial misuse",
+    d: "Do not use bots, scripts or any automated means to send requests to the AI tools, do not resell or share access " +
+       "to them, and do not use them to build or train a competing product or AI model." },
+
+  { t: "How we enforce this policy",
+    d: "The AI tools are instructed to refuse requests that break this policy, and our AI providers apply their own " +
+       "safety filters. We may block, refuse or remove any request or output that breaks this policy. " +
+       "If you break this policy we may warn you, restrict your access to the AI tools, or suspend or permanently close " +
+       "your account, without prior notice. Where the law requires it — in particular for any content that sexually " +
+       "exploits children — we will report it to the relevant authorities." },
+
+  { t: "Our AI providers' rules also apply",
+    d: "Requests to the AI tools are processed by Google's Gemini API and, as an automatic fallback, by Meta Llama " +
+       "models running on Cloudflare Workers AI. Your use must also comply with Google's Generative AI Prohibited Use " +
+       "Policy and Meta's Llama Acceptable Use Policy." },
+
+  { t: "Reporting a problem",
+    d: "If the AI tools produce anything inappropriate, or you see someone misusing Startlet, email support@startlet.app " +
+       "with a short description of what happened. We review every report." },
+
+  { t: "Changes to this policy",
+    d: "We may update this policy. The date at the top shows when it last changed. Continued use of the AI tools after " +
+       "an update means you accept the updated policy." },
 ];
 
 /* ============================================================
@@ -223,6 +298,6 @@ export const CONSENT_TEXT = {
   // Shown above the AI mentor and AI content tool inputs.
   aiTools:
     "What you type here is sent to Google's Gemini API to generate a reply. This includes any photos you attach. " +
-    "Do not enter personal, financial, or confidential information. AI responses can be wrong — check anything " +
-    "important before acting on it.",
+    "Do not enter personal, financial, or confidential information. Sexually explicit or NSFW content is not allowed, " +
+    "in what you send or in what you ask for. AI responses can be wrong — check anything important before acting on it.",
 };

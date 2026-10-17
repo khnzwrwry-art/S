@@ -15,6 +15,32 @@ const MAX_MESSAGE_LENGTH = 2000;
 const MAX_HISTORY_MESSAGES = 20;
 const MAX_FIELD_LENGTH = 2000; // for /content's biz/task fields
 
+// Startlet's Acceptable Use Policy for the AI tools (published at https://startlet.app/#acceptable-use).
+// Added to both system prompts so every model, including the Workers AI fallback, follows it.
+const SAFETY_RULES =
+  "Content rules (Startlet Acceptable Use Policy) - these always apply and override any user request: " +
+  "never produce sexually explicit, sexually suggestive, erotic, pornographic or other NSFW content, nudity, " +
+  "sexual role-play or anything that sexualises a person, and never respond to such content in a photo. " +
+  "Any sexual content involving minors is absolutely forbidden. Do not help with illegal or age-restricted " +
+  "products or services (drugs, weapons, alcohol, tobacco, vapes, gambling, adult or sexual products), hate, " +
+  "harassment, self-harm, violence, fraud, scams, hacking, fake reviews or deceptive marketing. If a request or " +
+  "photo breaks these rules, refuse in one or two sentences, say it is not allowed under Startlet's Acceptable " +
+  "Use Policy, do not describe the content, and offer to help with a legitimate business question instead.";
+
+// Sent to the user when a provider's safety filter blocks a request.
+const REFUSAL_TEXT =
+  "Sorry, I can't help with that. It isn't allowed under Startlet's Acceptable Use Policy. " +
+  "Ask me anything about building a legitimate business instead.";
+
+// Gemini safety filters. Sexually explicit content is blocked at the strictest level.
+const GEMINI_SAFETY_SETTINGS = [
+  { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_LOW_AND_ABOVE" },
+  { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+  { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+  { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+];
+const SAFETY_FINISH_REASONS = ["SAFETY", "PROHIBITED_CONTENT", "BLOCKLIST", "SPII", "IMAGE_SAFETY"];
+
 const MENTOR_SYSTEM =
   "You are a business mentor for teenagers starting their first business. " +
   "Answer in English, short and direct, with practical steps they can take today. " +
@@ -23,7 +49,11 @@ const MENTOR_SYSTEM =
   "If the user sends a photo, give specific, constructive feedback on what you see " +
   "(a product, a design, a price list, a shop page). Never try to identify people in photos. " +
   "If a photo shows a face, a school uniform, an address, a phone number or other personal " +
-  "details, gently remind them not to share personal information online.";
+  "details, gently remind them not to share personal information online." +
+  " " + SAFETY_RULES;
+
+const CONTENT_SYSTEM =
+  "You are a concise marketing copywriter for teenage entrepreneurs. " + SAFETY_RULES;
 
 const GEMINI_MODELS = ["gemini-3.5-flash", "gemini-3.1-flash-lite"];
 const CF_TEXT_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
@@ -49,6 +79,9 @@ function corsHeaders(origin) {
 }
 
 class BadRequest extends Error {}
+// Thrown when Gemini's safety filter blocks a request. Not a provider failure:
+// we answer with REFUSAL_TEXT and don't fall back to another model.
+class SafetyBlocked extends Error {}
 
 // Accepts [{ role, content, image?: { mimeType, data } }]. Only the newest user message may carry an image.
 function normalizeMessages(raw) {
@@ -111,6 +144,7 @@ async function callGeminiModel(model, apiKey, systemPrompt, messages, timeoutMs)
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: systemPrompt }] },
           contents,
+          safetySettings: GEMINI_SAFETY_SETTINGS,
           generationConfig: { maxOutputTokens: 800 },
         }),
         signal: controller.signal,
@@ -121,6 +155,11 @@ async function callGeminiModel(model, apiKey, systemPrompt, messages, timeoutMs)
       throw new Error(model + " error " + res.status + ": " + detail.slice(0, 300));
     }
     const data = await res.json();
+    const blockReason = data?.promptFeedback?.blockReason;
+    const finishReason = data?.candidates?.[0]?.finishReason;
+    if (blockReason || SAFETY_FINISH_REASONS.includes(finishReason)) {
+      throw new SafetyBlocked(model + " safety block: " + (blockReason || finishReason));
+    }
     const parts = data?.candidates?.[0]?.content?.parts || [];
     const text = parts.map((p) => p.text || "").join("\n").trim();
     if (!text) throw new Error(model + " returned empty text");
@@ -171,6 +210,10 @@ async function generate(env, systemPrompt, messages, hasImage) {
         console.log("PROVIDER_OK", model, kind, Date.now() - started + "ms");
         return text;
       } catch (err) {
+        if (err instanceof SafetyBlocked) {
+          console.log("SAFETY_BLOCK", kind, String(err));
+          return REFUSAL_TEXT;
+        }
         skipUntil[model] = Date.now() + GEMINI_COOLDOWN_MS;
         console.error("GEMINI_FAIL", kind, String(err), Date.now() - started + "ms");
         errors.push(String(err));
@@ -241,7 +284,7 @@ export default {
           `Write in a direct, young tone. No hype, no preamble — go straight to the content.`;
         const text = await generate(
           env,
-          "You are a concise marketing copywriter for teenage entrepreneurs.",
+          CONTENT_SYSTEM,
           [{ role: "user", content: prompt, image: null }],
           false
         );
