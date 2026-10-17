@@ -251,7 +251,10 @@ async function initAuth(){
  try{
   authModule=await import('./auth.js');
  }catch(e){
-  document.getElementById('gate').innerHTML='<div class="gate-card"><p class="hint">Could not load sign-in. Check your connection and reload the page.</p></div>';
+  // Sign-in failed to load (offline, blocker): still show what Startlet is, pricing and policies.
+  document.getElementById('gate').innerHTML='<div class="gate-card"><p class="hint">Could not load sign-in. Check your connection and reload the page.</p></div>'+publicLanding();
+  bindPublicLanding();
+  openPendingHashView();
   return;
  }
  authModule.watchAuthState(async function(user){
@@ -285,7 +288,7 @@ function publicLanding(){
   '<ul class="landing-list">'+
    '<li>10 business paths, including freelancing, content creation, print on demand, social media management and building websites for local businesses</li>'+
    '<li>11 step-by-step chapters per path, with templates and checklists</li>'+
-   '<li>An AI business mentor you can ask anything</li>'+
+   '<li>An AI business mentor for questions about starting and running your business, and an AI content tool that drafts marketing text such as captions and video scripts. Both are text-only: they can give feedback on a photo of your own product, but they do not generate images or video. Use is covered by our Acceptable Use Policy, and sexually explicit or NSFW content is not allowed.</li>'+
    '<li>A moderated community feed and a sales leaderboard</li>'+
   '</ul>'+
   '<h2>Pricing</h2>'+
@@ -443,7 +446,7 @@ function footerLinksHTML(){
  '<span class="link" data-legal="terms">Terms of Use</span> · '+
  '<span class="link" data-legal="aup">Acceptable Use Policy</span> · '+
  '<span class="link" data-legal="privacy">Privacy Policy</span> · '+
- '<a class="link" href="mailto:support@startlet.app">Contact</a> · '+
+ 'Support: <a class="link" href="mailto:support@startlet.app">support@startlet.app</a> · '+
  '<span class="link" data-legal="cookies">Cookie Policy</span> · '+
  '<span class="link" data-legal="refunds">Refund Policy</span> · '+
  '<span class="link" data-legal="access">Accessibility statement</span> · '+

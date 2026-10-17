@@ -157,7 +157,8 @@ export const ACCEPTABLE_USE_POLICY = [
   { t: "Our AI providers' rules also apply",
     d: "Requests to the AI tools are processed by Google's Gemini API and, as an automatic fallback, by Meta Llama " +
        "models running on Cloudflare Workers AI. Your use must also comply with Google's Generative AI Prohibited Use " +
-       "Policy and Meta's Llama Acceptable Use Policy." },
+       "Policy and Meta's Llama Acceptable Use Policy. Startlet is an independent product built on these third-party AI " +
+       "models. It is not affiliated with, endorsed by or sponsored by Google, Meta or Cloudflare." },
 
   { t: "Reporting a problem",
     d: "If the AI tools produce anything inappropriate, or you see someone misusing Startlet, email support@startlet.app " +
