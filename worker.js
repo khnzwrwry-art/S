@@ -94,8 +94,9 @@ function normalizeMessages(raw) {
 
 async function callGeminiModel(model, apiKey, systemPrompt, messages, timeoutMs) {
   const contents = messages.map((m) => {
-    const parts = [{ text: m.content }];
-    if (m.image) parts.push({ inlineData: { mimeType: m.image.mimeType, data: m.image.data } });
+    const parts = m.image
+      ? [{ text: m.content }, { inlineData: { mimeType: m.image.mimeType, data: m.image.data } }]
+      : [{ text: m.content }];
     return { role: m.role === "assistant" ? "model" : "user", parts };
   });
 
