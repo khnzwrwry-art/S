@@ -126,6 +126,11 @@ export const REFUND_POLICY = [
        "(US dollars). The exact price, billing frequency and anything included are always shown on the checkout screen " +
        "before you pay." },
 
+  { t: "Free trial",
+    d: "Startlet Pro starts with a 3-day free trial. You are not charged during the trial. If you cancel before the " +
+       "trial ends, you pay nothing. If you don't cancel, the subscription starts automatically at the end of the trial " +
+       "at the price and billing frequency you chose, and that is shown on the checkout screen before you start the trial." },
+
   { t: "Who processes payments",
     d: "Payments are processed by Creem, our online reseller and Merchant of Record. Creem handles billing, payment " +
        "security and sales tax, and your receipt will come from Creem. We never see or store your full card details." },

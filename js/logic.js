@@ -289,7 +289,7 @@ function publicLanding(){
     '<p class="muted-sm">Sign in with Google and start learning: business paths, step-by-step guides, the community feed, the leaderboard and the AI mentor.</p></div>'+
    '<div class="plan plan-pro"><h3>Startlet Pro <span class="plan-tag">Coming soon</span></h3>'+
     '<p class="plan-price">$4.99<span>/month</span></p><p class="muted-sm plan-alt">or $29.99/year (about $2.50 a month)</p>'+
-    '<p class="muted-sm">Every chapter of every path, unlimited AI mentor questions and photo feedback from the mentor. Cancel anytime.</p></div>'+
+    '<p class="muted-sm"><strong>Starts with a 3-day free trial.</strong> Every chapter of every path, unlimited AI mentor questions and photo feedback from the mentor. Cancel anytime during the trial and you pay nothing.</p></div>'+
   '</div>'+
   '<p class="muted-xs landing-note">Prices in US dollars. Payments will be processed securely by our payment partner; see the Refund Policy for details.</p>'+
   '<nav class="landing-links" aria-label="Policies">'+
