@@ -459,6 +459,16 @@ async function handleCreemWebhook(request, env) {
   if (!uid) return new Response("ok (no user)", { status: 200 });
   if (!type.startsWith("subscription.") && type !== "checkout.completed") return new Response("ok", { status: 200 });
   const product = sub.product || obj.product || {};
+  const incoming = { status: sub.status || (type === "checkout.completed" ? "trialing" : "unknown"),
+    periodEnd: sub.current_period_end_date || null };
+  // If this user has another subscription that still gives access, don't let an event about
+  // a different (e.g. duplicate, now cancelled) subscription lock them out.
+  const existing = await fsGetSub(env, uid).catch(() => null);
+  if (existing && existing.subscriptionId && sub.id && existing.subscriptionId !== sub.id &&
+      hasAccess(existing) && !hasAccess(incoming)) {
+    console.log("WEBHOOK_SKIP other subscription still active", existing.subscriptionId);
+    return new Response("ok (other subscription active)", { status: 200 });
+  }
   await fsSetSub(env, uid, {
     status: sub.status || (type === "checkout.completed" ? "trialing" : "unknown"),
     subscriptionId: sub.id || null,
