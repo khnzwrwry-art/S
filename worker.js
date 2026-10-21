@@ -329,9 +329,18 @@ let gToken = { value: null, exp: 0 };
 async function googleAccessToken(env) {
   if (gToken.value && gToken.exp > Date.now() + 60000) return gToken.value;
   if (!env.FIREBASE_SERVICE_ACCOUNT) throw new Error("FIREBASE_SERVICE_ACCOUNT is not set");
+  const rawSa = String(env.FIREBASE_SERVICE_ACCOUNT).trim();
   let sa;
-  try { sa = JSON.parse(String(env.FIREBASE_SERVICE_ACCOUNT).trim()); }
-  catch (e) { throw new Error("FIREBASE_SERVICE_ACCOUNT is not valid JSON (copy the whole file, from { to }): " + e.message); }
+  try { sa = JSON.parse(rawSa); }
+  catch (e) {
+    // Copy/paste on phones and tablets sometimes cuts the end or changes quotes. We only
+    // need two fields, so pull them out directly instead of failing.
+    const q = rawSa.replace(/[\u201C\u201D]/g, '"');
+    const email = (q.match(/"client_email"\s*:\s*"([^"]+)"/) || [])[1];
+    const key = (q.match(/-----BEGIN PRIVATE KEY-----[\s\S]*?-----END PRIVATE KEY-----/) || [])[0];
+    if (!email || !key) throw new Error("FIREBASE_SERVICE_ACCOUNT could not be read (copy the whole file, from { to }): " + e.message);
+    sa = { client_email: email, private_key: key.replace(/\\n/g, "\n") };
+  }
   if (!sa.client_email || !sa.private_key) throw new Error("FIREBASE_SERVICE_ACCOUNT is missing client_email or private_key");
   const now = Math.floor(Date.now() / 1000);
   const unsigned = strToB64url(JSON.stringify({ alg: "RS256", typ: "JWT" })) + "." + strToB64url(JSON.stringify({
