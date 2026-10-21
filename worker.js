@@ -245,33 +245,42 @@ async function generate(env, systemPrompt, messages, hasImage) {
      CREEM_WEBHOOK_SECRET     Creem webhook signing secret
      FIREBASE_SERVICE_ACCOUNT the whole service-account JSON from Firebase
    Plain variables (optional):
-     CREEM_MODE               "test" (default) or "live"
-     CREEM_PRODUCT_MONTHLY    product id (defaults to the test product below)
-     CREEM_PRODUCT_YEARLY     product id (defaults to the test product below)
-     REQUIRE_SUBSCRIPTION     "true" to block /mentor and /content without an active plan
+     CREEM_MODE               "test" or "live" (default: worked out from the API key)
+     CREEM_PRODUCT_MONTHLY    product id (defaults to the test/live products below)
+     CREEM_PRODUCT_YEARLY     product id (defaults to the test/live products below)
+     REQUIRE_SUBSCRIPTION     "false" to let /mentor and /content work without an active plan
    ===================================================================== */
 
 const FIREBASE_PROJECT = "launchpad-e6280";
 const SITE_URL = "https://startlet.app";
 const TEST_PRODUCTS = { monthly: "prod_4glFUdmCsSywNGXygD8C2g", yearly: "prod_7LhEcxkat6pOd8540IRxIU" };
+const LIVE_PRODUCTS = { monthly: "prod_6OVCRtis6GhhlLYTzF95Tw", yearly: "prod_76Jj0qoFjtXDXNP4xozIXL" };
+// Test or live is decided by the API key itself (test keys start with "creem_test_"),
+// unless CREEM_MODE is set explicitly.
+function isLive(env) {
+  if (env.CREEM_MODE === "live") return true;
+  if (env.CREEM_MODE === "test") return false;
+  return !String(env.CREEM_API_KEY || "").trim().startsWith("creem_test_");
+}
 // Statuses that give access to the app. "canceled" still gives access until the paid period ends.
 const ACCESS_STATUSES = ["active", "trialing", "scheduled_cancel", "past_due"];
 
 class AuthError extends Error {}
 
 function creemBase(env) {
-  return env.CREEM_MODE === "live" ? "https://api.creem.io" : "https://test-api.creem.io";
+  return isLive(env) ? "https://api.creem.io" : "https://test-api.creem.io";
 }
 function productFor(env, plan) {
-  if (plan === "yearly") return env.CREEM_PRODUCT_YEARLY || TEST_PRODUCTS.yearly;
-  return env.CREEM_PRODUCT_MONTHLY || TEST_PRODUCTS.monthly;
+  const d = isLive(env) ? LIVE_PRODUCTS : TEST_PRODUCTS;
+  if (plan === "yearly") return env.CREEM_PRODUCT_YEARLY || d.yearly;
+  return env.CREEM_PRODUCT_MONTHLY || d.monthly;
 }
 
 async function creem(env, method, path, body) {
   if (!env.CREEM_API_KEY) throw new Error("CREEM_API_KEY is not set");
   const res = await fetch(creemBase(env) + path, {
     method,
-    headers: { "x-api-key": env.CREEM_API_KEY, "Content-Type": "application/json" },
+    headers: { "x-api-key": String(env.CREEM_API_KEY).trim(), "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
   });
   const text = await res.text();
@@ -476,7 +485,7 @@ async function handleCreemWebhook(request, env) {
     productId: typeof product === "string" ? product : product.id || null,
     periodEnd: sub.current_period_end_date || null,
     lastEvent: type,
-    mode: env.CREEM_MODE === "live" ? "live" : "test",
+    mode: isLive(env) ? "live" : "test",
     updatedAt: new Date().toISOString(),
   });
   accessCache.delete(uid);
@@ -551,7 +560,7 @@ export default {
       if (["/checkout", "/portal", "/cancel-now"].includes(url.pathname)) {
         return Response.json(await handleBilling(url.pathname, body, env), { headers: cors });
       }
-      if ((url.pathname === "/mentor" || url.pathname === "/content") && env.REQUIRE_SUBSCRIPTION === "true") {
+      if ((url.pathname === "/mentor" || url.pathname === "/content") && env.REQUIRE_SUBSCRIPTION !== "false") {
         await requireAccess(env, body.idToken);
       }
       if (url.pathname === "/mentor") {
