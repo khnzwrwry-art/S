@@ -32,6 +32,19 @@ import { auth } from "./auth.js"; // reuse the initialized app's auth instance
 import { app } from "./auth.js";
 const db = getFirestore(app);
 
+/* ---------------- Subscription (written only by the server) ---------------- */
+
+// Calls cb(sub|null) now and every time the subscription changes. Returns an unsubscribe function.
+export function watchSubscription(cb) {
+  const user = auth.currentUser;
+  if (!user) { cb(null); return function () {}; }
+  return onSnapshot(
+    doc(db, "subscriptions", user.uid),
+    (snap) => cb(snap.exists() ? snap.data() : null),
+    () => cb(null)
+  );
+}
+
 /* ---------------- Progress tracking ---------------- */
 
 // Save progress: { businessId: [stepIndex, stepIndex, ...] }

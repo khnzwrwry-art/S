@@ -198,7 +198,7 @@ export const COOKIE_POLICY = [
    ============================================================ */
 export const REFUND_POLICY = [
   { t: "Plans and prices",
-    d: "Startlet has a free plan. Startlet Pro, a paid subscription, is priced at $4.99 per month or $29.99 per year " +
+    d: "Startlet is a paid subscription (Startlet Pro) with no free plan. It costs $4.99 per month or $29.99 per year " +
        "(US dollars). The exact price, billing frequency and anything included are always shown on the checkout screen " +
        "before you pay." },
 

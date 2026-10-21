@@ -4,30 +4,47 @@
 // Worker: launchpad-mentor (uses Google Gemini free tier, key stored as a Worker secret)
 
 const WORKER_URL = "https://launchpad-mentor.khnzwrwry.workers.dev";
+import { auth } from "./auth.js";
+
+async function idToken() {
+  const u = auth.currentUser;
+  return u ? await u.getIdToken() : null;
+}
+async function post(path, payload) {
+  const res = await fetch(WORKER_URL + path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...payload, idToken: await idToken() }),
+  });
+  let data = {};
+  try { data = await res.json(); } catch (e) { /* non-JSON */ }
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data;
+}
+
+// Billing (Creem). plan: "monthly" | "yearly". forParent: true leaves the email blank
+// so a parent can pay with their own details. Returns the Creem checkout URL.
+export async function startCheckout(plan, forParent) {
+  return (await post("/checkout", { plan, forParent: !!forParent })).url;
+}
+// Returns the Creem customer-portal URL (manage / cancel subscription).
+export async function openPortal() {
+  return (await post("/portal", {})).url;
+}
+// Cancels billing immediately (used right before deleting the account).
+export async function cancelNow() {
+  return post("/cancel-now", {});
+}
 
 // AI mentor chat.
 // messages: [{ role: 'user' | 'assistant', content: '...' }, ...]
 export async function mentorChat(messages) {
-  const res = await fetch(WORKER_URL + "/mentor", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Mentor request failed");
-  return data.text;
+  return (await post("/mentor", { messages })).text;
 }
 
 // AI content tool (captions, scripts, hashtags, etc.)
 export async function generateContent(biz, task) {
-  const res = await fetch(WORKER_URL + "/content", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ biz, task }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Content request failed");
-  return data.text;
+  return (await post("/content", { biz, task })).text;
 }
 
 /* ---------------- Wiring notes for Claude Code ----------------

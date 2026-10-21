@@ -79,7 +79,7 @@ let activeCat=null,activeTab='intro',selectedType=CONTENT_TYPES[0].id,chatHistor
 let lastActivity=null,streakCount=0,homeSearch='',homeCategoryFilter='all',openChapterIdx={},dailyReminderPref=false;
 const CATEGORY_LABELS={online:'Online',services:'Services',creative:'Creative',food:'Food'};
 
-const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','aup','access','privacy','cookies','refunds','ages','visual','help','profile','deleteAccount'];
+const VIEWS=['home','category','content','assistant','templates','editing','glossary','quiz','feed','leaderboard','legal','terms','aup','access','privacy','cookies','refunds','ages','visual','help','profile','deleteAccount','paywall'];
 // Views reachable without being signed in and agreed — the legal/policy pages only,
 // so they can be read before signing up. Every other view requires appUnlocked.
 const PUBLIC_VIEWS=['terms','aup','privacy','cookies','refunds','access'];
@@ -88,17 +88,25 @@ const HASH_VIEWS={'terms':'terms','acceptable-use':'aup','privacy':'privacy','co
 function hashView(){var h=(location.hash||'').replace(/^#\/?/,'').toLowerCase();return HASH_VIEWS.hasOwnProperty(h)?HASH_VIEWS[h]:null;}
 let pendingHashView=hashView();
 let appUnlocked=false;
+// Hard paywall: signed-in users without an active plan (trial or paid) can only reach these views.
+const PAYWALL_OK=PUBLIC_VIEWS.concat(['paywall','profile','deleteAccount']);
+let hasPro=false, subKnown=false, currentSub=null, subWatchStop=null, paywallPlan='yearly';
+let checkoutReturn=/[?&]checkout=success/.test(location.search);
+if(checkoutReturn){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}}
 function showView(n){
  if(!appUnlocked&&PUBLIC_VIEWS.indexOf(n)===-1){exitToGate();return false;}
+ if(appUnlocked&&!hasPro&&PAYWALL_OK.indexOf(n)===-1){
+  if(n!=='paywall'){renderPaywall();n='paywall';}
+ }
  VIEWS.forEach(function(v){document.getElementById('view-'+v).hidden=(v!==n);});
- document.getElementById('backBtn').hidden=(n==='home');
+ document.getElementById('backBtn').hidden=(n==='home'||n==='paywall');
  updateBottomNavActive(n);
  window.scrollTo(0,0);
  return true;
 }
 function go(n){if(showView(n)&&n==='home')renderHome();}
 function exitToGate(){
- appUnlocked=false;
+ appUnlocked=false;stopSubWatch();
  document.getElementById('bottomNav').hidden=true;
  document.getElementById('profileCircle').hidden=true;
  document.getElementById('app').hidden=true;
@@ -259,7 +267,7 @@ async function initAuth(){
  }
  authModule.watchAuthState(async function(user){
   currentUser=user;
-  if(!user){appUnlocked=false;gateAgreeChecked=false;stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;document.getElementById('profileCircle').hidden=true;document.getElementById('app').hidden=true;renderGate();document.getElementById('gate').hidden=false;openPendingHashView();return;}
+  if(!user){appUnlocked=false;gateAgreeChecked=false;stopSubWatch();stopFeedWatch();stopLeaderboardWatch();document.getElementById('bottomNav').hidden=true;document.getElementById('profileCircle').hidden=true;document.getElementById('app').hidden=true;renderGate();document.getElementById('gate').hidden=false;openPendingHashView();return;}
   var rec=null;
   try{
    await loadFirestore();
@@ -293,13 +301,11 @@ function publicLanding(){
   '</ul>'+
   '<h2>Pricing</h2>'+
   '<div class="plans">'+
-   '<div class="plan"><h3>Free</h3><p class="plan-price">$0</p>'+
-    '<p class="muted-sm">Sign in with Google and start learning: business paths, step-by-step guides, the community feed, the leaderboard and the AI mentor.</p></div>'+
-   '<div class="plan plan-pro"><h3>Startlet Pro <span class="plan-tag">Coming soon</span></h3>'+
+   '<div class="plan plan-pro"><h3>Startlet Pro <span class="plan-tag">3-day free trial</span></h3>'+
     '<p class="plan-price">$4.99<span>/month</span></p><p class="muted-sm plan-alt">or $29.99/year (about $2.50 a month)</p>'+
-    '<p class="muted-sm"><strong>Starts with a 3-day free trial.</strong> Every chapter of every path, unlimited AI mentor questions and photo feedback from the mentor. Cancel anytime during the trial and you pay nothing.</p></div>'+
+    '<p class="muted-sm">Everything in Startlet: all business paths and chapters, the AI mentor and content tool, the community feed and the leaderboard. <strong>Starts with a 3-day free trial</strong> — cancel before it ends and you pay nothing. Cancel anytime.</p></div>'+
   '</div>'+
-  '<p class="muted-xs landing-note">Prices in US dollars. Payments will be processed securely by our payment partner; see the Refund Policy for details.</p>'+
+  '<p class="muted-xs landing-note">Startlet has no free plan: a subscription is needed to use the app. Prices in US dollars. Payments are processed securely by our payment partner and Merchant of Record, Creem; see the Refund Policy for details. If you are under 18, ask a parent or guardian to pay.</p>'+
   '<nav class="landing-links" aria-label="Policies">'+
    '<button type="button" class="link" data-public="terms">Terms of Use</button>'+
    '<button type="button" class="link" data-public="aup">Acceptable Use Policy</button>'+
@@ -408,10 +414,116 @@ function enterApp(){
  document.getElementById('gate').hidden=true;
  document.getElementById('app').hidden=false;
  renderBottomNav();
- document.getElementById('bottomNav').hidden=false;
  renderTopbarProfile();
- renderHome();
- updateBottomNavActive('home');
+ // Show the paywall (in a "checking" state) until we know the subscription status.
+ hasPro=false;subKnown=false;
+ document.getElementById('bottomNav').hidden=true;
+ renderPaywall();showView('paywall');
+ startSubWatch();
+}
+
+/* ---------- subscription + paywall (Creem) ---------- */
+function subHasAccess(sub){
+ if(!sub)return false;
+ if(['active','trialing','scheduled_cancel','past_due'].indexOf(sub.status)>-1)return true;
+ return sub.status==='canceled'&&!!sub.periodEnd&&Date.parse(sub.periodEnd)>Date.now();
+}
+function stopSubWatch(){
+ if(subWatchStop){try{subWatchStop();}catch(e){}subWatchStop=null;}
+ hasPro=false;subKnown=false;currentSub=null;
+}
+async function startSubWatch(){
+ if(subWatchStop){try{subWatchStop();}catch(e){}subWatchStop=null;}
+ try{
+  await loadFirestore();
+  subWatchStop=firestoreModule.watchSubscription(onSubChange);
+ }catch(e){subKnown=true;renderPaywall();}
+}
+function onSubChange(sub){
+ currentSub=sub;subKnown=true;
+ var was=hasPro;
+ hasPro=subHasAccess(sub);
+ if(hasPro){
+  checkoutReturn=false;
+  document.getElementById('bottomNav').hidden=false;
+  if(!was||!document.getElementById('view-paywall').hidden){renderHome();showView('home');}
+  if(!document.getElementById('view-profile').hidden)renderProfile();
+ }else{
+  document.getElementById('bottomNav').hidden=true;
+  var onAllowed=PAYWALL_OK.some(function(v){return v!=='paywall'&&!document.getElementById('view-'+v).hidden;});
+  renderPaywall();
+  if(!onAllowed)showView('paywall');
+ }
+}
+function paywallPlanCard(id,title,price,per,note,tag){
+ return '<button type="button" class="plan pw-plan'+(paywallPlan===id?' plan-pro pw-on':'')+'" data-plan="'+id+'" aria-pressed="'+(paywallPlan===id)+'">'+
+  '<h3>'+title+(tag?' <span class="plan-tag">'+tag+'</span>':'')+'</h3>'+
+  '<p class="plan-price">'+price+'<span>'+per+'</span></p><p class="muted-sm">'+note+'</p></button>';
+}
+function renderPaywall(){
+ var el=document.getElementById('view-paywall');if(!el)return;
+ var waiting=!subKnown||checkoutReturn;
+ var lapsed=currentSub&&!subHasAccess(currentSub);
+ el.innerHTML=
+ '<div class="hero"><h1 class="sm">'+(waiting?(checkoutReturn?'Activating your trial…':'Checking your plan…'):(lapsed?'Your plan has ended':'Start your 3-day free trial'))+'</h1>'+
+  '<p class="muted-sm">'+(waiting?(checkoutReturn?'Thanks! This usually takes a few seconds.':'One moment.'):
+   'Startlet has no free plan. Try everything free for 3 days, then it continues at the price you pick. Cancel before the trial ends and you pay nothing.')+'</p></div>'+
+ (waiting?'<div class="panel"><p class="muted-sm">If this takes more than a minute, reload the page. Still stuck? Email <a class="link" href="mailto:'+SUPPORT_EMAIL+'">'+SUPPORT_EMAIL+'</a>.</p></div>':
+ '<div class="plans">'+
+  paywallPlanCard('yearly','Yearly','$29.99','/year','About $2.50 a month. Save 50%.','Best value')+
+  paywallPlanCard('monthly','Monthly','$4.99','/month','Billed every month.','')+
+ '</div>'+
+ '<div class="panel"><h4>What you get</h4><ul class="muted-sm" style="margin:6px 0 0 18px;padding:0">'+
+  '<li>Every business path and all 11 chapters in each</li><li>The AI mentor and the AI content tool</li>'+
+  '<li>The community feed and the leaderboard</li><li>Streaks, badges and progress saved to your account</li></ul></div>'+
+ '<button class="btn-primary" id="pwStart">Start 3-day free trial</button>'+
+ '<button class="btn-ghost full" id="pwParent" style="margin-top:10px">Under 18? Send the link to a parent</button>'+
+ '<p class="hint" id="pwHint"></p>'+
+ '<p class="muted-xs" style="margin-top:6px">A card is needed to start the trial (Apple Pay and Google Pay work too where available). '+
+  'You will see the exact price before you confirm. Payments are handled by Creem, our Merchant of Record. '+
+  'If you are under 18, a parent or guardian should pay. See the <span class="link" data-legal="refunds">Refund Policy</span>.</p>')+
+ '<p class="hint" style="margin-top:18px;text-align:center"><span class="link" id="pwProfile">Profile &amp; account</span></p>'+
+ footerLinksHTML()+copyrightNotice();
+ el.querySelectorAll('[data-plan]').forEach(function(b){b.onclick=function(){paywallPlan=b.dataset.plan;renderPaywall();};});
+ var start=document.getElementById('pwStart');
+ if(start)start.onclick=function(){beginCheckout(false);};
+ var par=document.getElementById('pwParent');
+ if(par)par.onclick=function(){beginCheckout(true);};
+ document.getElementById('pwProfile').onclick=function(){renderProfile();showView('profile');};
+ bindFooterLinks(el);
+}
+async function beginCheckout(forParent){
+ var hint=document.getElementById('pwHint');
+ var btn=document.getElementById(forParent?'pwParent':'pwStart');
+ btn.disabled=true;hint.textContent=forParent?'Creating a link for your parent…':'Opening secure checkout…';
+ try{
+  await loadWorker();
+  var url=await workerModule.startCheckout(paywallPlan,forParent);
+  if(!url||!/^https:\/\//.test(url))throw new Error('No checkout link');
+  if(forParent){
+   var shared=false;
+   if(navigator.share){try{await navigator.share({title:'Startlet',text:'Can you help me start my Startlet trial? Here is the secure checkout link:',url:url});shared=true;}catch(e){}}
+   if(!shared){try{await navigator.clipboard.writeText(url);hint.textContent='Link copied. Send it to your parent — once they finish, this page unlocks automatically.';}
+    catch(e){hint.innerHTML='Send this link to your parent: <a class="link" href="'+esc(url)+'" target="_blank" rel="noopener">checkout link</a>';}}
+   else hint.textContent='Sent! Once your parent finishes, this page unlocks automatically.';
+   btn.disabled=false;
+  }else{
+   location.href=url;
+  }
+ }catch(e){
+  hint.textContent=(e&&e.message&&e.message!=='Request failed'?e.message:'Could not open checkout')+' — try again in a moment.';
+  btn.disabled=false;
+ }
+}
+function subStatusLine(sub){
+ if(!sub)return 'No plan yet.';
+ var end=sub.periodEnd?new Date(sub.periodEnd).toLocaleDateString():'';
+ if(sub.status==='trialing')return 'Free trial'+(end?' — ends '+end:'')+'.';
+ if(sub.status==='active')return 'Active'+(end?' — renews '+end:'')+'.';
+ if(sub.status==='scheduled_cancel')return 'Cancelled — you keep access until '+(end||'the end of the period')+'.';
+ if(sub.status==='past_due')return 'Payment problem — please update your payment method.';
+ if(sub.status==='canceled'&&subHasAccess(sub))return 'Cancelled — access until '+end+'.';
+ return 'Not active.';
 }
 function renderTopbarProfile(){
  var el=document.getElementById('profileCircle');
@@ -599,6 +711,11 @@ function renderProfile(){
   '<input type="text" id="profileName" value="'+esc((currentUser&&currentUser.displayName)||'')+'">'+
   '<button class="btn-primary" id="profileNameSave">Save name</button>'+
   '<p class="hint" id="profileNameHint"></p></div>'+
+ '<div class="panel"><h4>Your plan</h4>'+
+  '<p class="muted-sm">Startlet Pro · '+esc(subStatusLine(currentSub))+'</p>'+
+  (currentSub&&currentSub.customerId?'<button class="btn-ghost full" id="profileManageSub">Manage or cancel subscription</button>':
+   '<button class="btn-primary" id="profileStartTrial">Start 3-day free trial</button>')+
+  '<p class="hint" id="profileSubHint"></p></div>'+
  '<div class="panel"><h4>Your country</h4>'+
   '<label class="field-label" for="profileCountry">Country</label>'+
   '<select id="profileCountry">'+countryOptions()+'</select>'+
@@ -675,6 +792,14 @@ function renderProfile(){
   }catch(e){hint.textContent='Could not prepare your download — try again.';}
  };
  document.getElementById('profileDeleteAccount').onclick=function(){renderDeleteAccount();showView('deleteAccount');};
+ var ms=document.getElementById('profileManageSub');
+ if(ms)ms.onclick=async function(){
+  var hint=document.getElementById('profileSubHint');hint.textContent='Opening…';ms.disabled=true;
+  try{await loadWorker();var url=await workerModule.openPortal();location.href=url;}
+  catch(e){hint.textContent='Could not open the billing portal — try again.';ms.disabled=false;}
+ };
+ var st=document.getElementById('profileStartTrial');
+ if(st)st.onclick=function(){renderPaywall();showView('paywall');};
  bindFooterLinks(document.getElementById('view-profile'));
 }
 
@@ -689,7 +814,7 @@ function renderDeleteAccount(){
    '<li>All your leaderboard entries</li>'+
    '<li>All your feed posts and replies</li>'+
    '<li>Your sign-in itself — you will need to create a new account to use Startlet again</li>'+
-  '</ul></div>'+
+  '</ul>'+(currentSub&&subHasAccess(currentSub)?'<p class="muted-sm" style="margin-top:8px"><strong>Your Startlet Pro subscription will be cancelled right away</strong>, so you will not be charged again.</p>':'')+'</div>'+
  '<div class="panel"><h4>Confirm with Google</h4>'+
   '<p class="muted-sm">You will be asked to sign in with Google again first, to confirm this is really you.</p></div>'+
  '<label class="field-label" for="deleteConfirmInput">Type DELETE to confirm</label>'+
@@ -715,6 +840,12 @@ async function runAccountDeletion(){
  try{
   hint.textContent='Confirming with Google...';
   await authModule.reauthenticateWithGoogle();
+  if(currentSub&&subHasAccess(currentSub)){
+   step='cancelling your subscription';
+   hint.textContent='Cancelling your subscription...';
+   await loadWorker();
+   await workerModule.cancelNow();
+  }
   step='deleting your leaderboard entries';
   hint.textContent='Deleting your leaderboard entries...';
   await loadLeaderboard();

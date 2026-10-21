@@ -127,6 +127,13 @@ service cloud.firestore {
       allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
     }
 
+    // Subscription status — written only by the Cloudflare Worker (Creem webhook) with a
+    // service account, which bypasses these rules. Users can only read their own.
+    match /subscriptions/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

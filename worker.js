@@ -238,8 +238,269 @@ async function generate(env, systemPrompt, messages, hasImage) {
   throw new Error(errors.join(" | "));
 }
 
+/* =====================================================================
+   BILLING (Creem) + Firebase helpers
+   Secrets (Cloudflare → Worker → Settings → Variables and Secrets):
+     CREEM_API_KEY            Creem API key (test key while CREEM_MODE is "test")
+     CREEM_WEBHOOK_SECRET     Creem webhook signing secret
+     FIREBASE_SERVICE_ACCOUNT the whole service-account JSON from Firebase
+   Plain variables (optional):
+     CREEM_MODE               "test" (default) or "live"
+     CREEM_PRODUCT_MONTHLY    product id (defaults to the test product below)
+     CREEM_PRODUCT_YEARLY     product id (defaults to the test product below)
+     REQUIRE_SUBSCRIPTION     "true" to block /mentor and /content without an active plan
+   ===================================================================== */
+
+const FIREBASE_PROJECT = "launchpad-e6280";
+const SITE_URL = "https://startlet.app";
+const TEST_PRODUCTS = { monthly: "prod_4glFUdmCsSywNGXygD8C2g", yearly: "prod_7LhEcxkat6pOd8540IRxIU" };
+// Statuses that give access to the app. "canceled" still gives access until the paid period ends.
+const ACCESS_STATUSES = ["active", "trialing", "scheduled_cancel", "past_due"];
+
+class AuthError extends Error {}
+
+function creemBase(env) {
+  return env.CREEM_MODE === "live" ? "https://api.creem.io" : "https://test-api.creem.io";
+}
+function productFor(env, plan) {
+  if (plan === "yearly") return env.CREEM_PRODUCT_YEARLY || TEST_PRODUCTS.yearly;
+  return env.CREEM_PRODUCT_MONTHLY || TEST_PRODUCTS.monthly;
+}
+
+async function creem(env, method, path, body) {
+  if (!env.CREEM_API_KEY) throw new Error("CREEM_API_KEY is not set");
+  const res = await fetch(creemBase(env) + path, {
+    method,
+    headers: { "x-api-key": env.CREEM_API_KEY, "Content-Type": "application/json" },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const text = await res.text();
+  let data = null;
+  try { data = JSON.parse(text); } catch { /* keep text */ }
+  if (!res.ok) throw new Error("Creem " + path + " " + res.status + ": " + text.slice(0, 300));
+  return data;
+}
+
+// ---- base64url / PEM helpers ----
+function b64urlToBytes(s) {
+  s = s.replace(/-/g, "+").replace(/_/g, "/");
+  while (s.length % 4) s += "=";
+  const bin = atob(s);
+  return Uint8Array.from(bin, (c) => c.charCodeAt(0));
+}
+function bytesToB64url(bytes) {
+  let bin = "";
+  bytes.forEach((b) => (bin += String.fromCharCode(b)));
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function strToB64url(s) { return bytesToB64url(new TextEncoder().encode(s)); }
+
+// ---- Verify a Firebase ID token sent by the app ----
+let jwksCache = { keys: null, exp: 0 };
+async function firebaseJwks() {
+  if (jwksCache.keys && jwksCache.exp > Date.now()) return jwksCache.keys;
+  const res = await fetch("https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com");
+  const data = await res.json();
+  jwksCache = { keys: data.keys || [], exp: Date.now() + 60 * 60 * 1000 };
+  return jwksCache.keys;
+}
+async function verifyIdToken(token) {
+  if (!token || typeof token !== "string") throw new AuthError("Please sign in again.");
+  const parts = token.split(".");
+  if (parts.length !== 3) throw new AuthError("Please sign in again.");
+  const header = JSON.parse(new TextDecoder().decode(b64urlToBytes(parts[0])));
+  const payload = JSON.parse(new TextDecoder().decode(b64urlToBytes(parts[1])));
+  const now = Math.floor(Date.now() / 1000);
+  if (header.alg !== "RS256") throw new AuthError("Please sign in again.");
+  if (payload.aud !== FIREBASE_PROJECT || payload.iss !== "https://securetoken.google.com/" + FIREBASE_PROJECT)
+    throw new AuthError("Please sign in again.");
+  if (!payload.sub || payload.exp < now || payload.iat > now + 300) throw new AuthError("Please sign in again.");
+  const jwk = (await firebaseJwks()).find((k) => k.kid === header.kid);
+  if (!jwk) throw new AuthError("Please sign in again.");
+  const key = await crypto.subtle.importKey("jwk", jwk, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
+  const ok = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, b64urlToBytes(parts[2]),
+    new TextEncoder().encode(parts[0] + "." + parts[1]));
+  if (!ok) throw new AuthError("Please sign in again.");
+  return { uid: payload.sub, email: payload.email || null };
+}
+
+// ---- Firestore REST access with the service account ----
+let gToken = { value: null, exp: 0 };
+async function googleAccessToken(env) {
+  if (gToken.value && gToken.exp > Date.now() + 60000) return gToken.value;
+  if (!env.FIREBASE_SERVICE_ACCOUNT) throw new Error("FIREBASE_SERVICE_ACCOUNT is not set");
+  const sa = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT);
+  const now = Math.floor(Date.now() / 1000);
+  const unsigned = strToB64url(JSON.stringify({ alg: "RS256", typ: "JWT" })) + "." + strToB64url(JSON.stringify({
+    iss: sa.client_email, scope: "https://www.googleapis.com/auth/datastore",
+    aud: "https://oauth2.googleapis.com/token", iat: now, exp: now + 3600,
+  }));
+  const pem = sa.private_key.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+  const key = await crypto.subtle.importKey("pkcs8", b64urlToBytes(pem.replace(/\+/g, "-").replace(/\//g, "_")),
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["sign"]);
+  const sig = new Uint8Array(await crypto.subtle.sign("RSASSA-PKCS1-v1_5", key, new TextEncoder().encode(unsigned)));
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=" + unsigned + "." + bytesToB64url(sig),
+  });
+  const data = await res.json();
+  if (!data.access_token) throw new Error("Google token error: " + JSON.stringify(data).slice(0, 200));
+  gToken = { value: data.access_token, exp: Date.now() + (data.expires_in || 3600) * 1000 };
+  return gToken.value;
+}
+const FS_BASE = "https://firestore.googleapis.com/v1/projects/" + FIREBASE_PROJECT + "/databases/(default)/documents";
+function toFs(v) {
+  if (v === null || v === undefined) return { nullValue: null };
+  if (typeof v === "boolean") return { booleanValue: v };
+  if (typeof v === "number") return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+  return { stringValue: String(v) };
+}
+function fromFs(fields) {
+  const out = {};
+  for (const [k, v] of Object.entries(fields || {})) {
+    out[k] = "stringValue" in v ? v.stringValue : "integerValue" in v ? Number(v.integerValue)
+      : "doubleValue" in v ? v.doubleValue : "booleanValue" in v ? v.booleanValue : null;
+  }
+  return out;
+}
+async function fsGetSub(env, uid) {
+  const res = await fetch(FS_BASE + "/subscriptions/" + encodeURIComponent(uid), {
+    headers: { Authorization: "Bearer " + (await googleAccessToken(env)) },
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error("Firestore read " + res.status);
+  return fromFs((await res.json()).fields);
+}
+async function fsSetSub(env, uid, data) {
+  const fields = {};
+  for (const [k, v] of Object.entries(data)) fields[k] = toFs(v);
+  const mask = Object.keys(data).map((k) => "updateMask.fieldPaths=" + encodeURIComponent(k)).join("&");
+  const res = await fetch(FS_BASE + "/subscriptions/" + encodeURIComponent(uid) + "?" + mask, {
+    method: "PATCH",
+    headers: { Authorization: "Bearer " + (await googleAccessToken(env)), "Content-Type": "application/json" },
+    body: JSON.stringify({ fields }),
+  });
+  if (!res.ok) throw new Error("Firestore write " + res.status + ": " + (await res.text()).slice(0, 200));
+}
+async function fsFindUidByCustomer(env, customerId) {
+  const res = await fetch(FS_BASE + ":runQuery", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + (await googleAccessToken(env)), "Content-Type": "application/json" },
+    body: JSON.stringify({ structuredQuery: {
+      from: [{ collectionId: "subscriptions" }],
+      where: { fieldFilter: { field: { fieldPath: "customerId" }, op: "EQUAL", value: { stringValue: customerId } } },
+      limit: 1,
+    } }),
+  });
+  const rows = await res.json();
+  const name = rows && rows[0] && rows[0].document && rows[0].document.name;
+  return name ? decodeURIComponent(name.split("/").pop()) : null;
+}
+
+function hasAccess(sub) {
+  if (!sub) return false;
+  if (ACCESS_STATUSES.includes(sub.status)) return true;
+  return sub.status === "canceled" && sub.periodEnd && Date.parse(sub.periodEnd) > Date.now();
+}
+const accessCache = new Map(); // uid -> { ok, exp }
+async function requireAccess(env, idToken) {
+  const { uid } = await verifyIdToken(idToken);
+  const c = accessCache.get(uid);
+  if (c && c.exp > Date.now()) { if (!c.ok) throw new AuthError("An active Startlet Pro plan is needed."); return uid; }
+  const ok = hasAccess(await fsGetSub(env, uid));
+  accessCache.set(uid, { ok, exp: Date.now() + (ok ? 10 : 1) * 60 * 1000 });
+  if (!ok) throw new AuthError("An active Startlet Pro plan is needed.");
+  return uid;
+}
+
+// ---- Creem webhook ----
+async function verifyCreemSignature(rawBody, header, secret) {
+  if (!header || !secret) return false;
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(rawBody)));
+  const expected = [...mac].map((b) => b.toString(16).padStart(2, "0")).join("");
+  const got = header.trim().toLowerCase();
+  if (got.length !== expected.length) return false;
+  let diff = 0;
+  for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ got.charCodeAt(i);
+  return diff === 0;
+}
+async function handleCreemWebhook(request, env) {
+  const raw = await request.text();
+  if (!(await verifyCreemSignature(raw, request.headers.get("creem-signature"), env.CREEM_WEBHOOK_SECRET))) {
+    console.error("WEBHOOK_BAD_SIGNATURE");
+    return new Response("Invalid signature", { status: 401 });
+  }
+  const evt = JSON.parse(raw);
+  const type = evt.eventType;
+  const obj = evt.object || {};
+  // checkout.completed carries the subscription nested; subscription.* events carry it at the top.
+  const sub = type === "checkout.completed" ? (obj.subscription || {}) : obj;
+  const customer = obj.customer || sub.customer || {};
+  const customerId = typeof customer === "string" ? customer : customer.id;
+  const meta = obj.metadata || sub.metadata || {};
+  let uid = meta.uid || null;
+  if (!uid && customerId) uid = await fsFindUidByCustomer(env, customerId);
+  console.log("WEBHOOK", type, "uid=" + uid, "status=" + (sub.status || ""));
+  if (!uid) return new Response("ok (no user)", { status: 200 });
+  if (!type.startsWith("subscription.") && type !== "checkout.completed") return new Response("ok", { status: 200 });
+  const product = sub.product || obj.product || {};
+  await fsSetSub(env, uid, {
+    status: sub.status || (type === "checkout.completed" ? "trialing" : "unknown"),
+    subscriptionId: sub.id || null,
+    customerId: customerId || null,
+    productId: typeof product === "string" ? product : product.id || null,
+    periodEnd: sub.current_period_end_date || null,
+    lastEvent: type,
+    mode: env.CREEM_MODE === "live" ? "live" : "test",
+    updatedAt: new Date().toISOString(),
+  });
+  accessCache.delete(uid);
+  return new Response("ok", { status: 200 });
+}
+
+async function handleBilling(path, body, env) {
+  const { uid, email } = await verifyIdToken(body.idToken);
+  if (path === "/checkout") {
+    const plan = body.plan === "yearly" ? "yearly" : "monthly";
+    const forParent = body.forParent === true;
+    const payload = {
+      product_id: productFor(env, plan),
+      request_id: uid + "_" + Date.now(),
+      success_url: SITE_URL + "/?checkout=success",
+      metadata: { uid, plan, forParent: forParent ? "yes" : "no" },
+    };
+    if (email && !forParent) payload.customer = { email };
+    const out = await creem(env, "POST", "/v1/checkouts", payload);
+    return { url: out.checkout_url };
+  }
+  if (path === "/portal") {
+    const sub = await fsGetSub(env, uid);
+    if (!sub || !sub.customerId) throw new BadRequest("No subscription found yet.");
+    const out = await creem(env, "POST", "/v1/customers/billing", { customer_id: sub.customerId });
+    return { url: out.customer_portal_link };
+  }
+  if (path === "/cancel-now") {
+    // Used when a user deletes their account: stop billing immediately.
+    const sub = await fsGetSub(env, uid);
+    if (sub && sub.subscriptionId && hasAccess(sub)) {
+      await creem(env, "POST", "/v1/subscriptions/" + encodeURIComponent(sub.subscriptionId) + "/cancel", { mode: "immediate" });
+    }
+    return { ok: true };
+  }
+  throw new BadRequest("Unknown billing action");
+}
+
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+    // Creem calls this from its servers (no browser Origin). It's protected by the signature instead.
+    if (url.pathname === "/webhooks/creem" && request.method === "POST") {
+      try { return await handleCreemWebhook(request, env); }
+      catch (err) { console.error("WEBHOOK_FAIL", String(err)); return new Response("error", { status: 500 }); }
+    }
+
     // Reject anything whose Origin isn't one of our own sites. This doesn't stop someone
     // spoofing the header with curl, but it blocks other websites' browser code from using
     // this Worker: real browsers can't fake Origin on a cross-origin request.
@@ -263,9 +524,13 @@ export default {
       return Response.json({ error: "Invalid JSON" }, { status: 400, headers: cors });
     }
 
-    const url = new URL(request.url);
-
     try {
+      if (["/checkout", "/portal", "/cancel-now"].includes(url.pathname)) {
+        return Response.json(await handleBilling(url.pathname, body, env), { headers: cors });
+      }
+      if ((url.pathname === "/mentor" || url.pathname === "/content") && env.REQUIRE_SUBSCRIPTION === "true") {
+        await requireAccess(env, body.idToken);
+      }
       if (url.pathname === "/mentor") {
         const { messages, hasImage } = normalizeMessages(body.messages);
         const text = await generate(env, MENTOR_SYSTEM, messages, hasImage);
@@ -295,6 +560,13 @@ export default {
     } catch (err) {
       if (err instanceof BadRequest) {
         return Response.json({ error: err.message }, { status: 400, headers: cors });
+      }
+      if (err instanceof AuthError) {
+        return Response.json({ error: err.message }, { status: 401, headers: cors });
+      }
+      if (String(err).includes("Creem") || String(err).includes("Firestore") || String(err).includes("CREEM") || String(err).includes("FIREBASE")) {
+        console.error("BILLING_FAIL", String(err));
+        return Response.json({ error: "Billing is temporarily unavailable. Please try again." }, { status: 502, headers: cors });
       }
       console.error("ALL_PROVIDERS_FAILED", String(err));
       return Response.json(
