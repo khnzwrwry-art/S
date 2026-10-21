@@ -329,7 +329,10 @@ let gToken = { value: null, exp: 0 };
 async function googleAccessToken(env) {
   if (gToken.value && gToken.exp > Date.now() + 60000) return gToken.value;
   if (!env.FIREBASE_SERVICE_ACCOUNT) throw new Error("FIREBASE_SERVICE_ACCOUNT is not set");
-  const sa = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT);
+  let sa;
+  try { sa = JSON.parse(String(env.FIREBASE_SERVICE_ACCOUNT).trim()); }
+  catch (e) { throw new Error("FIREBASE_SERVICE_ACCOUNT is not valid JSON (copy the whole file, from { to }): " + e.message); }
+  if (!sa.client_email || !sa.private_key) throw new Error("FIREBASE_SERVICE_ACCOUNT is missing client_email or private_key");
   const now = Math.floor(Date.now() / 1000);
   const unsigned = strToB64url(JSON.stringify({ alg: "RS256", typ: "JWT" })) + "." + strToB64url(JSON.stringify({
     iss: sa.client_email, scope: "https://www.googleapis.com/auth/datastore",
@@ -369,7 +372,7 @@ async function fsGetSub(env, uid) {
     headers: { Authorization: "Bearer " + (await googleAccessToken(env)) },
   });
   if (res.status === 404) return null;
-  if (!res.ok) throw new Error("Firestore read " + res.status);
+  if (!res.ok) throw new Error("Firestore read " + res.status + ": " + (await res.text()).slice(0, 200));
   return fromFs((await res.json()).fields);
 }
 async function fsSetSub(env, uid, data) {
@@ -393,6 +396,7 @@ async function fsFindUidByCustomer(env, customerId) {
       limit: 1,
     } }),
   });
+  if (!res.ok) throw new Error("Firestore query " + res.status + ": " + (await res.text()).slice(0, 200));
   const rows = await res.json();
   const name = rows && rows[0] && rows[0].document && rows[0].document.name;
   return name ? decodeURIComponent(name.split("/").pop()) : null;
@@ -428,12 +432,12 @@ async function verifyCreemSignature(rawBody, header, secret) {
 }
 async function handleCreemWebhook(request, env) {
   const raw = await request.text();
-  if (!(await verifyCreemSignature(raw, request.headers.get("creem-signature"), env.CREEM_WEBHOOK_SECRET))) {
+  if (!(await verifyCreemSignature(raw, request.headers.get("creem-signature"), String(env.CREEM_WEBHOOK_SECRET || "").trim()))) {
     console.error("WEBHOOK_BAD_SIGNATURE");
     return new Response("Invalid signature", { status: 401 });
   }
   const evt = JSON.parse(raw);
-  const type = evt.eventType;
+  const type = String(evt.eventType || evt.type || evt.event_type || "");
   const obj = evt.object || {};
   // checkout.completed carries the subscription nested; subscription.* events carry it at the top.
   const sub = type === "checkout.completed" ? (obj.subscription || {}) : obj;
@@ -498,7 +502,7 @@ export default {
     // Creem calls this from its servers (no browser Origin). It's protected by the signature instead.
     if (url.pathname === "/webhooks/creem" && request.method === "POST") {
       try { return await handleCreemWebhook(request, env); }
-      catch (err) { console.error("WEBHOOK_FAIL", String(err)); return new Response("error", { status: 500 }); }
+      catch (err) { console.error("WEBHOOK_FAIL", String(err)); return new Response("error: " + String(err).slice(0, 400), { status: 500 }); }
     }
 
     // Reject anything whose Origin isn't one of our own sites. This doesn't stop someone
