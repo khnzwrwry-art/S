@@ -1452,11 +1452,28 @@ function renderAssistant(prefill){
   }catch(err){errEl.textContent=(err&&err.message)||'Could not use that photo. Try a different one.';}
  };
 }
+// Small, safe Markdown for mentor replies: the text is HTML-escaped first, then only
+// **bold**, *italic*, headings and "- " / "* " / "1. " list lines are turned into markup.
+function mentorMd(t){
+ var lines=esc(t).split('\n'),out=[],list=null;
+ function inline(x){return x.replace(/\*\*([^*\n]+?)\*\*/g,'<strong>$1</strong>').replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g,'$1<em>$2</em>').replace(/\*\*/g,'');}
+ function close(){if(list){out.push('</'+list+'>');list=null;}}
+ lines.forEach(function(l){
+  var m;
+  if((m=l.match(/^\s*[-*•]\s+(.*)$/))){if(list!=='ul'){close();out.push('<ul class="md-list">');list='ul';}out.push('<li>'+inline(m[1])+'</li>');}
+  else if((m=l.match(/^\s*(\d+)[.)]\s+(.*)$/))){if(list!=='ol'){close();out.push('<ol class="md-list">');list='ol';}out.push('<li>'+inline(m[2])+'</li>');}
+  else if((m=l.match(/^\s*#{1,6}\s+(.*)$/))){close();out.push('<p class="md-p"><strong>'+inline(m[1])+'</strong></p>');}
+  else if(!l.trim()){close();}
+  else{close();out.push('<p class="md-p">'+inline(l)+'</p>');}
+ });
+ close();return out.join('');
+}
 function renderChatLog(){
  var log=document.getElementById('chatLog');if(!log)return;
  log.innerHTML=chatHistory.map(function(m){
   var photoHtml=m.photoPreview?('<img src="'+esc(m.photoPreview)+'" alt="Attached photo" class="msg-photo">'):'';
-  return '<div class="msg '+(m.role==='user'?'user':'bot')+'">'+photoHtml+(m.content?esc(m.content):'')+'</div>';
+  var body=m.content?(m.role==='user'?esc(m.content):mentorMd(m.content)):'';
+  return '<div class="msg '+(m.role==='user'?'user':'bot')+'">'+photoHtml+body+'</div>';
  }).join('');
 }
 async function sendChat(){
@@ -1476,7 +1493,7 @@ async function sendChat(){
   if(sentImage&&turns.length){turns[turns.length-1].image={mimeType:sentImage.mimeType,data:sentImage.data};}
   var last=chatHistory[chatHistory.length-1],reply='',pending=false;
   var paint=function(){pending=false;var log=document.getElementById('chatLog');var bubbles=log?log.querySelectorAll('.msg.bot'):[];
-   var el=bubbles.length?bubbles[bubbles.length-1]:null;if(el){el.textContent=last.content;var nearBottom=log.scrollHeight-log.scrollTop-log.clientHeight<120;if(nearBottom)log.scrollTop=log.scrollHeight;}};
+   var el=bubbles.length?bubbles[bubbles.length-1]:null;if(el){el.innerHTML=mentorMd(last.content);var nearBottom=log.scrollHeight-log.scrollTop-log.clientHeight<120;if(nearBottom)log.scrollTop=log.scrollHeight;}};
   try{
    reply=await workerModule.mentorChatStream(turns,function(t){last.content=t;if(!pending){pending=true;requestAnimationFrame(paint);}});
   }catch(streamErr){
