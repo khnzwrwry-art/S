@@ -40,6 +40,15 @@
           }
         ],
         "regex": "^/([^_].*)?$"
+      },
+      {
+        "source": "**/*.@(js|css|json|html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
       }
     ]
   },
