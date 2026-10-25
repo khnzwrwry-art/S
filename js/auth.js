@@ -21,7 +21,12 @@ import {
 // These are public identifiers, safe to ship in frontend code.
 const firebaseConfig = {
   apiKey: "AIzaSyBvaS2OZUCJpfr4gDuot1xP6tAEeqaK3jI",
-  authDomain: "launchpad-e6280.firebaseapp.com",
+  // Sign-in runs through our own domain (Firebase Hosting serves /__/auth/* on it), so the
+  // sign-in window shares storage with the app. Safari private tabs and other browsers that
+  // partition storage break sign-in when this is a different domain (firebaseapp.com).
+  authDomain: ["startlet.app", "www.startlet.app"].includes(location.hostname)
+    ? location.hostname
+    : "launchpad-e6280.firebaseapp.com",
   projectId: "launchpad-e6280",
   storageBucket: "launchpad-e6280.firebasestorage.app",
   messagingSenderId: "975236062976",
