@@ -493,4 +493,5 @@ const FLOWS={
  pod:{nodes:['You upload a design','Customer orders','Platform prints it','Platform ships it'],note:'No stock and no upfront cost — but every design must be original, or the account gets closed.'},
  freelance:{nodes:['You define a service','Client agrees in writing','You deliver the work','You get paid and reviewed'],note:'The written agreement is the whole protection: scope, revisions and payment timing.'},
  social:{nodes:['You pitch a business','Monthly plan approved','You publish for them','Monthly report keeps them'],note:'Recurring fee, recurring work. Reporting is what turns one month into twelve.'},
- courses:{nodes:['You pick a known topic','Build a short version','Sell the first copies','Improve from feedback'],note:'Built once, sold many times — but only if an audience already exists or you sell before you build.'}};
+ courses:{nodes:['You pick a known topic','Build a short version','Sell the first copies','Improve from feedback'],note:'Built once, sold many times — but only if an audience already exists or you sell before you build.'},
+ websites:{nodes:['You build a free demo','Owner agrees in writing','You launch their site','You get paid'],note:'Show a finished demo, not a promise. An optional monthly hosting fee turns one build into steady income.'}};

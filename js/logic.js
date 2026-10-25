@@ -5,16 +5,8 @@ function yt(q){return 'https://www.youtube.com/results?search_query='+encodeURIC
 /* ---------- flow diagrams ---------- */
 function flowSvg(id){
  var f=FLOWS[id]; if(!f) return '';
- var c=(DATA.find(function(x){return x.id===id;})||{}).color||'#6C7BD1';
- var boxes=f.nodes.map(function(n,i){
-  var y=8+i*62;
-  return '<rect x="8" y="'+y+'" width="250" height="46" rx="10" fill="var(--surface-2)" stroke="'+c+'" stroke-opacity=".5"/>'+
-   '<circle cx="34" cy="'+(y+23)+'" r="12" fill="'+c+'" fill-opacity=".85"/>'+
-   '<text x="34" y="'+(y+28)+'" font-size="12" font-weight="700" fill="#14171C" text-anchor="middle" font-family="Inter">'+(i+1)+'</text>'+
-   '<text x="56" y="'+(y+28)+'" font-size="12.5" fill="var(--text)" font-family="Inter">'+esc(n)+'</text>'+
-   (i<f.nodes.length-1?'<path d="M34 '+(y+48)+'v12" stroke="'+c+'" stroke-width="2" stroke-opacity=".6"/><path d="M30 '+(y+56)+'l4 5 4-5" fill="none" stroke="'+c+'" stroke-width="2" stroke-opacity=".6"/>':'');
- }).join('');
- return '<svg viewBox="0 0 266 '+(8+f.nodes.length*62)+'" width="100%" role="img" aria-label="How this business works, step by step" xmlns="http://www.w3.org/2000/svg">'+boxes+'</svg>'+
+ var cat=DATA.find(function(x){return x.id===id;})||{name:''};
+ return '<div class="chapter-image" style="margin-top:4px"><img src="public/images/'+esc(id)+'/how-it-works.jpg" alt="'+esc('How '+cat.name+' works: '+f.nodes.map(function(n,i){return (i+1)+'. '+n;}).join(', '))+'" loading="lazy"></div>'+
   '<p class="cap">'+esc(f.note)+'</p>';
 }
 
@@ -161,6 +153,8 @@ function consentNotice(key,fallback){
  return (legalModule&&legalModule.CONSENT_TEXT&&legalModule.CONSENT_TEXT[key])||fallback;
 }
 
+// Chapter JSON stores image paths relative to public/ (e.g. "images/pod/idea.jpg").
+function chapterImageUrl(p){p=String(p||'');return /^(https?:|\/|public\/)/.test(p)?p:'public/'+p;}
 /* ---------- deep chapters (per-business, JSON-backed — pilot: dropship only) ---------- */
 let chaptersCache={};
 async function loadChapters(bizId){
@@ -979,7 +973,7 @@ function chaptersHtml(cat,chData){
    '<div class="mini-progress" style="margin:8px 0 14px"><i style="width:'+pct+'%;background:'+cat.color+'"></i></div>'+
    '<div class="dark-card" style="cursor:default"><h4>Your goal</h4><p>'+esc(ch.goal)+'</p></div>'+
    '<p class="muted-sm" style="margin:12px 0"><b>Why this matters:</b> each chapter builds on the one before it — skipping ahead usually means redoing the work later.</p>'+
-   '<div class="chapter-image"><img class="chapter-image-img" src="'+esc(ch.imagePath)+'" alt="" loading="lazy">'+
+   '<div class="chapter-image"><img class="chapter-image-img" src="'+esc(chapterImageUrl(ch.imagePath))+'" alt="'+esc('Steps: '+ch.checklist.map(function(t,i){return (i+1)+'. '+t;}).join(' '))+'" loading="lazy">'+
    '<div class="chapter-image-fallback" style="display:none;background:'+cat.color+'">'+svg(cat.icon,26)+'</div></div>'+
    '<h4 style="margin:14px 0 4px">Step by step</h4>'+explanationHtml+
    '<div class="panel" style="margin-top:12px"><h4>Example</h4><p>'+esc(ch.example)+'</p></div>'+
