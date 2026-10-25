@@ -1474,8 +1474,17 @@ async function sendChat(){
   await loadWorker();
   var turns=chatHistory.slice(0,-1).map(function(m){return {role:m.role,content:m.content};});
   if(sentImage&&turns.length){turns[turns.length-1].image={mimeType:sentImage.mimeType,data:sentImage.data};}
-  var reply=await workerModule.mentorChat(turns);
-  chatHistory[chatHistory.length-1].content=reply;
+  var last=chatHistory[chatHistory.length-1],reply='',pending=false;
+  var paint=function(){pending=false;var log=document.getElementById('chatLog');var bubbles=log?log.querySelectorAll('.msg.bot'):[];
+   var el=bubbles.length?bubbles[bubbles.length-1]:null;if(el){el.textContent=last.content;var nearBottom=log.scrollHeight-log.scrollTop-log.clientHeight<120;if(nearBottom)log.scrollTop=log.scrollHeight;}};
+  try{
+   reply=await workerModule.mentorChatStream(turns,function(t){last.content=t;if(!pending){pending=true;requestAnimationFrame(paint);}});
+  }catch(streamErr){
+   // 401/400 are real answers (no plan, bad input); anything else: try the non-streaming route once.
+   if(streamErr&&(streamErr.status===401||streamErr.status===400))throw streamErr;
+   reply=await workerModule.mentorChat(turns);
+  }
+  last.content=reply||'Could not answer right now. Try again in a moment.';
  }catch(e){chatHistory[chatHistory.length-1].content=(e&&e.message)||'Could not answer right now. Try again in a moment.';}
  renderChatLog();btn.disabled=false;
 }

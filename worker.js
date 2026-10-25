@@ -195,6 +195,148 @@ async function callCloudflareAI(ai, systemPrompt, messages, hasImage) {
   return { text: text.trim(), model };
 }
 
+/* ---------- Streaming (word by word) ----------
+   /mentor-stream answers with plain text that arrives in pieces. If the whole answer has to be
+   replaced (for example a safety refusal after some text was already sent), the stream contains
+   the character \u001e followed by the text that should replace everything before it. */
+const REPLACE_MARK = "\u001e";
+
+// Reads a Server-Sent Events body and yields each "data:" payload.
+async function* sseData(body) {
+  const reader = body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true }).replace(/\r/g, "");
+      let i;
+      while ((i = buf.indexOf("\n\n")) >= 0) {
+        const block = buf.slice(0, i);
+        buf = buf.slice(i + 2);
+        const data = block.split("\n").filter((l) => l.startsWith("data:")).map((l) => l.slice(5).trim()).join("\n");
+        if (data) yield data;
+      }
+    }
+    const tail = buf.split("\n").filter((l) => l.startsWith("data:")).map((l) => l.slice(5).trim()).join("\n");
+    if (tail) yield tail;
+  } finally {
+    try { reader.releaseLock(); } catch { /* ignore */ }
+  }
+}
+
+// Starts a Gemini stream. Resolves once the first piece of text arrives (or throws), and returns
+// that text plus an iterator for the rest. Only the wait for the first text is timed.
+async function openGeminiStream(model, apiKey, systemPrompt, messages, timeoutMs) {
+  const contents = messages.map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: m.image ? [{ text: m.content }, { inlineData: { mimeType: m.image.mimeType, data: m.image.data } }] : [{ text: m.content }],
+  }));
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":streamGenerateContent?alt=sse&key=" + apiKey,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          contents,
+          safetySettings: GEMINI_SAFETY_SETTINGS,
+          generationConfig: { maxOutputTokens: 800 },
+        }),
+        signal: controller.signal,
+      }
+    );
+    if (!res.ok) throw new Error(model + " error " + res.status + ": " + (await res.text()).slice(0, 300));
+    const events = sseData(res.body);
+    const pieces = async function* () {
+      for await (const raw of events) {
+        let data;
+        try { data = JSON.parse(raw); } catch { continue; }
+        const block = data?.promptFeedback?.blockReason;
+        const finish = data?.candidates?.[0]?.finishReason;
+        const text = (data?.candidates?.[0]?.content?.parts || []).filter((p) => !p.thought).map((p) => p.text || "").join("");
+        if (text) yield { text };
+        if (block || SAFETY_FINISH_REASONS.includes(finish)) yield { blocked: block || finish };
+      }
+    }();
+    // Wait for the first real text (still under the timeout).
+    while (true) {
+      const { value, done } = await pieces.next();
+      if (done) throw new Error(model + " returned empty text");
+      if (value.blocked) throw new SafetyBlocked(model + " safety block: " + value.blocked);
+      if (value.text) { clearTimeout(timer); return { first: value.text, rest: pieces, controller }; }
+    }
+  } catch (err) {
+    clearTimeout(timer);
+    if (err.name === "AbortError") throw new Error(model + " timed out after " + timeoutMs + "ms");
+    throw err;
+  }
+}
+
+// Returns a ReadableStream of the answer text. Falls back model by model before any text is sent.
+function generateStream(env, ctx, systemPrompt, messages, hasImage) {
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
+  const enc = new TextEncoder();
+  const write = (t) => writer.write(enc.encode(t));
+  const kind = hasImage ? "image" : "text";
+  const timeoutMs = hasImage ? GEMINI_TIMEOUT_IMAGE_MS : GEMINI_TIMEOUT_TEXT_MS;
+
+  const run = async () => {
+    const errors = [];
+    if (env.GEMINI_API_KEY) {
+      for (const model of GEMINI_MODELS) {
+        if (skipUntil[model] && skipUntil[model] > Date.now()) continue;
+        const started = Date.now();
+        let opened;
+        try {
+          opened = await openGeminiStream(model, env.GEMINI_API_KEY, systemPrompt, messages, timeoutMs);
+        } catch (err) {
+          if (err instanceof SafetyBlocked) { console.log("SAFETY_BLOCK", kind, String(err)); await write(REFUSAL_TEXT); return; }
+          skipUntil[model] = Date.now() + GEMINI_COOLDOWN_MS;
+          console.error("GEMINI_FAIL", kind, String(err), Date.now() - started + "ms");
+          errors.push(String(err));
+          continue;
+        }
+        console.log("PROVIDER_OK_STREAM", model, kind, "first text after", Date.now() - started + "ms");
+        await write(opened.first);
+        try {
+          for await (const piece of opened.rest) {
+            if (piece.blocked) { console.log("SAFETY_BLOCK_MIDSTREAM", kind, piece.blocked); await write(REPLACE_MARK + REFUSAL_TEXT); return; }
+            if (piece.text) await write(piece.text);
+          }
+        } catch (err) {
+          console.error("GEMINI_STREAM_BROKE", kind, String(err));
+          await write("\n\n(The answer was cut off. Please ask again.)");
+        }
+        return;
+      }
+    }
+    // Fallback: Workers AI (whole answer at once).
+    if (env.AI) {
+      try {
+        const out = await callCloudflareAI(env.AI, systemPrompt, messages, hasImage);
+        console.log("PROVIDER_OK", out.model, kind);
+        await write(out.text);
+        return;
+      } catch (err) {
+        console.error("WORKERS_AI_FAIL", kind, String(err));
+        errors.push(String(err));
+      }
+    }
+    console.error("ALL_PROVIDERS_FAILED", errors.join(" | "));
+    await write(REPLACE_MARK + "Sorry, I couldn't answer right now. Please try again in a moment.");
+  };
+
+  const job = run().catch((err) => console.error("STREAM_FAIL", String(err))).finally(() => writer.close().catch(() => {}));
+  if (ctx && ctx.waitUntil) ctx.waitUntil(job);
+  return readable;
+}
+
 async function generate(env, systemPrompt, messages, hasImage) {
   const errors = [];
   const now = Date.now();
@@ -525,7 +667,7 @@ async function handleBilling(path, body, env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     // Creem calls this from its servers (no browser Origin). It's protected by the signature instead.
     if (url.pathname === "/webhooks/creem" && request.method === "POST") {
@@ -560,8 +702,14 @@ export default {
       if (["/checkout", "/portal", "/cancel-now"].includes(url.pathname)) {
         return Response.json(await handleBilling(url.pathname, body, env), { headers: cors });
       }
-      if ((url.pathname === "/mentor" || url.pathname === "/content") && env.REQUIRE_SUBSCRIPTION !== "false") {
+      if (["/mentor", "/mentor-stream", "/content"].includes(url.pathname) && env.REQUIRE_SUBSCRIPTION !== "false") {
         await requireAccess(env, body.idToken);
+      }
+      if (url.pathname === "/mentor-stream") {
+        const { messages, hasImage } = normalizeMessages(body.messages);
+        return new Response(generateStream(env, ctx, MENTOR_SYSTEM, messages, hasImage), {
+          headers: { ...cors, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache, no-transform", "X-Content-Type-Options": "nosniff" },
+        });
       }
       if (url.pathname === "/mentor") {
         const { messages, hasImage } = normalizeMessages(body.messages);
